@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { darkBlue, red, white } from "../ColorPalette";
 import { AiOutlineMenu } from "react-icons/ai/index";
+import { signIn } from "../../../firebase";
 
 const NavWrapper = styled.nav`
   height: 5rem;
@@ -41,7 +42,7 @@ const NavLink = styled(Link)`
   font-weight: 600;
   font-family: "Nunito" sans-serif;
   text-align: center;
-  
+
   &:hover,
   &:focus {
     text-decoration: underline;
@@ -63,7 +64,7 @@ const NavLogin = styled.button`
   &:hover,
   &:focus {
     color: ${darkBlue};
-    background: ${red+"35"};
+    background: ${red + "35"};
   }
 
   @media (max-width: 768px) {
@@ -117,7 +118,6 @@ const Navbar = () => {
   useEffect(() => {
     window.screen.width >= 768 ? setToggleNav(true) : setToggleNav(false);
   }, []);
-
   return (
     <>
       <NavWrapper className="container d-flex px-md-4 align-items-center justify-content-between">
@@ -151,7 +151,9 @@ const Navbar = () => {
               Safety
             </NavLink>
           </NavLinkWraper>
-          <NavLogin>Login</NavLogin>
+          <NavLogin onClick={signIn}>
+            Login
+          </NavLogin>
         </NavMobileWrapper>
       </NavWrapper>
     </>
