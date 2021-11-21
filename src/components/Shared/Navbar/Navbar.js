@@ -41,8 +41,7 @@ const NavLink = styled(Link)`
   font-weight: 600;
   font-family: "Nunito" sans-serif;
   text-align: center;
-  transition: 0.35s all ease-in-out;
-
+  
   &:hover,
   &:focus {
     text-decoration: underline;
@@ -56,14 +55,15 @@ const NavLogin = styled.button`
   background: ${red};
   color: ${white};
   font-family: "Nunito" sans-serif;
-  font-weight: 800;
+  font-weight: 600;
   font-size: 1.15rem;
   margin: 0 0 0 1rem;
-  transition: 0.35s all ease-in-out;
+  border: 2px solid ${red};
 
   &:hover,
   &:focus {
-    background: ${red+"CC"};
+    color: ${darkBlue};
+    background: ${red+"35"};
   }
 
   @media (max-width: 768px) {
@@ -93,7 +93,11 @@ export const NavMobileWrapper = styled.div`
   @media (max-width: 768px) {
     justify-content: flex-start;
     flex-direction: column;
-    height: 100%;
+    height: 100vh;
+    width: 100vw;
+    padding-top: 2rem;
+    background: ${white};
+    z-index: 10;
   }
 `;
 
