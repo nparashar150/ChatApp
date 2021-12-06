@@ -1,25 +1,5 @@
-import styled, { keyframes } from "styled-components";
-
-const SlideRight = keyframes`
-  from {
-    margin-right: -20%;
-    opacity: 0;
-  }
-  to {
-    margin-right: 0%;
-    opacity: 1;
-  }
-`;
-const SlideLeft = keyframes`
-  from {
-    margin-left: -20%;
-    opacity: 0;
-  }
-  to {
-    margin-left: 0%;
-    opacity: 1;
-  }
-`;
+import styled from "styled-components";
+import { SlideLeft, SlideRight } from "../Shared/Animation";
 
 export const LandingWrapper = styled.main`
   padding: 0 1rem;

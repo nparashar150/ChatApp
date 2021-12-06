@@ -5,6 +5,7 @@ $red: #e63946;
 $blue: #457b9d;
 $light-blue: #a8dadc;
 $dark-blue: #1d3557;
+$dark: #1a1a1a;
 
 * {
   box-sizing: border-box;
@@ -14,6 +15,7 @@ $dark-blue: #1d3557;
   font-size: 1rem;
   scroll-behavior: smooth;
   transition: 0.35s all ease-in-out;
+  // background: $white;
 }
 
 body, #root {
@@ -21,4 +23,27 @@ body, #root {
   width: 100vw;
   height: 100vh;
   overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 2px;
+}
+::-webkit-scrollbar-track {
+  background: $white;
+}
+::-webkit-scrollbar-thumb {
+  background: $dark;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: $dark;
+}
+
+::-moz-selection {
+  color: $white;
+  background: $red;
+}
+
+::selection {
+  color: $white;
+  background: $red;
 }
