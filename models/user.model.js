@@ -22,12 +22,6 @@ const userInfo = new mongoose.Schema({
     type: String,
     require: true,
     unique: true
-  },
-  chatData: {
-    type: Object,
-    users: {
-      type: Object
-    }
   }
 });
 
