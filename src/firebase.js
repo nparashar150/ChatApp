@@ -1,6 +1,12 @@
-import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "firebase/auth";
+import {
+  getAuth,
+  signInWithPopup,
+  GoogleAuthProvider,
+  onAuthStateChanged,
+} from "firebase/auth";
 import { initializeApp } from "firebase/app";
 import axios from "axios";
+// import {useNavigate} from "react-router-dom";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_APIKEY,
@@ -15,34 +21,39 @@ initializeApp(firebaseConfig);
 
 const provider = new GoogleAuthProvider();
 const auth = getAuth();
-const signIn = () => {
+const signIn = (dispatch) => {
+  dispatch({ type: "LOGIN_START" });
   signInWithPopup(auth, provider)
     .then((result) => {
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      const token = credential.accessToken;
-      const user = result.user;
-      const res = axios.post("http://localhost:5000/user/create", {email: user.email, name: user.displayName, photoUrl: user.photoURL, uid: user.uid});
-      console.log(res);
-      window.location.href = "/dashboard";
-      return (user, token);
+      // const credential = GoogleAuthProvider.credentialFromResult(result);
+      // const token = credential.accessToken;
+      const userData = result.user;
+      const res = axios.post("http://localhost:5000/user/create", {
+        email: userData.email,
+        name: userData.displayName,
+        photoUrl: userData.photoURL,
+        uid: userData.uid,
+      });
+      // console.log(res);
+      dispatch({ type: "LOGIN_SUCCESS", payload: userData || res.data });
+      // window.location.href = "/dashboard";
+      // const history = useNavigate();
+      // history.push("/dashboard");
+      // return res;
     })
     .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      const email = error.email;
-      const credential = GoogleAuthProvider.credentialFromError(error);
-      console.log(errorCode, errorMessage, email, credential);
-      return (errorCode, errorMessage, email, credential)
+      dispatch({ type: "LOGIN_FAILURE", payload: error });
     });
 };
 
-const signInStatus = () => {
+const signInStatus = (dispatch) => {
   onAuthStateChanged(auth, (user) => {
+    dispatch({ type: "LOGIN_START" });
     if (user) {
-      return user;
+      dispatch({ type: "LOGIN_SUCCESS", payload: user });
     } else {
       window.location.replace("/");
     }
   });
-}
+};
 export { signIn, signInStatus };

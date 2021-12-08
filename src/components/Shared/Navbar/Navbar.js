@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { darkBlue, red, white } from "../ColorPalette";
 import { AiOutlineMenu } from "react-icons/ai/index";
 import { signIn } from "../../../firebase";
+import { AuthContext } from "../../../context/authContext";
 
 const NavWrapper = styled.nav`
   height: 5rem;
@@ -115,6 +116,11 @@ const Navbar = () => {
     }
   };
 
+  const { dispatch, user, isFetching } = useContext(AuthContext);
+  const handleLogin = async () => {
+    signIn(dispatch);
+  };
+  console.log(user);
   useEffect(() => {
     window.screen.width >= 768 ? setToggleNav(true) : setToggleNav(false);
   }, []);
@@ -151,8 +157,8 @@ const Navbar = () => {
               Safety
             </NavLink>
           </NavLinkWraper>
-          <NavLogin onClick={signIn}>
-            Login
+          <NavLogin onClick={handleLogin} disabled={isFetching} >
+            {isFetching ? "loading" : "Login"}
           </NavLogin>
         </NavMobileWrapper>
       </NavWrapper>
