@@ -3,6 +3,7 @@ import { darkBlue, white } from "../Shared/ColorPalette";
 import { SlideLeft } from "../Shared/Animation";
 import ChatSampleData from "../../data/ChatPage/ChatPage.json";
 import { useState } from "react";
+import broadcast from "../../data/ChatPage/broadcast.png";
 
 const Messages = styled.h1`
   font-weight: 700;
@@ -10,6 +11,12 @@ const Messages = styled.h1`
   padding: 1.5rem 0 0.5rem 0;
   width: 100%;
   padding-left: 0.5rem;
+
+  @media (max-width: 768px) {
+    text-align: center;
+    width: 100%;
+    padding: 0 1rem;
+  }
 `;
 
 const MessageWrapper = styled.section`
@@ -84,6 +91,10 @@ const MessageSearchBar = styled.input`
   outline: none;
   background: ${white};
   border-radius: 1rem;
+
+  @media (max-width: 768px) {
+    width: 80%;
+  }
 `;
 
 const ChatMessageList = (props) => {
@@ -104,7 +115,7 @@ const ChatMessageList = (props) => {
           {Object.keys(ChatSampleData.Users).map((key) => {
             const showUserInfo = () => {
               let name = ChatSampleData.Users[key].name;
-              let img = ChatSampleData.Users[key].image;
+              let img = broadcast;
               props.currentUser({ name: name, img: img });
             };
             return (
@@ -113,12 +124,13 @@ const ChatMessageList = (props) => {
                 onClick={showUserInfo}
                 className="d-flex flex-row w-100"
               >
-                <MessageItemUser src={ChatSampleData.Users[key].image} />
+                <MessageItemUser src={broadcast} />
                 <MessageInfo className="d-flex flex-column w-100">
                   <MessageItemName>
                     {ChatSampleData.Users[key].name}
                   </MessageItemName>
-                  <MessageData className="text-justify">
+                  <MessageData
+                   className="text-justify">
                     {ChatSampleData.Users[key].message}
                   </MessageData>
                 </MessageInfo>

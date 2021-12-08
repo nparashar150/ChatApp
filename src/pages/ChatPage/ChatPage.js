@@ -12,7 +12,7 @@ const ChatPageWrapper = styled.div`
 const ChatPage = () => {
   let [userInfo, setUserInfo] = useState({
     name: "",
-    img: ""
+    img: "",
   });
 
   return (

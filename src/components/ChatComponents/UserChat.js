@@ -7,9 +7,19 @@ import { io } from "socket.io-client";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { signIn } from "../../firebase";
 // import axios from "axios";
+import TimeAgo from 'javascript-time-ago'
+import en from 'javascript-time-ago/locale/en.json'
+
+TimeAgo.addDefaultLocale(en);
+const timeAgo = new TimeAgo('en-US');
 
 const socket = io.connect("http://localhost:5000", { autoConnect: false });
 
+const ChattingSection = styled.section`
+  @media (max-width: 768px) {
+    width: 100% !important;
+  }
+`;
 const ChatArea = styled.section`
   height: 100vh;
   overflow-y: scroll;
@@ -58,9 +68,9 @@ const Chat = styled.div`
 `;
 const ChattingGuest = styled.div`
   padding: 1rem 0 0 0;
-  padding-right: 1rem;
+  /* padding-right: 1rem; */
   gap: 0.75rem;
-  flex-direction: row-reverse;
+  /* flex-direction: row-reverse; */
   justify-content: flex-start;
   cursor: pointer;
 `;
@@ -72,6 +82,15 @@ const ChattingForm = styled.form`
   margin-bottom: 0.75rem;
   margin-right: 0.75rem;
   background: ${white};
+`;
+const ChatTime = styled.p`
+  font-weight: 600;
+  font-size: 0.7rem;
+  background: ${white};
+  text-align: center;
+  cursor: pointer;
+  margin: 0;
+  width: max-content;
 `;
 const ChattingInput = styled.input`
   border: 2px solid ${darkBlue + "50"};
@@ -140,7 +159,7 @@ const UserChat = (props) => {
     e.preventDefault();
     socket.emit("userChat", {
       message,
-      username: user.displayName,
+      username: user.email,
       image: user.photoURL,
     });
     setMessage("");
@@ -156,12 +175,10 @@ const UserChat = (props) => {
     signInStatus();
   });
 
-  function handleTyping(e) {
-    
-  }
+  function handleTyping(e) {}
 
   return (
-    <div className="w-75">
+    <ChattingSection className="w-75">
       {props.currentUser.name !== "" ? (
         <>
           <ChatArea className="w-100">
@@ -176,14 +193,22 @@ const UserChat = (props) => {
               <ChattingWrapper className="d-flex flex-column">
                 <Chat className="">
                   {inputValue.map((payload, index) => {
+                    // (user.email === payload.username) ? console.log(payload.username) : console.log("false") ;
                     return (
                       <ChattingGuest
                         key={index}
-                        className="d-flex w-100 align-items-center"
+                        className={
+                          user.email === payload.username
+                            ? "d-flex flex-row-reverse w-100 align-items-center pr-1"
+                            : "d-flex flex-row w-100 align-items-center pl-1"
+                        }
                       >
                         <ChatInfoUserImg chatting src={payload.image} />
                         <ChatInfoUserName chatting>
                           {payload.message}
+                          <ChatTime className="text-justify">
+                          {timeAgo.format(Date.now(), 'round-minute')}
+                        </ChatTime>
                         </ChatInfoUserName>
                       </ChattingGuest>
                     );
@@ -197,7 +222,11 @@ const UserChat = (props) => {
                     }}
                     placeholder="Type your message here..."
                   />
-                  <ChattingInputSubmit onKeyPress={(e) => handleTyping(e)} className="d-flex justify-content-center align-items-center">
+                  <ChattingInputSubmit
+                    onClick={formHandler}
+                    onKeyPress={(e) => handleTyping(e)}
+                    className="d-flex justify-content-center align-items-center"
+                  >
                     <FiSend />
                   </ChattingInputSubmit>
                 </ChattingForm>
@@ -208,7 +237,7 @@ const UserChat = (props) => {
       ) : (
         " "
       )}
-    </div>
+    </ChattingSection>
   );
 };
 
