@@ -4,14 +4,14 @@ import { useState, useEffect } from "react";
 import { FiSend } from "react-icons/fi/index";
 import { AiOutlineMore } from "react-icons/ai/index";
 import { io } from "socket.io-client";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { signIn } from "../../firebase";
 // import axios from "axios";
-import TimeAgo from 'javascript-time-ago'
-import en from 'javascript-time-ago/locale/en.json'
+import TimeAgo from "javascript-time-ago";
+import en from "javascript-time-ago/locale/en.json";
+import { useContext } from "react";
+import { AuthContext } from "../../context/authContext";
 
 TimeAgo.addDefaultLocale(en);
-const timeAgo = new TimeAgo('en-US');
+const timeAgo = new TimeAgo("en-US");
 
 const socket = io.connect("http://localhost:5000", { autoConnect: false });
 
@@ -33,16 +33,17 @@ const ChatInfoWrapper = styled.div`
   /* position: fixed;
   top: 0%; */
   background: ${white};
+  margin-top: .5rem;
 `;
 const ChatPanel = styled.div`
   width: 100%;
   overflow-x: hidden;
   overflow-y: scroll;
 `;
-const ChatInfoUserName = styled.p`
+const ChatInfoUserName = styled.div`
   font-size: ${(props) => (props.chatting ? "1rem" : "1.5rem")};
   font-weight: 700;
-  margin-top: 1rem;
+  /* margin-top: 1rem; */
   cursor: pointer;
   background: ${(props) => (props.chatting ? `${white}` : `${white}`)};
 `;
@@ -134,26 +135,14 @@ const ChattingInputSubmit = styled.div`
 const UserChat = (props) => {
   let [message, setMessage] = useState("");
   let [inputValue, setInputValue] = useState([]);
-  let [user, setUser] = useState([]);
-  const signInStatus = () => {
-    const auth = getAuth();
-    onAuthStateChanged(auth, (userInfo) => {
-      if (userInfo) {
-        setUser(userInfo);
-        // console.log(res);
-        // socket.emit("newUser", {user: user.displayName});
-        socket.auth = { username: userInfo.uid };
-        socket.connect();
-        socket.on("connect_error", (err) => {
-          if (err.message === "invalid username") {
-            this.usernameAlreadySelected = false;
-          }
-        });
-      } else {
-        signIn();
-      }
-    });
-  };
+  const { user } = useContext(AuthContext);
+  socket.auth = { username: user.uid };
+  socket.connect();
+  socket.on("connect_error", (err) => {
+    if (err.message === "invalid username") {
+      this.usernameAlreadySelected = false;
+    }
+  });
 
   const formHandler = async (e) => {
     e.preventDefault();
@@ -171,20 +160,16 @@ const UserChat = (props) => {
     });
   });
 
-  useEffect(() => {
-    signInStatus();
-  });
-
   function handleTyping(e) {}
 
   return (
     <ChattingSection className="w-75">
-      {props.currentUser.name !== "" ? (
+      {props.currentUserData.name !== "" ? (
         <>
           <ChatArea className="w-100">
             <ChatInfoWrapper className="d-flex w-100 align-items-center">
-              <ChatInfoUserImg src={props.currentUser.img} />
-              <ChatInfoUserName>{props.currentUser.name}</ChatInfoUserName>
+              <ChatInfoUserImg src={props.currentUserData.img} />
+              <ChatInfoUserName>{props.currentUserData.name}</ChatInfoUserName>
               <ChatInfoUserMore>
                 <AiOutlineMore size="1.75rem" />
               </ChatInfoUserMore>
@@ -207,8 +192,8 @@ const UserChat = (props) => {
                         <ChatInfoUserName chatting>
                           {payload.message}
                           <ChatTime className="text-justify">
-                          {timeAgo.format(Date.now(), 'round-minute')}
-                        </ChatTime>
+                            {timeAgo.format(Date.now(), "round-minute")}
+                          </ChatTime>
                         </ChatInfoUserName>
                       </ChattingGuest>
                     );

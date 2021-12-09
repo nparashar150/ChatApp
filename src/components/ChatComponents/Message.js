@@ -1,8 +1,11 @@
 import styled from "styled-components";
 import { darkBlue, white } from "../Shared/ColorPalette";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { useContext } from "react";
+import { AuthContext } from "../../context/authContext";
+import Conversation from "./Conversation";
 import { SlideLeft } from "../Shared/Animation";
-import ChatSampleData from "../../data/ChatPage/ChatPage.json";
-import { useState } from "react";
 import broadcast from "../../data/ChatPage/broadcast.png";
 
 const Messages = styled.h1`
@@ -41,13 +44,23 @@ const MessageDivider = styled.section`
   overflow-y: scroll;
 `;
 
+const MessageSearchBar = styled.input`
+  border: 1px solid ${darkBlue};
+  outline: none;
+  background: ${white};
+  border-radius: 1rem;
+
+  @media (max-width: 768px) {
+    width: 80%;
+  }
+`;
+
 const MessageItem = styled.div`
   background: ${white};
   justify-content: flex-start;
   align-items: center;
   cursor: pointer;
   padding: 0.5rem 0.5rem;
-  border-bottom: 1px solid ${darkBlue + "50"};
   gap: 0.75rem;
   animation: ${SlideLeft} 1.5s ease-in-out;
 `;
@@ -86,19 +99,24 @@ const MessageItemUser = styled.img`
   border: 2px solid ${darkBlue + "75"};
 `;
 
-const MessageSearchBar = styled.input`
-  border: 1px solid ${darkBlue};
-  outline: none;
-  background: ${white};
-  border-radius: 1rem;
-
-  @media (max-width: 768px) {
-    width: 80%;
-  }
-`;
-
 const ChatMessageList = (props) => {
   const [searchUser, setSearchUser] = useState("");
+  const { user } = useContext(AuthContext);
+  const [conversations, setConversations] = useState([]);
+
+  useEffect(() => {
+    const getUserConversations = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/user/conversation/" + user.uid
+        );
+        setConversations(response.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getUserConversations();
+  }, [user.uid]);
 
   return (
     <>
@@ -112,31 +130,26 @@ const ChatMessageList = (props) => {
           className="w-100 px-3 py-1 mb-3"
         />
         <MessageDivider className="d-flex">
-          {Object.keys(ChatSampleData.Users).map((key) => {
-            const showUserInfo = () => {
-              let name = ChatSampleData.Users[key].name;
-              let img = broadcast;
-              props.currentUser({ name: name, img: img });
-            };
-            return (
-              <MessageItem
-                key={key}
-                onClick={showUserInfo}
-                className="d-flex flex-row w-100"
-              >
-                <MessageItemUser src={broadcast} />
-                <MessageInfo className="d-flex flex-column w-100">
-                  <MessageItemName>
-                    {ChatSampleData.Users[key].name}
-                  </MessageItemName>
-                  <MessageData
-                   className="text-justify">
-                    {ChatSampleData.Users[key].message}
-                  </MessageData>
-                </MessageInfo>
-              </MessageItem>
-            );
-          })}
+          {conversations.length === 0 ? (
+            <MessageItem className="d-flex flex-row w-100">
+              <MessageItemUser src={broadcast} />
+              <MessageInfo className="d-flex flex-column w-100">
+                <MessageItemName>Start Conversation</MessageItemName>
+                <MessageData className="text-justify"> </MessageData>
+              </MessageInfo>
+            </MessageItem>
+          ) : (
+            Object.keys(conversations).map((key) => {
+              return (
+                <Conversation
+                  currentUserData={props.currentUserData}
+                  currentUser={user}
+                  showUserInfo={conversations[key].members}
+                  keys={key}
+                />
+              );
+            })
+          )}
         </MessageDivider>
       </MessageWrapper>
     </>

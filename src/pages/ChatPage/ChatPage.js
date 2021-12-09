@@ -2,6 +2,7 @@ import ChatMessageList from "../../components/ChatComponents/Message";
 import UserChat from "../../components/ChatComponents/UserChat";
 import styled from "styled-components";
 import { useState } from "react";
+// import { AuthContext } from "../../context/authContext";
 
 const ChatPageWrapper = styled.div`
   width: 100vw;
@@ -14,12 +15,11 @@ const ChatPage = () => {
     name: "",
     img: "",
   });
-
   return (
     <>
       <ChatPageWrapper className="d-flex">
-        <ChatMessageList currentUser={(value) => setUserInfo(value)} />
-        <UserChat currentUser={userInfo} />
+        <ChatMessageList currentUserData={(value) => setUserInfo(value)} />
+        <UserChat currentUserData={userInfo} />
       </ChatPageWrapper>
     </>
   );
