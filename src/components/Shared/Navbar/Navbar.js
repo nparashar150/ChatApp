@@ -137,14 +137,14 @@ const Navbar = () => {
           <NavLinkWraper className="d-flex">
             <NavLink
               className="px-3"
-              to="#about"
+              to="/about"
               onClick={() => toggleNavItem()}
             >
               About
             </NavLink>
             <NavLink
               className="px-3"
-              to="#support"
+              to="/support"
               onClick={() => toggleNavItem()}
             >
               Support
@@ -158,7 +158,7 @@ const Navbar = () => {
             </NavLink>
           </NavLinkWraper>
           <NavLogin onClick={handleLogin} disabled={isFetching} >
-            {isFetching ? "loading" : "Login"}
+            {isFetching ? "wait.." : "Login"}
           </NavLogin>
         </NavMobileWrapper>
       </NavWrapper>
