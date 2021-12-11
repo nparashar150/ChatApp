@@ -11,10 +11,11 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/:consversationId", async (req, res) => {
+router.get("/:conversationId", async (req, res) => {
+  // console.log(req.params.conversationId);
   try {
     const conversation = await Messages.find({
-      consversationId: req.params.consversationId,
+      conversationId: req.params.conversationId,
     });
     res.status(200).json(conversation);
   } catch (err) {
