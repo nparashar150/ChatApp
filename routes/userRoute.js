@@ -24,8 +24,8 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/", async (req, res) => {
-    const users = await userInfo.find({});
+router.get("/:userId", async (req, res) => {
+    const users = await userInfo.find({uid: req.params.userId});
     res.json(users);
 });
 
