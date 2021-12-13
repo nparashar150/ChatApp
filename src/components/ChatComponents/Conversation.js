@@ -65,7 +65,7 @@ export default function Conversation({
 
   const showUserData = () => {
     let chat = [];
-    currentUserData({ name: user.name, img: user.photoUrl, chatData: chat, uid: user.uid });
+    currentUserData({ name: user.name, img: user.photoUrl, chatData: chat, uid: user.uid, chatId: id });
     messages.forEach((e) => {
       chat.push(e);
     });
@@ -110,7 +110,7 @@ export default function Conversation({
       <MessageItemUser src={user.photoUrl} />
       <MessageInfo className="d-flex flex-column w-100">
         <MessageItemName>{user.name}</MessageItemName>
-        <MessageData className="text-justify"> </MessageData>
+        <MessageData className="text-justify">{""}</MessageData>
       </MessageInfo>
     </MessageItem>
   );

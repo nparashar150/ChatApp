@@ -4,12 +4,11 @@ import { useState, useEffect } from "react";
 import { FiSend } from "react-icons/fi/index";
 import { AiOutlineMore } from "react-icons/ai/index";
 import { io } from "socket.io-client";
-// import axios from "axios";
+import axios from "axios";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en.json";
 import { useContext } from "react";
 import { AuthContext } from "../../context/authContext";
-import moment from 'moment';
 
 TimeAgo.addDefaultLocale(en);
 const timeAgo = new TimeAgo("en-US");
@@ -151,7 +150,7 @@ const NoConversation = styled.div`
 const UserChat = ({ currentUserData }) => {
   let [message, setMessage] = useState("");
   let [inputValue, setInputValue] = useState([]);
-
+  let [chat, setChat] = useState([]);
   const { user } = useContext(AuthContext);
   socket.auth = { username: user.uid };
   socket.connect();
@@ -163,6 +162,14 @@ const UserChat = ({ currentUserData }) => {
 
   const formHandler = async (e) => {
     e.preventDefault();
+    const messagePush = {
+      sender: user.uid,
+      text: message,
+      conversationId: currentUserData.chatId
+    }
+    const pushChat = await axios.post("http://localhost:5000/user/message", messagePush);
+    console.log(pushChat.data);
+    setChat([...chat, pushChat.data])
     socket.emit("userChat", {
       message,
       username: user.email,
@@ -180,7 +187,21 @@ const UserChat = ({ currentUserData }) => {
   function handleTyping(e) {}
   // console.log(date.getTime())
   // console.log(timeAgo.format(date))
-  // console.log(currentUserData.chatData[0].createdAt)
+  // console.log(currentUserData.chatData)
+  useEffect(() => {
+    const getMessages = async () => {
+      try {
+        const res = await axios.get(
+          "http://localhost:5000/user/message/" + currentUserData.chatId
+        );
+        setChat(res.data);
+        // console.log(chat)
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getMessages();
+  }, [currentUserData.chatId, chat]);
   return (
     <ChattingSection className="w-75">
       {currentUserData.name !== "" ? (
@@ -196,11 +217,10 @@ const UserChat = ({ currentUserData }) => {
             <ChatPanel>
               <ChattingWrapper className="d-flex flex-column">
                 <Chat className="">
-                  {currentUserData.chatData.map((index, key) => {
-                    // console.log(index.sender, user.uid);
+                  {chat.map((index, key) => {
                     return (
                       <ChattingGuest
-                        key={index}
+                        key={key}
                         className={
                           user.uid === index.sender
                             ? "d-flex flex-row-reverse w-100 align-items-center pr-1"
@@ -218,7 +238,7 @@ const UserChat = ({ currentUserData }) => {
                         <ChatInfoUserName chatting>
                           {index.text}
                           <ChatTime className="text-justify">
-                            {timeAgo.format(new Date(currentUserData.chatData[0].createdAt))}
+                            {timeAgo.format(new Date(index.createdAt))}
                           </ChatTime>
                         </ChatInfoUserName>
                       </ChattingGuest>
