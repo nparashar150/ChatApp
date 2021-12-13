@@ -1,13 +1,12 @@
 import styled from "styled-components";
 import { darkBlue, red, white } from "../Shared/ColorPalette";
-import { useState, useEffect } from "react";
 import { FiSend } from "react-icons/fi/index";
 import { AiOutlineMore } from "react-icons/ai/index";
 import { io } from "socket.io-client";
 import axios from "axios";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en.json";
-import { useContext } from "react";
+import { useContext, useRef, useState, useEffect } from "react";
 import { AuthContext } from "../../context/authContext";
 
 TimeAgo.addDefaultLocale(en);
@@ -151,6 +150,8 @@ const UserChat = ({ currentUserData }) => {
   let [message, setMessage] = useState("");
   let [inputValue, setInputValue] = useState([]);
   let [chat, setChat] = useState([]);
+  const scrollRef = useRef();
+
   const { user } = useContext(AuthContext);
   socket.auth = { username: user.uid };
   socket.connect();
@@ -165,11 +166,14 @@ const UserChat = ({ currentUserData }) => {
     const messagePush = {
       sender: user.uid,
       text: message,
-      conversationId: currentUserData.chatId
-    }
-    const pushChat = await axios.post("http://localhost:5000/user/message", messagePush);
+      conversationId: currentUserData.chatId,
+    };
+    const pushChat = await axios.post(
+      "http://localhost:5000/user/message",
+      messagePush
+    );
     console.log(pushChat.data);
-    setChat([...chat, pushChat.data])
+    setChat([...chat, pushChat.data]);
     socket.emit("userChat", {
       message,
       username: user.email,
@@ -202,6 +206,10 @@ const UserChat = ({ currentUserData }) => {
     };
     getMessages();
   }, [currentUserData.chatId, chat]);
+
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({behaviour: "smooth"})
+  }, [chat])
   return (
     <ChattingSection className="w-75">
       {currentUserData.name !== "" ? (
@@ -226,6 +234,7 @@ const UserChat = ({ currentUserData }) => {
                             ? "d-flex flex-row-reverse w-100 align-items-center pr-1"
                             : "d-flex flex-row w-100 align-items-center pl-1"
                         }
+                        ref={scrollRef}
                       >
                         <ChatInfoUserImg
                           chatting
