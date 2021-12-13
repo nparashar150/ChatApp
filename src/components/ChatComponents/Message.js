@@ -11,7 +11,7 @@ import broadcast from "../../data/ChatPage/broadcast.png";
 const Messages = styled.h1`
   font-weight: 700;
   font-size: 2rem;
-  padding: 1.5rem 0 0.5rem 0;
+  padding: 1.25rem 0 0.5rem 0;
   width: 100%;
   padding-left: 0.5rem;
 
@@ -26,6 +26,7 @@ const MessageWrapper = styled.section`
   background: ${white};
   overflow: hidden;
   flex-direction: column;
+  border-right: 2px hidden;
 
   @media (max-width: 768px) {
     padding: 0;
@@ -45,10 +46,19 @@ const MessageDivider = styled.section`
 `;
 
 const MessageSearchBar = styled.input`
-  border: 1px solid ${darkBlue};
+  border: 2px solid ${darkBlue + "50"};
   outline: none;
+  border-radius: 2rem;
+  height: 2.5rem;
+  width: 100%;
   background: ${white};
-  border-radius: 1rem;
+  font-size: 0.95rem;
+  padding: 0 0.75rem;
+
+  &:hover,
+  &:focus {
+    border-color: ${darkBlue + "AA"};
+  }
 
   @media (max-width: 768px) {
     width: 80%;
@@ -100,10 +110,10 @@ const MessageItemUser = styled.img`
 `;
 
 const ChatMessageList = (props) => {
-  const [searchUser, setSearchUser] = useState("");
-  const { user } = useContext(AuthContext);
-  const [conversations, setConversations] = useState([]);
-
+  let [searchUser, setSearchUser] = useState("");
+  let { user } = useContext(AuthContext);
+  let [conversations, setConversations] = useState([]);
+  // console.log(user.photoUrl);
   useEffect(() => {
     const getUserConversations = async () => {
       try {
@@ -121,7 +131,12 @@ const ChatMessageList = (props) => {
   return (
     <>
       <MessageWrapper className="container d-flex w-25 h-100">
-        <Messages>Messages</Messages>
+        <Messages className="d-flex flex-row w-100 justify-content-between align-items-center">
+          Messages
+          <MessageItem className="d-flex flex-row p-0">
+            <MessageItemUser src={user.photoURL} />
+          </MessageItem>
+        </Messages>
         <MessageSearchBar
           onChange={(e) => setSearchUser(e.target.value)}
           value={searchUser}
@@ -146,6 +161,7 @@ const ChatMessageList = (props) => {
                   currentUser={user}
                   showUserInfo={conversations[key].members}
                   keys={key}
+                  id={conversations[key]._id}
                 />
               );
             })

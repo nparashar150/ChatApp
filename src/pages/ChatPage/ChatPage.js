@@ -14,6 +14,8 @@ const ChatPage = () => {
   let [userInfo, setUserInfo] = useState({
     name: "",
     img: "",
+    chatData: [],
+    uid: ""
   });
   return (
     <>

@@ -9,6 +9,7 @@ import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en.json";
 import { useContext } from "react";
 import { AuthContext } from "../../context/authContext";
+import moment from 'moment';
 
 TimeAgo.addDefaultLocale(en);
 const timeAgo = new TimeAgo("en-US");
@@ -33,7 +34,7 @@ const ChatInfoWrapper = styled.div`
   /* position: fixed;
   top: 0%; */
   background: ${white};
-  margin-top: .5rem;
+  margin-top: 0.5rem;
 `;
 const ChatPanel = styled.div`
   width: 100%;
@@ -132,9 +133,25 @@ const ChattingInputSubmit = styled.div`
   }
 `;
 
-const UserChat = (props) => {
+const NoConversation = styled.div`
+  font-size: 6rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 70vw;
+  color: ${darkBlue + "75"};
+  padding: 2rem;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+`;
+
+const UserChat = ({ currentUserData }) => {
   let [message, setMessage] = useState("");
   let [inputValue, setInputValue] = useState([]);
+
   const { user } = useContext(AuthContext);
   socket.auth = { username: user.uid };
   socket.connect();
@@ -161,15 +178,17 @@ const UserChat = (props) => {
   });
 
   function handleTyping(e) {}
-
+  // console.log(date.getTime())
+  // console.log(timeAgo.format(date))
+  // console.log(currentUserData.chatData[0].createdAt)
   return (
     <ChattingSection className="w-75">
-      {props.currentUserData.name !== "" ? (
+      {currentUserData.name !== "" ? (
         <>
           <ChatArea className="w-100">
             <ChatInfoWrapper className="d-flex w-100 align-items-center">
-              <ChatInfoUserImg src={props.currentUserData.img} />
-              <ChatInfoUserName>{props.currentUserData.name}</ChatInfoUserName>
+              <ChatInfoUserImg src={currentUserData.img} />
+              <ChatInfoUserName>{currentUserData.name}</ChatInfoUserName>
               <ChatInfoUserMore>
                 <AiOutlineMore size="1.75rem" />
               </ChatInfoUserMore>
@@ -177,22 +196,29 @@ const UserChat = (props) => {
             <ChatPanel>
               <ChattingWrapper className="d-flex flex-column">
                 <Chat className="">
-                  {inputValue.map((payload, index) => {
-                    // (user.email === payload.username) ? console.log(payload.username) : console.log("false") ;
+                  {currentUserData.chatData.map((index, key) => {
+                    // console.log(index.sender, user.uid);
                     return (
                       <ChattingGuest
                         key={index}
                         className={
-                          user.email === payload.username
+                          user.uid === index.sender
                             ? "d-flex flex-row-reverse w-100 align-items-center pr-1"
                             : "d-flex flex-row w-100 align-items-center pl-1"
                         }
                       >
-                        <ChatInfoUserImg chatting src={payload.image} />
+                        <ChatInfoUserImg
+                          chatting
+                          src={
+                            user.uid === index.sender
+                              ? user.photoURL
+                              : currentUserData.img
+                          }
+                        />
                         <ChatInfoUserName chatting>
-                          {payload.message}
+                          {index.text}
                           <ChatTime className="text-justify">
-                            {timeAgo.format(Date.now(), "round-minute")}
+                            {timeAgo.format(new Date(currentUserData.chatData[0].createdAt))}
                           </ChatTime>
                         </ChatInfoUserName>
                       </ChattingGuest>
@@ -220,7 +246,7 @@ const UserChat = (props) => {
           </ChatArea>
         </>
       ) : (
-        " "
+        <NoConversation>Open a conversation to start chat.</NoConversation>
       )}
     </ChattingSection>
   );

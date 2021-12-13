@@ -57,8 +57,21 @@ export default function Conversation({
   showUser,
   keys,
   currentUserData,
+  id,
 }) {
   const [user, setUser] = useState({});
+  let [messages, setMessages] = useState([]);
+  let [currentChat, setCurrentChat] = useState(null);
+
+  const showUserData = () => {
+    let chat = [];
+    currentUserData({ name: user.name, img: user.photoUrl, chatData: chat, uid: user.uid });
+    messages.forEach((e) => {
+      chat.push(e);
+    });
+    setCurrentChat(id);
+    // console.log(chat);
+  };
 
   useEffect(() => {
     const friendId = showUserInfo.find((m) => m !== currentUser.uid);
@@ -75,9 +88,19 @@ export default function Conversation({
     getUser();
   }, [currentUser, showUserInfo]);
 
-  const showUserData = () => {
-    currentUserData({ name: user.name, img: user.photoUrl });
-  };
+  useEffect(() => {
+    const getMessages = async () => {
+      try {
+        const res = await axios.get(
+          "http://localhost:5000/user/message/" + currentChat
+        );
+        setMessages(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getMessages();
+  }, [currentChat]);
   return (
     <MessageItem
       onClick={showUserData}
