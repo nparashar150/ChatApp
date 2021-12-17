@@ -45,6 +45,9 @@ const ChatInfoUserName = styled.div`
   /* margin-top: 1rem; */
   cursor: pointer;
   background: ${(props) => (props.chatting ? `${white}` : `${white}`)};
+  color: ${darkBlue};
+  width: 50%;
+  text-align: ${(props) => (props.right ? "right" : "left")};
 `;
 const ChatInfoUserImg = styled.img`
   width: ${(props) => (props.chatting ? "1.75rem" : "2.75rem")};
@@ -87,10 +90,10 @@ const ChatTime = styled.p`
   font-weight: 600;
   font-size: 0.7rem;
   background: ${white};
-  text-align: center;
+  /* text-align: center; */
   cursor: pointer;
   margin: 0;
-  width: max-content;
+  width: 100%;
 `;
 const ChattingInput = styled.input`
   border: 2px solid ${darkBlue + "50"};
@@ -208,8 +211,8 @@ const UserChat = ({ currentUserData }) => {
   }, [currentUserData.chatId, chat]);
 
   useEffect(() => {
-    scrollRef.current?.scrollIntoView({behaviour: "smooth"})
-  }, [chat])
+    scrollRef.current?.scrollIntoView({ behaviour: "smooth" });
+  }, [chat]);
   return (
     <ChattingSection className="w-75">
       {currentUserData.name !== "" ? (
@@ -231,8 +234,8 @@ const UserChat = ({ currentUserData }) => {
                         key={key}
                         className={
                           user.uid === index.sender
-                            ? "d-flex flex-row-reverse w-100 align-items-center pr-1"
-                            : "d-flex flex-row w-100 align-items-center pl-1"
+                            ? "d-flex flex-row-reverse w-100 align-items-start px-2"
+                            : "d-flex flex-row w-100 align-items-start px-3"
                         }
                         ref={scrollRef}
                       >
@@ -244,9 +247,22 @@ const UserChat = ({ currentUserData }) => {
                               : currentUserData.img
                           }
                         />
-                        <ChatInfoUserName chatting>
+                        <ChatInfoUserName
+                          chatting
+                          className={
+                            user.uid === index.sender
+                              ? "text-end"
+                              : "text-start"
+                          }
+                        >
                           {index.text}
-                          <ChatTime className="text-justify">
+                          <ChatTime
+                            className={
+                              user.uid === index.sender
+                                ? "text-end"
+                                : "text-start"
+                            }
+                          >
                             {timeAgo.format(new Date(index.createdAt))}
                           </ChatTime>
                         </ChatInfoUserName>

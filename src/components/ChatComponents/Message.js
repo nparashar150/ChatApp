@@ -27,7 +27,7 @@ const MessageWrapper = styled.section`
   background: ${white};
   overflow: hidden;
   flex-direction: column;
-  border-right: 2px hidden;
+  border-right: 2px solid ${darkBlue+"50"};
 
   @media (max-width: 768px) {
     padding: 0;
@@ -113,13 +113,20 @@ const MessageItemUser = styled.img`
 const searchStyles = {
   marginLeft: "-10%",
   marginTop: "-1rem",
-}
+};
 
 const ChatMessageList = (props) => {
   let [searchUser, setSearchUser] = useState("");
   let { user } = useContext(AuthContext);
   let [conversations, setConversations] = useState([]);
+  let [searching, setSearching] = useState(false);
   // console.log(user.photoUrl);
+
+  const handleSearch = (e) => {
+    setSearchUser(e.target.value);
+    // setSearching(false);
+  }
+
   useEffect(() => {
     const getUserConversations = async () => {
       try {
@@ -145,23 +152,29 @@ const ChatMessageList = (props) => {
         </Messages>
         <div className="d-flex flex-row align-items-center">
           <MessageSearchBar
-            onChange={(e) => setSearchUser(e.target.value)}
+            onChange={(e) => handleSearch(e)}
             value={searchUser}
             type="text"
             placeholder="Search or Start New Chat"
             className="w-100 px-3 py-1 mb-3"
           />
-          <FiSearch style={searchStyles} size="1.25rem" color={darkBlue+"AA"} />
+          <FiSearch
+            style={searchStyles}
+            size="1.25rem"
+            color={darkBlue + "AA"}
+          />
         </div>
         <MessageDivider className="d-flex">
           {conversations.length === 0 ? (
             <MessageItem className="d-flex flex-row w-100">
               <MessageItemUser src={broadcast} />
               <MessageInfo className="d-flex flex-column w-100">
-                <MessageItemName>Start Conversation</MessageItemName>
+                <MessageItemName>Start Conversations</MessageItemName>
                 <MessageData className="text-justify"> </MessageData>
               </MessageInfo>
             </MessageItem>
+          ) : searching ? (
+            ""
           ) : (
             Object.keys(conversations).map((key) => {
               return (
