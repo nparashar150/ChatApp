@@ -7,6 +7,7 @@ import { AuthContext } from "../../context/authContext";
 import Conversation from "./Conversation";
 import { SlideLeft } from "../Shared/Animation";
 import broadcast from "../../data/ChatPage/broadcast.png";
+import { FiSearch } from "react-icons/fi/index";
 
 const Messages = styled.h1`
   font-weight: 700;
@@ -109,6 +110,11 @@ const MessageItemUser = styled.img`
   border: 2px solid ${darkBlue + "75"};
 `;
 
+const searchStyles = {
+  marginLeft: "-10%",
+  marginTop: "-1rem",
+}
+
 const ChatMessageList = (props) => {
   let [searchUser, setSearchUser] = useState("");
   let { user } = useContext(AuthContext);
@@ -137,13 +143,16 @@ const ChatMessageList = (props) => {
             <MessageItemUser src={user.photoURL} />
           </MessageItem>
         </Messages>
-        <MessageSearchBar
-          onChange={(e) => setSearchUser(e.target.value)}
-          value={searchUser}
-          type="text"
-          placeholder="Search Chat"
-          className="w-100 px-3 py-1 mb-3"
-        />
+        <div className="d-flex flex-row align-items-center">
+          <MessageSearchBar
+            onChange={(e) => setSearchUser(e.target.value)}
+            value={searchUser}
+            type="text"
+            placeholder="Search or Start New Chat"
+            className="w-100 px-3 py-1 mb-3"
+          />
+          <FiSearch style={searchStyles} size="1.25rem" color={darkBlue+"AA"} />
+        </div>
         <MessageDivider className="d-flex">
           {conversations.length === 0 ? (
             <MessageItem className="d-flex flex-row w-100">
