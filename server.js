@@ -7,41 +7,41 @@ const bodyParser = require("body-parser");
 const userRoute = require("./routes/userRoute");
 const conversationRoute = require("./routes/conversationRoute");
 const messageRoute = require("./routes/messageRoute");
-const io = require("socket.io")(server, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST"],
-  },
-});
+// const io = require("socket.io")(server, {
+//   cors: {
+//     origin: "*",
+//     methods: ["GET", "POST"],
+//   },
+// });
 
-io.use((socket, next) => {
-  const username = socket.handshake.auth.username;
-  if (!username) {
-    return next(new Error("invalid username"));
-  }
-  socket.username = username;
-  next();
-});
-io.on("connection", (socket) => {
-  console.log("Socket is active!");
+// io.use((socket, next) => {
+//   const username = socket.handshake.auth.username;
+//   if (!username) {
+//     return next(new Error("invalid username"));
+//   }
+//   socket.username = username;
+//   next();
+// });
+// io.on("connection", (socket) => {
+//   console.log("Socket is active!");
 
-  socket.on("newUser", (name) => {
-    user[socket.id] = name;
-    socket.broadcast.emit("user-joined", name);
-    console.log(name);
-  });
+//   socket.on("newUser", (name) => {
+//     user[socket.id] = name;
+//     socket.broadcast.emit("user-joined", name);
+//     console.log(name);
+//   });
 
-  socket.on("userChat", (payload) => {
-    io.emit("userChat", payload);
-  });
-});
+//   socket.on("userChat", (payload) => {
+//     io.emit("userChat", payload);
+//   });
+// });
 
-io.on("connection", (socket) => {
-  console.log("New user!");
-  socket.on("disconnect", () => {
-    console.log("User Disconnected!");
-  });
-});
+// io.on("connection", (socket) => {
+//   console.log("New user!");
+//   socket.on("disconnect", () => {
+//     console.log("User Disconnected!");
+//   });
+// });
 mongoose.connect(
   process.env.CONNECTION_STRING,
   {
