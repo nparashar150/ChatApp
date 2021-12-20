@@ -9,6 +9,7 @@ import { SlideLeft } from "../Shared/Animation";
 import broadcast from "../../data/ChatPage/broadcast.png";
 import { FiSearch } from "react-icons/fi/index";
 import FindUser from "./FindUser";
+import { useNavigate } from "react-router-dom";
 
 const Messages = styled.h1`
   font-weight: 700;
@@ -122,6 +123,7 @@ const ChatMessageList = (props) => {
   let [conversations, setConversations] = useState([]);
   let [searching, setSearching] = useState(false);
   // console.log(user.photoUrl);
+  const navigate = useNavigate();
 
   const searchRef = useRef();
   const handleSearching = (e) => {
@@ -156,7 +158,7 @@ const ChatMessageList = (props) => {
       <MessageWrapper className="container d-flex w-25 h-100">
         <Messages className="d-flex flex-row w-100 justify-content-between align-items-center">
           Messages
-          <MessageItem className="d-flex flex-row p-0">
+          <MessageItem onClick={() => navigate("/profile")} className="d-flex flex-row p-0">
             <MessageItemUser src={user.photoURL} />
           </MessageItem>
         </Messages>
@@ -166,11 +168,12 @@ const ChatMessageList = (props) => {
           onSubmit={(e) => handleSearching(e)}
         >
           <MessageSearchBar
-            type="text"
             placeholder="Search or Start New Chat"
             className="w-100 px-3 py-1 mb-3"
             name="SearchBar"
             onChange={(e) => handleInputSearch(e)}
+            autoComplete="off"
+            type="email"
           />
           <FiSearch
             style={searchStyles}

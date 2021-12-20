@@ -3,6 +3,7 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
   onAuthStateChanged,
+  signOut
 } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 import axios from "axios";
@@ -48,12 +49,23 @@ const signIn = (dispatch) => {
 
 const signInStatus = (dispatch) => {
   onAuthStateChanged(auth, (user) => {
-    dispatch({ type: "LOGIN_START" });
+    // dispatch({ type: "LOGIN_START" });
     if (user) {
       dispatch({ type: "LOGIN_SUCCESS", payload: user });
     } else {
       window.location.replace("/");
+      // console.log("Signed Out");
     }
   });
 };
-export { signIn, signInStatus };
+
+const signOutUser = () => {
+  signOut(auth).then(() => {
+    // SingOut Success
+    signInStatus();
+  }).catch((error) => {
+    console.log(error);
+  });
+}
+
+export { signIn, signInStatus, signOutUser };
