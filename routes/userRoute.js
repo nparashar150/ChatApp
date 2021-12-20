@@ -29,4 +29,9 @@ router.get("/:userId", async (req, res) => {
     res.json(users);
 });
 
+router.get("/all/:queryUserEmail", async (req, res) => {
+  const userEmail = await userInfo.find({email: req.params.queryUserEmail});
+  res.json(userEmail);
+});
+
 module.exports = router;
