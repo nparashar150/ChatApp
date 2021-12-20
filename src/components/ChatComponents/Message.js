@@ -131,6 +131,12 @@ const ChatMessageList = (props) => {
     setSearching(true);
   };
 
+  const handleInputSearch = (e) => {
+    if (e.target.value === "") {
+      setSearching(false);
+    }  
+  }
+
   useEffect(() => {
     const getUserConversations = async () => {
       try {
@@ -164,6 +170,7 @@ const ChatMessageList = (props) => {
             placeholder="Search or Start New Chat"
             className="w-100 px-3 py-1 mb-3"
             name="SearchBar"
+            onChange={(e) => handleInputSearch(e)}
           />
           <FiSearch
             style={searchStyles}
