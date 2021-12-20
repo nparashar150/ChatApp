@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { darkBlue, white } from "../Shared/ColorPalette";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useContext } from "react";
 import { AuthContext } from "../../context/authContext";
@@ -8,6 +8,7 @@ import Conversation from "./Conversation";
 import { SlideLeft } from "../Shared/Animation";
 import broadcast from "../../data/ChatPage/broadcast.png";
 import { FiSearch } from "react-icons/fi/index";
+import FindUser from "./FindUser";
 
 const Messages = styled.h1`
   font-weight: 700;
@@ -27,7 +28,7 @@ const MessageWrapper = styled.section`
   background: ${white};
   overflow: hidden;
   flex-direction: column;
-  border-right: 2px solid ${darkBlue+"50"};
+  border-right: 2px solid ${darkBlue + "50"};
 
   @media (max-width: 768px) {
     padding: 0;
@@ -122,10 +123,13 @@ const ChatMessageList = (props) => {
   let [searching, setSearching] = useState(false);
   // console.log(user.photoUrl);
 
-  const handleSearch = (e) => {
-    setSearchUser(e.target.value);
-    // setSearching(false);
-  }
+  const searchRef = useRef();
+  const handleSearching = (e) => {
+    e.preventDefault();
+    console.log(searchRef.current.SearchBar.value);
+    setSearchUser(searchRef.current.SearchBar.value);
+    setSearching(true);
+  };
 
   useEffect(() => {
     const getUserConversations = async () => {
@@ -150,20 +154,23 @@ const ChatMessageList = (props) => {
             <MessageItemUser src={user.photoURL} />
           </MessageItem>
         </Messages>
-        <div className="d-flex flex-row align-items-center">
+        <form
+          className="d-flex flex-row align-items-center"
+          ref={searchRef}
+          onSubmit={(e) => handleSearching(e)}
+        >
           <MessageSearchBar
-            onChange={(e) => handleSearch(e)}
-            value={searchUser}
             type="text"
             placeholder="Search or Start New Chat"
             className="w-100 px-3 py-1 mb-3"
+            name="SearchBar"
           />
           <FiSearch
             style={searchStyles}
             size="1.25rem"
             color={darkBlue + "AA"}
           />
-        </div>
+        </form>
         <MessageDivider className="d-flex">
           {conversations.length === 0 ? (
             <MessageItem className="d-flex flex-row w-100">
@@ -174,7 +181,7 @@ const ChatMessageList = (props) => {
               </MessageInfo>
             </MessageItem>
           ) : searching ? (
-            ""
+            <FindUser friendEmail={searchUser} />
           ) : (
             Object.keys(conversations).map((key) => {
               return (
