@@ -11,9 +11,6 @@ import { AuthContext } from "../../context/authContext";
 
 TimeAgo.addDefaultLocale(en);
 const timeAgo = new TimeAgo("en-US");
-
-const socket = io.connect("http://localhost:5000", { autoConnect: false });
-
 const ChattingSection = styled.section`
   @media (max-width: 768px) {
     width: 100% !important;
@@ -151,18 +148,13 @@ const NoConversation = styled.div`
 
 const UserChat = ({ currentUserData }) => {
   let [message, setMessage] = useState("");
-  let [inputValue, setInputValue] = useState([]);
+  // let [inputValue, setInputValue] = useState([]);
   let [chat, setChat] = useState([]);
+  let [incommingMessage, setIncommingMessage] = useState(null);
+  const socket = useRef();
   const scrollRef = useRef();
 
   const { user } = useContext(AuthContext);
-  socket.auth = { username: user.uid };
-  socket.connect();
-  socket.on("connect_error", (err) => {
-    if (err.message === "invalid username") {
-      this.usernameAlreadySelected = false;
-    }
-  });
 
   const formHandler = async (e) => {
     e.preventDefault();
@@ -176,25 +168,34 @@ const UserChat = ({ currentUserData }) => {
       messagePush
     );
     console.log(pushChat.data);
-    setChat([...chat, pushChat.data]);
-    socket.emit("userChat", {
-      message,
-      username: user.email,
-      image: user.photoURL,
+    socket.current.emit("sendMessage", {
+      senderId: user.uid,
+      receiverId: currentUserData.uid,
+      text: message,
     });
+    setChat([...chat, pushChat.data]);
     setMessage("");
   };
+  function handleTyping(e) {}
 
   useEffect(() => {
-    socket.on("userChat", (payload) => {
-      setInputValue([...inputValue, payload]);
+    socket.current = io("ws://localhost:8000");
+    socket.current.on("getMessage", (chatData) => {
+      setIncommingMessage({
+        sender: chatData.senderId,
+        text: chatData.text,
+        createdAt: Date.now(),
+      });
     });
-  });
+  }, []);
 
-  function handleTyping(e) {}
-  // console.log(date.getTime())
-  // console.log(timeAgo.format(date))
-  // console.log(currentUserData.chatData)
+  useEffect(() => {
+    socket.current.emit("sendUser", user.uid);
+    socket.current.on("getUsers", (users) => {
+      console.log(users);
+    });
+  }, [user]);
+
   useEffect(() => {
     const getMessages = async () => {
       try {
@@ -208,7 +209,7 @@ const UserChat = ({ currentUserData }) => {
       }
     };
     getMessages();
-  }, [currentUserData.chatId, chat]);
+  }, [currentUserData, chat]);
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behaviour: "smooth" });
