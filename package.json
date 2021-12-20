@@ -1,0 +1,16 @@
+{
+  "name": "socket-server",
+  "version": "0.1",
+  "main": "index.js",
+  "repository": "https://github.com/nparashar150/threejs_",
+  "author": "Naman Parashar",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "nodemon": "^2.0.15",
+    "socket.io": "^4.4.0"
+  },
+  "scripts": {
+    "start": "nodemon index.js"
+  }
+}
