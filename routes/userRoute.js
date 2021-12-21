@@ -25,12 +25,14 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/:userId", async (req, res) => {
-    const users = await userInfo.find({uid: req.params.userId});
-    res.json(users);
+  const users = await userInfo.find({ uid: req.params.userId });
+  res.json(users);
 });
 
 router.get("/all/:queryUserEmail", async (req, res) => {
-  const userEmail = await userInfo.find({email: req.params.queryUserEmail});
+  const userEmail = await userInfo.find({
+    name: new RegExp("^" + req.params.queryUserEmail, "i"),
+  });
   res.json(userEmail);
 });
 
