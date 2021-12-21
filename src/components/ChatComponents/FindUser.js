@@ -3,6 +3,9 @@ import { SlideLeft } from "../Shared/Animation";
 import { darkBlue, white } from "../Shared/ColorPalette";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useContext } from "react";
+import { AuthContext } from "../../context/authContext";
+import QuestionMark from "../../data/ChatPage/QuestionMark.svg";
 
 const MessageItem = styled.div`
   background: ${white};
@@ -46,11 +49,12 @@ const MessageItemUser = styled.img`
   overflow: hidden;
   border-radius: 50%;
   cursor: pointer;
-  border: 2px solid ${darkBlue + "75"};
+  /* border: 2px solid ${darkBlue + "75"}; */
 `;
-export default function FindUser({ friendEmail }) {
-  const [user, setUser] = useState({});
+export default function FindUser({ friendEmail, conversations }) {
+  const [searchedUser, setSearchedUser] = useState([]);
   const [find, setFind] = useState(false);
+  let { user } = useContext(AuthContext);
 
   useEffect(() => {
     const getUser = async () => {
@@ -59,30 +63,64 @@ export default function FindUser({ friendEmail }) {
           "http://localhost:5000/user/create/all/" + friendEmail
         );
         res.data.length === 0 ? setFind(false) : setFind(true);
-        find ? setUser(res.data[0]) : setUser({});
+        find ? setSearchedUser(res.data) : setSearchedUser([]);
       } catch (err) {
         console.log(err);
       }
     };
     getUser();
-  }, [friendEmail, user, find]);
+  }, [friendEmail, user, find, searchedUser]);
 
+  const checkChat = (key) => {
+    let found = conversations.length;
+    conversations.forEach((element, index) => {
+      // conversations[index].members.indexOf(searchedUser[key].uid) > -1 ? (--found)
+      if (conversations[index].members.indexOf(searchedUser[key].uid) > -1) {
+        (--found);
+      }
+    });
+    found < conversations.length ? console.log("User already there.") : createChat(key);
+  };
+
+  const createChat = async (key) => {
+    try {
+      const chatUsers = {
+        senderId: user.uid,
+        receiverId: searchedUser[key].uid,
+      };
+      const res = await axios.post(
+        "http://localhost:5000/user/conversation",
+        chatUsers
+      );
+      console.log("User added.");
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <>
       {find ? (
-        <MessageItem className="d-flex flex-row w-100">
-          <MessageItemUser src={user.photoUrl} />
-          <MessageInfo className="d-flex flex-column w-100">
-            <MessageItemName>{user.name}</MessageItemName>
-            <MessageData className="text-justify">{""}</MessageData>
-          </MessageInfo>
-        </MessageItem>
+        <>
+          {searchedUser?.map((element, key) => {
+            return (
+              <MessageItem
+                key={key}
+                onClick={() => checkChat(key)}
+                className="d-flex flex-row w-100"
+              >
+                <MessageItemUser src={element.photoUrl} />
+                <MessageInfo className="d-flex flex-column w-100">
+                  <MessageItemName>{element.name}</MessageItemName>
+                  <MessageData className="text-justify">{element.email}</MessageData>
+                </MessageInfo>
+              </MessageItem>
+            );
+          })}
+        </>
       ) : (
         <MessageItem className="d-flex flex-row w-100">
           <MessageItemUser
-            src={
-              "https://cdn4.iconfinder.com/data/icons/material-set-6-2/48/543-512.png"
-            }
+            src={QuestionMark}
           />
           <MessageInfo className="d-flex flex-column w-100">
             <MessageItemName>{"User Not Found"}</MessageItemName>
