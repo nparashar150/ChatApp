@@ -116,11 +116,11 @@ const Navbar = () => {
     }
   };
 
-  const { dispatch, user, isFetching } = useContext(AuthContext);
+  const { dispatch, isFetching } = useContext(AuthContext);
   const handleLogin = async () => {
     signIn(dispatch);
   };
-  console.log(user);
+  // console.log(user);
   useEffect(() => {
     window.screen.width >= 768 ? setToggleNav(true) : setToggleNav(false);
   }, []);
