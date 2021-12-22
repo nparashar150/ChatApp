@@ -1,10 +1,9 @@
 import styled from "styled-components";
 import { SlideLeft } from "../Shared/Animation";
-// import ChatSampleData from "../../data/ChatPage/ChatPage.json";
 import { darkBlue, white, green } from "../Shared/ColorPalette";
-// import broadcast from "../../data/ChatPage/broadcast.png";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { backendBaseURL } from "../../firebase";
 
 const MessageItem = styled.div`
   background: ${white};
@@ -97,7 +96,7 @@ export default function Conversation({
     const getUser = async () => {
       try {
         const res = await axios(
-          "http://localhost:5000/user/create/" + friendId
+          `${backendBaseURL}/user/create/` + friendId
         );
         if (isComponentMounted) {
           setUser(res.data[0]);
@@ -117,7 +116,7 @@ export default function Conversation({
     const getMessages = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:5000/user/message/" + currentChat
+          `${backendBaseURL}/user/message/` + currentChat
         );
         if (isComponentMounted) {
           setMessages(res.data);

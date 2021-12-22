@@ -3,6 +3,7 @@ import { SlideLeft } from "../Shared/Animation";
 import { darkBlue, white } from "../Shared/ColorPalette";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { backendBaseURL } from "../../firebase";
 import { useContext } from "react";
 import { AuthContext } from "../../context/authContext";
 import QuestionMark from "../../data/ChatPage/QuestionMark.svg";
@@ -60,7 +61,7 @@ export default function FindUser({ friendEmail, conversations }) {
     const getUser = async () => {
       try {
         const res = await axios(
-          "http://localhost:5000/user/create/all/" + friendEmail
+          `${backendBaseURL}/user/create/all/` + friendEmail
         );
         res.data.length === 0 ? setFind(false) : setFind(true);
         find ? setSearchedUser(res.data) : setSearchedUser([]);
@@ -90,7 +91,7 @@ export default function FindUser({ friendEmail, conversations }) {
         receiverId: searchedUser[key].uid,
       };
       const res = await axios.post(
-        "http://localhost:5000/user/conversation",
+        `${backendBaseURL}/user/conversation`,
         chatUsers
       );
       console.log("User added.", res);

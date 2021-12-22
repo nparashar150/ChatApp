@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { darkBlue, white } from "../Shared/ColorPalette";
 import { useState, useEffect, useRef } from "react";
+import { backendBaseURL } from "../../firebase";
 import axios from "axios";
 import { useContext, lazy, Suspense } from "react";
 import { AuthContext } from "../../context/authContext";
@@ -122,13 +123,11 @@ const ChatMessageList = (props) => {
   let { user } = useContext(AuthContext);
   let [conversations, setConversations] = useState([]);
   let [searching, setSearching] = useState(false);
-  // console.log(user.photoUrl);
   const navigate = useNavigate();
 
   const searchRef = useRef();
   const handleSearching = (e) => {
     e.preventDefault();
-    // console.log(searchRef.current.SearchBar.value);
     setSearchUser(searchRef.current.SearchBar.value);
     setSearching(true);
   };
@@ -144,7 +143,7 @@ const ChatMessageList = (props) => {
     const getUserConversations = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/user/conversation/" + user.uid
+          `${backendBaseURL}/user/conversation/` + user.uid
         );
         if (isComponentMounted) {
           setConversations(response.data);

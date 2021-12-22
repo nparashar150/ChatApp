@@ -4,6 +4,7 @@ import { FiSend } from "react-icons/fi/index";
 import { AiOutlineMore } from "react-icons/ai/index";
 import { io } from "socket.io-client";
 import axios from "axios";
+import { backendBaseURL } from "../../firebase";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en.json";
 import { useContext, useRef, useState, useEffect } from "react";
@@ -27,8 +28,6 @@ const ChatInfoWrapper = styled.div`
   gap: 0.75rem;
   justify-content: flex-start;
   cursor: pointer;
-  /* position: fixed;
-  top: 0%; */
   background: ${white};
   margin-top: 0.5rem;
 `;
@@ -40,7 +39,6 @@ const ChatPanel = styled.div`
 const ChatInfoUserName = styled.div`
   font-size: ${(props) => (props.chatting ? "1rem" : "1.5rem")};
   font-weight: 700;
-  /* margin-top: 1rem; */
   cursor: pointer;
   background: ${(props) => (props.chatting ? `${white}` : `${white}`)};
   color: ${darkBlue};
@@ -69,9 +67,7 @@ const Chat = styled.div`
 `;
 const ChattingGuest = styled.div`
   padding: 1rem 0 0 0;
-  /* padding-right: 1rem; */
   gap: 0.75rem;
-  /* flex-direction: row-reverse; */
   justify-content: flex-start;
   cursor: pointer;
 `;
@@ -88,7 +84,6 @@ const ChatTime = styled.p`
   font-weight: 600;
   font-size: 0.7rem;
   background: ${white};
-  /* text-align: center; */
   cursor: pointer;
   margin: 0;
   width: 100%;
@@ -154,45 +149,24 @@ const UserChat = ({ currentUserData, setOnlineUsers }) => {
   let [loading, setLoading] = useState(true);
   const socket = useRef();
   const scrollRef = useRef();
-
   const { user } = useContext(AuthContext);
 
-  const formHandler = async (e) => {
-    e.preventDefault();
-    const messagePush = {
-      sender: user.uid,
-      text: message,
-      conversationId: currentUserData.chatId,
-    };
-    const pushChat = await axios.post(
-      "http://localhost:5000/user/message",
-      messagePush
-    );
-    socket.current.emit("sendMessage", {
-      senderId: user.uid,
-      receiverId: currentUserData.uid,
-      text: message,
-    });
-    setChat([...chat, pushChat.data]);
-    setMessage("");
-  };
-
   useEffect(() => {
-    let isComponentMounted = true;
-    socket.current = io("ws://localhost:8000");
-    socket.current.on("getMessage", (chatData) => {
-      if (isComponentMounted) {
+      socket.current = io("ws://localhost:8000");
+      socket.current.on("getMessage", (chatData) => {
         setIncommingMessage({
           sender: chatData.senderId,
           text: chatData.text,
           createdAt: Date.now(),
         });
-      }
-    });
-    return () => {
-      isComponentMounted = false;
-    }
+      });
   }, []);
+
+  useEffect(() => {
+    incommingMessage &&
+      currentUserData?.members?.includes(incommingMessage.sender) &&
+      setChat((prev) => [...prev], incommingMessage);
+  }, [incommingMessage, currentUserData]);
 
   useEffect(() => {
     let isComponentMounted = true;
@@ -204,14 +178,14 @@ const UserChat = ({ currentUserData, setOnlineUsers }) => {
     });
     return () => {
       isComponentMounted = false;
-    }
+    };
   }, [setOnlineUsers, user]);
 
   useEffect(() => {
     const getMessages = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:5000/user/message/" + currentUserData.chatId
+          `${backendBaseURL}/user/message/` + currentUserData.chatId
         );
         setChat(res.data);
         setLoading(false);
@@ -221,6 +195,32 @@ const UserChat = ({ currentUserData, setOnlineUsers }) => {
     };
     getMessages();
   }, [currentUserData, chat]);
+
+  const formHandler = async (e) => {
+    e.preventDefault();
+    const messagePush = {
+      sender: user.uid,
+      text: message,
+      conversationId: currentUserData.chatId,
+    };
+
+    socket.current.emit("sendMessage", {
+      senderId: user.uid,
+      receiverId: currentUserData.uid,
+      text: message,
+    });
+
+    try {
+      const pushChat = await axios.post(
+        `${backendBaseURL}/user/message`,
+        messagePush
+      );
+      setChat([...chat, pushChat.data]);
+      setMessage("");
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behaviour: "smooth" });

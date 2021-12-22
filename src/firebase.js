@@ -68,4 +68,6 @@ const signOutUser = () => {
   });
 }
 
-export { signIn, signInStatus, signOutUser };
+const backendBaseURL = "https://cheract-backend.netlify.app/.netlify/functions/server";
+
+export { signIn, signInStatus, signOutUser, backendBaseURL };
