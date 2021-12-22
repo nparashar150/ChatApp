@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { SlideLeft } from "../Shared/Animation";
 // import ChatSampleData from "../../data/ChatPage/ChatPage.json";
-import { darkBlue, white } from "../Shared/ColorPalette";
+import { darkBlue, white, green } from "../Shared/ColorPalette";
 // import broadcast from "../../data/ChatPage/broadcast.png";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -33,13 +33,14 @@ const MessageItemName = styled.p`
 `;
 
 const MessageData = styled.p`
-  font-weight: 600;
+  font-weight: 700;
   font-size: 0.9rem;
   background: ${white};
   text-align: center;
   cursor: pointer;
   margin: 0;
   width: max-content;
+  color: ${props => props.online ? `${green}` : `${darkBlue}`};
 `;
 
 const MessageItemUser = styled.img`
@@ -54,7 +55,7 @@ const MessageItemUser = styled.img`
 export default function Conversation({
   showUserInfo,
   currentUser,
-  showUser,
+  onlineUsers,
   currentUserData,
   id,
   keyValue
@@ -62,6 +63,7 @@ export default function Conversation({
   const [user, setUser] = useState({});
   let [messages, setMessages] = useState([]);
   let [currentChat, setCurrentChat] = useState(null);
+  let [isOnline, setIsOnline] = useState(false);
 
   const showUserData = () => {
     let chat = [];
@@ -70,36 +72,64 @@ export default function Conversation({
       chat.push(e);
     });
     setCurrentChat(id);
-    // console.log(chat);
   };
 
   useEffect(() => {
+    let isComponentMounted = true;
+    const checkOnline = (userId) => {
+      onlineUsers.forEach((element, index) => {
+        if (onlineUsers[index].userId === user.uid || onlineUsers[index].userId === userId) {
+          if (isComponentMounted) {
+            setIsOnline(true);
+          }
+        }
+      });
+    }
+    checkOnline();
+    return () => {
+      isComponentMounted = false;
+    }
+  }, [user, onlineUsers])
+
+  useEffect(() => {
+    let isComponentMounted = true;
     const friendId = showUserInfo.find((m) => m !== currentUser.uid);
     const getUser = async () => {
       try {
         const res = await axios(
           "http://localhost:5000/user/create/" + friendId
         );
-        setUser(res.data[0]);
+        if (isComponentMounted) {
+          setUser(res.data[0]);
+        }
       } catch (err) {
         console.log(err);
       }
     };
     getUser();
+    return () => {
+      isComponentMounted = false;
+    }
   }, [currentUser, showUserInfo]);
 
   useEffect(() => {
+    let isComponentMounted = true;
     const getMessages = async () => {
       try {
         const res = await axios.get(
           "http://localhost:5000/user/message/" + currentChat
         );
-        setMessages(res.data);
+        if (isComponentMounted) {
+          setMessages(res.data);
+        }
       } catch (err) {
         console.log(err);
       }
     };
     getMessages();
+    return () => {
+      isComponentMounted = false;
+    }
   }, [currentChat]);
 
   return (
@@ -110,7 +140,7 @@ export default function Conversation({
       <MessageItemUser src={user.photoUrl} />
       <MessageInfo className="d-flex flex-column w-100">
         <MessageItemName>{user.name}</MessageItemName>
-        <MessageData className="text-justify">{""}</MessageData>
+        <MessageData online={isOnline} className="text-justify">{isOnline ? "Online" : "Offline"}</MessageData>
       </MessageInfo>
     </MessageItem>
   );

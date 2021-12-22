@@ -140,17 +140,23 @@ const ChatMessageList = (props) => {
   };
 
   useEffect(() => {
+    let isComponentMounted = true;
     const getUserConversations = async () => {
       try {
         const response = await axios.get(
           "http://localhost:5000/user/conversation/" + user.uid
         );
-        setConversations(response.data);
+        if (isComponentMounted) {
+          setConversations(response.data);
+        }
       } catch (err) {
         console.log(err);
       }
     };
     getUserConversations();
+    return () => {
+      isComponentMounted = false;
+    }
   }, [user]);
 
   return (
@@ -221,6 +227,7 @@ const ChatMessageList = (props) => {
                     showUserInfo={conversations[key].members}
                     keyValue={key}
                     id={conversations[key]._id}
+                    onlineUsers={props.onlineUsers}
                   />
                 </Suspense>
               );

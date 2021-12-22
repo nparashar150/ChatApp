@@ -32,12 +32,14 @@ const ChatPage = () => {
     uid: "",
     keyValue: 0
   });
+  let [onlineUsers, setOnlineUsers] = useState([]);
+  
   return (
     <>
       <ChatPageWrapper className="d-flex">
-        <ChatMessageList currentUserData={(value) => setUserInfo(value)} />
+        <ChatMessageList currentUserData={(value) => setUserInfo(value)} onlineUsers={onlineUsers} />
         <Suspense fallback={<NoConversation>Loading Chat...</NoConversation>}>
-          <UserChat key={userInfo.keyValue} currentUserData={userInfo} />
+          <UserChat key={userInfo.keyValue} currentUserData={userInfo} setOnlineUsers={(value) => setOnlineUsers(value)} />
         </Suspense>
       </ChatPageWrapper>
     </>

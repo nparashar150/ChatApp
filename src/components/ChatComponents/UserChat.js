@@ -147,9 +147,8 @@ const NoConversation = styled.div`
   user-select: none;
 `;
 
-const UserChat = ({ currentUserData }) => {
+const UserChat = ({ currentUserData, setOnlineUsers }) => {
   let [message, setMessage] = useState("");
-  // let [inputValue, setInputValue] = useState([]);
   let [chat, setChat] = useState([]);
   let [incommingMessage, setIncommingMessage] = useState(null);
   let [loading, setLoading] = useState(true);
@@ -169,7 +168,6 @@ const UserChat = ({ currentUserData }) => {
       "http://localhost:5000/user/message",
       messagePush
     );
-    // console.log(pushChat.data);
     socket.current.emit("sendMessage", {
       senderId: user.uid,
       receiverId: currentUserData.uid,
@@ -178,23 +176,36 @@ const UserChat = ({ currentUserData }) => {
     setChat([...chat, pushChat.data]);
     setMessage("");
   };
-  function handleTyping(e) {}
 
   useEffect(() => {
+    let isComponentMounted = true;
     socket.current = io("ws://localhost:8000");
     socket.current.on("getMessage", (chatData) => {
-      setIncommingMessage({
-        sender: chatData.senderId,
-        text: chatData.text,
-        createdAt: Date.now(),
-      });
+      if (isComponentMounted) {
+        setIncommingMessage({
+          sender: chatData.senderId,
+          text: chatData.text,
+          createdAt: Date.now(),
+        });
+      }
     });
+    return () => {
+      isComponentMounted = false;
+    }
   }, []);
 
   useEffect(() => {
+    let isComponentMounted = true;
     socket.current.emit("sendUser", user.uid);
-    socket.current.on("getUsers", (users) => {});
-  }, [user]);
+    socket.current.on("getUsers", (users) => {
+      if (isComponentMounted) {
+        setOnlineUsers(users);
+      }
+    });
+    return () => {
+      isComponentMounted = false;
+    }
+  }, [setOnlineUsers, user]);
 
   useEffect(() => {
     const getMessages = async () => {
@@ -288,7 +299,6 @@ const UserChat = ({ currentUserData }) => {
                   />
                   <ChattingInputSubmit
                     onClick={formHandler}
-                    onKeyPress={(e) => handleTyping(e)}
                     className="d-flex justify-content-center align-items-center"
                   >
                     <FiSend />
