@@ -55,9 +55,9 @@ export default function Conversation({
   showUserInfo,
   currentUser,
   showUser,
-  keys,
   currentUserData,
   id,
+  keyValue
 }) {
   const [user, setUser] = useState({});
   let [messages, setMessages] = useState([]);
@@ -65,7 +65,7 @@ export default function Conversation({
 
   const showUserData = () => {
     let chat = [];
-    currentUserData({ name: user.name, img: user.photoUrl, chatData: chat, uid: user.uid, chatId: id });
+    currentUserData({ name: user.name, img: user.photoUrl, chatData: chat, uid: user.uid, chatId: id, keyValue });
     messages.forEach((e) => {
       chat.push(e);
     });
@@ -101,10 +101,10 @@ export default function Conversation({
     };
     getMessages();
   }, [currentChat]);
+
   return (
     <MessageItem
       onClick={showUserData}
-      key={keys}
       className="d-flex flex-row w-100"
     >
       <MessageItemUser src={user.photoUrl} />

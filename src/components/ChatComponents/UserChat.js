@@ -8,6 +8,7 @@ import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en.json";
 import { useContext, useRef, useState, useEffect } from "react";
 import { AuthContext } from "../../context/authContext";
+import Spinner from "../Shared/Spinner/Spinner";
 
 TimeAgo.addDefaultLocale(en);
 const timeAgo = new TimeAgo("en-US");
@@ -151,6 +152,7 @@ const UserChat = ({ currentUserData }) => {
   // let [inputValue, setInputValue] = useState([]);
   let [chat, setChat] = useState([]);
   let [incommingMessage, setIncommingMessage] = useState(null);
+  let [loading, setLoading] = useState(true);
   const socket = useRef();
   const scrollRef = useRef();
 
@@ -167,7 +169,7 @@ const UserChat = ({ currentUserData }) => {
       "http://localhost:5000/user/message",
       messagePush
     );
-    console.log(pushChat.data);
+    // console.log(pushChat.data);
     socket.current.emit("sendMessage", {
       senderId: user.uid,
       receiverId: currentUserData.uid,
@@ -191,9 +193,7 @@ const UserChat = ({ currentUserData }) => {
 
   useEffect(() => {
     socket.current.emit("sendUser", user.uid);
-    socket.current.on("getUsers", (users) => {
-      console.log(users);
-    });
+    socket.current.on("getUsers", (users) => {});
   }, [user]);
 
   useEffect(() => {
@@ -203,7 +203,7 @@ const UserChat = ({ currentUserData }) => {
           "http://localhost:5000/user/message/" + currentUserData.chatId
         );
         setChat(res.data);
-        // console.log(chat)
+        setLoading(false);
       } catch (err) {
         console.log(err);
       }
@@ -214,6 +214,7 @@ const UserChat = ({ currentUserData }) => {
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behaviour: "smooth" });
   }, [chat]);
+
   return (
     <ChattingSection className="w-75">
       {currentUserData.name !== "" ? (
@@ -229,47 +230,53 @@ const UserChat = ({ currentUserData }) => {
             <ChatPanel>
               <ChattingWrapper className="d-flex flex-column">
                 <Chat className="">
-                  {chat.map((index, key) => {
-                    return (
-                      <ChattingGuest
-                        key={key}
-                        className={
-                          user.uid === index.sender
-                            ? "d-flex flex-row-reverse w-100 align-items-start px-2"
-                            : "d-flex flex-row w-100 align-items-start px-3"
-                        }
-                        ref={scrollRef}
-                      >
-                        <ChatInfoUserImg
-                          chatting
-                          src={
-                            user.uid === index.sender
-                              ? user.photoURL
-                              : currentUserData.img
-                          }
-                        />
-                        <ChatInfoUserName
-                          chatting
+                  {loading ? (
+                    <div className="d-flex justify-content-center align-items-center w-100 h-100">
+                      <Spinner />
+                    </div>
+                  ) : (
+                    chat?.map((index, key) => {
+                      return (
+                        <ChattingGuest
+                          key={key}
                           className={
                             user.uid === index.sender
-                              ? "text-end"
-                              : "text-start"
+                              ? "d-flex flex-row-reverse w-100 align-items-start px-2"
+                              : "d-flex flex-row w-100 align-items-start px-3"
                           }
+                          ref={scrollRef}
                         >
-                          {index.text}
-                          <ChatTime
+                          <ChatInfoUserImg
+                            chatting
+                            src={
+                              user.uid === index.sender
+                                ? user.photoURL
+                                : currentUserData.img
+                            }
+                          />
+                          <ChatInfoUserName
+                            chatting
                             className={
                               user.uid === index.sender
                                 ? "text-end"
                                 : "text-start"
                             }
                           >
-                            {timeAgo.format(new Date(index.createdAt))}
-                          </ChatTime>
-                        </ChatInfoUserName>
-                      </ChattingGuest>
-                    );
-                  })}
+                            {index.text}
+                            <ChatTime
+                              className={
+                                user.uid === index.sender
+                                  ? "text-end"
+                                  : "text-start"
+                              }
+                            >
+                              {timeAgo.format(new Date(index.createdAt))}
+                            </ChatTime>
+                          </ChatInfoUserName>
+                        </ChattingGuest>
+                      );
+                    })
+                  )}
                 </Chat>
                 <ChattingForm onSubmit={formHandler} className="d-flex">
                   <ChattingInput

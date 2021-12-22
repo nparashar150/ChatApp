@@ -2,14 +2,14 @@ import styled from "styled-components";
 import { darkBlue, white } from "../Shared/ColorPalette";
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { useContext } from "react";
+import { useContext, lazy, Suspense } from "react";
 import { AuthContext } from "../../context/authContext";
-import Conversation from "./Conversation";
 import { SlideLeft } from "../Shared/Animation";
 import broadcast from "../../data/ChatPage/broadcast.png";
 import { FiSearch } from "react-icons/fi/index";
 import FindUser from "./FindUser";
 import { useNavigate } from "react-router-dom";
+const Conversation = lazy(() => import("./Conversation"));
 
 const Messages = styled.h1`
   font-weight: 700;
@@ -128,7 +128,7 @@ const ChatMessageList = (props) => {
   const searchRef = useRef();
   const handleSearching = (e) => {
     e.preventDefault();
-    console.log(searchRef.current.SearchBar.value);
+    // console.log(searchRef.current.SearchBar.value);
     setSearchUser(searchRef.current.SearchBar.value);
     setSearching(true);
   };
@@ -136,8 +136,8 @@ const ChatMessageList = (props) => {
   const handleInputSearch = (e) => {
     if (e.target.value === "") {
       setSearching(false);
-    }  
-  }
+    }
+  };
 
   useEffect(() => {
     const getUserConversations = async () => {
@@ -151,14 +151,17 @@ const ChatMessageList = (props) => {
       }
     };
     getUserConversations();
-  }, [user.uid]);
+  }, [user]);
 
   return (
     <>
       <MessageWrapper className="container d-flex w-25 h-100">
         <Messages className="d-flex flex-row w-100 justify-content-between align-items-center">
           Messages
-          <MessageItem onClick={() => navigate("/profile")} className="d-flex flex-row p-0">
+          <MessageItem
+            onClick={() => navigate("/profile")}
+            className="d-flex flex-row p-0"
+          >
             <MessageItemUser src={user.photoURL} />
           </MessageItem>
         </Messages>
@@ -173,7 +176,7 @@ const ChatMessageList = (props) => {
             name="SearchBar"
             onChange={(e) => handleInputSearch(e)}
             autoComplete="off"
-            type="email"
+            type="text"
           />
           <FiSearch
             style={searchStyles}
@@ -183,25 +186,43 @@ const ChatMessageList = (props) => {
         </form>
         <MessageDivider className="d-flex">
           {conversations.length === 0 ? (
-            <MessageItem className="d-flex flex-row w-100">
-              <MessageItemUser src={broadcast} />
-              <MessageInfo className="d-flex flex-column w-100">
-                <MessageItemName>Start Conversations</MessageItemName>
-                <MessageData className="text-justify"> </MessageData>
-              </MessageInfo>
-            </MessageItem>
+            searching ? (
+              <FindUser
+                conversations={conversations}
+                friendEmail={searchUser}
+              />
+            ) : (
+              <MessageItem className="d-flex flex-row w-100">
+                <MessageItemUser src={broadcast} />
+                <MessageInfo className="d-flex flex-column w-100">
+                  <MessageItemName>Start Conversations</MessageItemName>
+                  <MessageData className="text-justify"> </MessageData>
+                </MessageInfo>
+              </MessageItem>
+            )
           ) : searching ? (
-            <FindUser friendEmail={searchUser} />
+            <FindUser conversations={conversations} friendEmail={searchUser} />
           ) : (
             Object.keys(conversations).map((key) => {
               return (
-                <Conversation
-                  currentUserData={props.currentUserData}
-                  currentUser={user}
-                  showUserInfo={conversations[key].members}
-                  keys={key}
-                  id={conversations[key]._id}
-                />
+                <Suspense
+                  fallback={
+                    <MessageItem key={key} className="d-flex flex-row w-100">
+                      <MessageInfo className="d-flex flex-column w-100">
+                        <MessageItemName>Loading Conversations...</MessageItemName>
+                        <MessageData className="text-justify">Please wait...</MessageData>
+                      </MessageInfo>
+                    </MessageItem>
+                  }
+                >
+                  <Conversation
+                    currentUserData={props.currentUserData}
+                    currentUser={user}
+                    showUserInfo={conversations[key].members}
+                    keyValue={key}
+                    id={conversations[key]._id}
+                  />
+                </Suspense>
               );
             })
           )}
