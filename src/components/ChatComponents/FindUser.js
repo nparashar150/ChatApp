@@ -74,12 +74,13 @@ export default function FindUser({ friendEmail, conversations }) {
   const checkChat = (key) => {
     let found = conversations.length;
     conversations.forEach((element, index) => {
-      // conversations[index].members.indexOf(searchedUser[key].uid) > -1 ? (--found)
       if (conversations[index].members.indexOf(searchedUser[key].uid) > -1) {
-        (--found);
+        --found;
       }
     });
-    found < conversations.length ? console.log("User already there.") : createChat(key);
+    found < conversations.length
+      ? console.log("User already there.")
+      : createChat(key);
   };
 
   const createChat = async (key) => {
@@ -92,7 +93,7 @@ export default function FindUser({ friendEmail, conversations }) {
         "http://localhost:5000/user/conversation",
         chatUsers
       );
-      console.log("User added.");
+      console.log("User added.", res);
     } catch (err) {
       console.log(err);
     }
@@ -111,7 +112,9 @@ export default function FindUser({ friendEmail, conversations }) {
                 <MessageItemUser src={element.photoUrl} />
                 <MessageInfo className="d-flex flex-column w-100">
                   <MessageItemName>{element.name}</MessageItemName>
-                  <MessageData className="text-justify">{element.email}</MessageData>
+                  <MessageData className="text-justify">
+                    {element.email}
+                  </MessageData>
                 </MessageInfo>
               </MessageItem>
             );
@@ -119,9 +122,7 @@ export default function FindUser({ friendEmail, conversations }) {
         </>
       ) : (
         <MessageItem className="d-flex flex-row w-100">
-          <MessageItemUser
-            src={QuestionMark}
-          />
+          <MessageItemUser src={QuestionMark} />
           <MessageInfo className="d-flex flex-column w-100">
             <MessageItemName>{"User Not Found"}</MessageItemName>
             <MessageData className="text-justify">
