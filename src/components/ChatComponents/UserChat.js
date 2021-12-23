@@ -78,7 +78,7 @@ const Chat = styled.div`
   background: ${white};
 
   @media (max-width: 768px) {
-    height: 100%;
+    height: calc(50vh - 8rem);
   }
 `;
 const ChattingGuest = styled.div`
@@ -260,7 +260,7 @@ const UserChat = ({ currentUserData, setOnlineUsers }) => {
 
   return (
     <ChattingSection className="w-75">
-      {currentUserData.name !== "" ? (
+      {currentUserData.name === "" ? (
         <>
           <ChatArea className="w-100">
             <ChatInfoWrapper className="d-flex w-100 align-items-center">
