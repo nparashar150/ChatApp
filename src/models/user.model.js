@@ -16,7 +16,7 @@ const userInfo = new mongoose.Schema({
   photoUrl: {
     type: String,
     require: true,
-    unique: true
+    // unique: true
   },
   uid: {
     type: String,

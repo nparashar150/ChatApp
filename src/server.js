@@ -8,6 +8,7 @@ const bodyParser = require("body-parser");
 const userRoute = require("./routes/userRoute");
 const conversationRoute = require("./routes/conversationRoute");
 const messageRoute = require("./routes/messageRoute");
+const router = require("express").Router();
 
 mongoose.connect(
   process.env.CONNECTION_STRING,
@@ -22,6 +23,12 @@ mongoose.connect(
       console.log("DB connection success!");
     }
   }
+);
+router.use(
+  cors({
+    origin: "*",
+    methods: ["GET", "POST"],
+  })
 );
 
 app.use(
@@ -46,5 +53,5 @@ app.get("/.netlify/functions/server/", (req, res) => {
 
 app.use("/.netlify/functions/server/user/conversation", conversationRoute);
 app.use("/.netlify/functions/server/user/message", messageRoute);
-app.use("/.netlify/functions/server/user/create", userRoute)
+app.use("/.netlify/functions/server/user/create", userRoute);
 module.exports.handler = serverless(app);
