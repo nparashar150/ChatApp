@@ -9,6 +9,7 @@ import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en.json";
 import { useContext, useRef, useState, useEffect } from "react";
 import { AuthContext } from "../../context/authContext";
+import { SocketAuthContext } from "../../context/socketContext";
 import Spinner from "../Shared/Spinner/Spinner";
 
 TimeAgo.addDefaultLocale(en);
@@ -52,6 +53,11 @@ const ChatInfoUserName = styled.div`
   color: ${darkBlue};
   width: 50%;
   text-align: ${(props) => (props.right ? "right" : "left")};
+
+  @media (max-width: 768px) {
+    white-space: ${(props) => (props.chatting ? "nowrap" : "normal")};
+    overflow: scroll;
+  }
 `;
 const ChatInfoUserImg = styled.img`
   width: ${(props) => (props.chatting ? "1.75rem" : "2.75rem")};
@@ -95,7 +101,7 @@ const ChattingForm = styled.form`
   margin-bottom: 0.75rem;
   margin-right: 0.75rem;
   background: ${white};
-  
+
   @media (max-width: 768px) {
     width: 100vw;
     justify-content: end;
@@ -179,20 +185,36 @@ const UserChat = ({ currentUserData, setOnlineUsers }) => {
   let [chat, setChat] = useState([]);
   let [incommingMessage, setIncommingMessage] = useState(null);
   let [loading, setLoading] = useState(true);
-  const socket = useRef();
+  const socketRef = useRef();
   const scrollRef = useRef();
   const { user } = useContext(AuthContext);
+  const { socketEvent, dispatch } = useContext(SocketAuthContext);
 
   useEffect(() => {
-      socket.current = io("ws://localhost:8000");
-      socket.current.on("getMessage", (chatData) => {
-        setIncommingMessage({
-          sender: chatData.senderId,
-          text: chatData.text,
-          createdAt: Date.now(),
+    const checkSocket = (dispatch) => {
+        dispatch({ type: "SOCKET_EVENT_START" });
+        if (socketEvent) {
+          socketRef.current = socketEvent;
+          // console.log(socketRef.current, "Exists")
+        } else {
+          socketRef.current = io("ws://localhost:8000");
+          socketRef.current.on("getMessage", (chatData) => {
+            setIncommingMessage({
+              sender: chatData.senderId,
+              text: chatData.text,
+              createdAt: Date.now(),
+            });
+          });  
+          // console.log(socketRef.current, "Does Not Exist")
+        }
+        dispatch({
+          type: "SOCKET_EVENT_SUCCESS",
+          payload: socketRef.current,
         });
-      });
-  }, []);
+    };
+    checkSocket(dispatch);
+  }, [socketEvent, dispatch]);
+  // console.log(socketEvent);
 
   useEffect(() => {
     incommingMessage &&
@@ -202,8 +224,8 @@ const UserChat = ({ currentUserData, setOnlineUsers }) => {
 
   useEffect(() => {
     let isComponentMounted = true;
-    socket.current.emit("sendUser", user.uid);
-    socket.current.on("getUsers", (users) => {
+    socketRef?.current?.emit("sendUser", user.uid);
+    socketRef?.current?.on("getUsers", (users) => {
       if (isComponentMounted) {
         setOnlineUsers(users);
       }
@@ -236,7 +258,7 @@ const UserChat = ({ currentUserData, setOnlineUsers }) => {
       conversationId: currentUserData.chatId,
     };
 
-    socket.current.emit("sendMessage", {
+    socketRef?.current?.emit("sendMessage", {
       senderId: user.uid,
       receiverId: currentUserData.uid,
       text: message,
@@ -260,7 +282,7 @@ const UserChat = ({ currentUserData, setOnlineUsers }) => {
 
   return (
     <ChattingSection className="w-75">
-      {currentUserData.name === "" ? (
+      {currentUserData.name !== "" ? (
         <>
           <ChatArea className="w-100">
             <ChatInfoWrapper className="d-flex w-100 align-items-center">

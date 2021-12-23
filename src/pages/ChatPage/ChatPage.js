@@ -2,6 +2,7 @@ import ChatMessageList from "../../components/ChatComponents/Message";
 import styled from "styled-components";
 import { useState, lazy, Suspense } from "react";
 import { darkBlue } from "../../components/Shared/ColorPalette";
+import { SocketAuthContextProvider } from "../../context/socketContext";
 const UserChat = lazy(() => import("../../components/ChatComponents/UserChat"));
 
 const ChatPageWrapper = styled.div`
@@ -40,19 +41,21 @@ const ChatPage = () => {
 
   return (
     <>
-      <ChatPageWrapper className="d-flex">
-        <ChatMessageList
-          currentUserData={(value) => setUserInfo(value)}
-          onlineUsers={onlineUsers}
-        />
-        <Suspense fallback={<NoConversation>Loading Chat...</NoConversation>}>
-          <UserChat
-            key={userInfo.keyValue}
-            currentUserData={userInfo}
-            setOnlineUsers={(value) => setOnlineUsers(value)}
+      <SocketAuthContextProvider>
+        <ChatPageWrapper className="d-flex">
+          <ChatMessageList
+            currentUserData={(value) => setUserInfo(value)}
+            onlineUsers={onlineUsers}
           />
-        </Suspense>
-      </ChatPageWrapper>
+          <Suspense fallback={<NoConversation>Loading Chat...</NoConversation>}>
+            <UserChat
+              key={userInfo.keyValue}
+              currentUserData={userInfo}
+              setOnlineUsers={(value) => setOnlineUsers(value)}
+            />
+          </Suspense>
+        </ChatPageWrapper>
+      </SocketAuthContextProvider>
     </>
   );
 };
