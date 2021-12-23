@@ -21,6 +21,10 @@ const ChattingSection = styled.section`
 const ChatArea = styled.section`
   height: 100vh;
   overflow-y: scroll;
+
+  @media (max-width: 768px) {
+    height: 50vh;
+  }
 `;
 const ChatInfoWrapper = styled.div`
   padding: 1rem 0 0 0;
@@ -30,6 +34,10 @@ const ChatInfoWrapper = styled.div`
   cursor: pointer;
   background: ${white};
   margin-top: 0.5rem;
+
+  @media (max-width: 768px) {
+    padding: 0 1rem;
+  }
 `;
 const ChatPanel = styled.div`
   width: 100%;
@@ -55,6 +63,10 @@ const ChatInfoUserMore = styled.div`
   cursor: pointer;
   margin-left: auto;
   padding-right: 1rem;
+
+  @media (max-width: 768px) {
+    padding-right: 0;
+  }
 `;
 const ChattingWrapper = styled.div`
   height: max-content;
@@ -64,6 +76,10 @@ const Chat = styled.div`
   margin: 0.5rem 0.75rem 0 0;
   height: 75vh;
   background: ${white};
+
+  @media (max-width: 768px) {
+    height: 100%;
+  }
 `;
 const ChattingGuest = styled.div`
   padding: 1rem 0 0 0;
@@ -79,6 +95,12 @@ const ChattingForm = styled.form`
   margin-bottom: 0.75rem;
   margin-right: 0.75rem;
   background: ${white};
+  
+  @media (max-width: 768px) {
+    width: 100vw;
+    justify-content: end;
+    align-items: center;
+  }
 `;
 const ChatTime = styled.p`
   font-weight: 600;
@@ -101,6 +123,10 @@ const ChattingInput = styled.input`
   &:hover,
   &:focus {
     border-color: ${darkBlue + "AA"};
+  }
+
+  @media (max-width: 768px) {
+    width: 80vw;
   }
 `;
 const ChattingInputSubmit = styled.div`
@@ -140,6 +166,12 @@ const NoConversation = styled.div`
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+
+  @media (max-width: 768px) {
+    height: 100%;
+    width: 100vw;
+    font-size: 3rem;
+  }
 `;
 
 const UserChat = ({ currentUserData, setOnlineUsers }) => {

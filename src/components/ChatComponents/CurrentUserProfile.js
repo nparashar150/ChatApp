@@ -19,6 +19,10 @@ const ProfileWrapper = styled.section`
   outline-offset: 0.25rem;
   padding: 3rem 5rem;
   gap: 1rem;
+  
+  @media (max-width: 768px) {
+    padding: 2rem 3rem;
+  }
 `;
 const ProfileImageWrapper = styled.div`
   width: 7rem;
@@ -27,6 +31,11 @@ const ProfileImageWrapper = styled.div`
   overflow: hidden;
   outline-offset: 2px;
   outline: 2px solid ${red};
+  
+  @media (max-width: 768px) {
+    width: 4rem;
+    height: 4rem;
+  }
 `;
 const ProfileImage = styled.img`
   width: 100%;
@@ -39,12 +48,20 @@ const ProfileName = styled.h1`
   font-family: "Nunito" sans-serif;
   font-weight: 600;
   font-size: 2.5rem;
+
+  @media (max-width: 768px) {
+    font-size: 2rem;
+  }
 `;
 const ProfileEmail = styled.h3`
   color: ${darkBlue};
   font-family: "Nunito" sans-serif;
   font-weight: 600;
   font-size: 1.6rem;
+
+  @media (max-width: 768px) {
+    font-size: 1.2rem;
+  }
 `;
 const LogOut = styled.button`
   padding: 0.8rem 2.25rem;
@@ -67,6 +84,7 @@ const LogOut = styled.button`
 
   @media (max-width: 768px) {
     margin: 1rem 0 0 0;
+    padding: .7rem 2rem;
   }
 `;
 const BackButton = styled.div`

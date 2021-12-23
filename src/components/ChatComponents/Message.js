@@ -31,10 +31,15 @@ const MessageWrapper = styled.section`
   overflow: hidden;
   flex-direction: column;
   border-right: 2px solid ${darkBlue + "50"};
+  width: 25%;
+  justify-content: start;
 
   @media (max-width: 768px) {
-    padding: 0;
-    width: 100vw !important;
+    padding-top: 1rem;
+    width: 100vw;
+    overflow: hidden;
+    height: 50vh !important;
+    justify-content: start;
   }
 `;
 
@@ -62,10 +67,6 @@ const MessageSearchBar = styled.input`
   &:hover,
   &:focus {
     border-color: ${darkBlue + "AA"};
-  }
-
-  @media (max-width: 768px) {
-    width: 80%;
   }
 `;
 
@@ -160,7 +161,7 @@ const ChatMessageList = (props) => {
 
   return (
     <>
-      <MessageWrapper className="container d-flex w-25 h-100">
+      <MessageWrapper className="container d-flex h-100">
         <Messages className="d-flex flex-row w-100 justify-content-between align-items-center">
           Messages
           <MessageItem

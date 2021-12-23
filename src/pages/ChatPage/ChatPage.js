@@ -8,6 +8,10 @@ const ChatPageWrapper = styled.div`
   width: 100vw;
   height: 100vh;
   overflow: hidden;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 const NoConversation = styled.div`
   font-size: 6rem;
@@ -30,16 +34,23 @@ const ChatPage = () => {
     img: "",
     chatData: [],
     uid: "",
-    keyValue: 0
+    keyValue: 0,
   });
   let [onlineUsers, setOnlineUsers] = useState([]);
-  
+
   return (
     <>
       <ChatPageWrapper className="d-flex">
-        <ChatMessageList currentUserData={(value) => setUserInfo(value)} onlineUsers={onlineUsers} />
+        <ChatMessageList
+          currentUserData={(value) => setUserInfo(value)}
+          onlineUsers={onlineUsers}
+        />
         <Suspense fallback={<NoConversation>Loading Chat...</NoConversation>}>
-          <UserChat key={userInfo.keyValue} currentUserData={userInfo} setOnlineUsers={(value) => setOnlineUsers(value)} />
+          <UserChat
+            key={userInfo.keyValue}
+            currentUserData={userInfo}
+            setOnlineUsers={(value) => setOnlineUsers(value)}
+          />
         </Suspense>
       </ChatPageWrapper>
     </>
