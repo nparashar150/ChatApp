@@ -3,12 +3,18 @@ import {BrowserRouter as Router, Routes, Route, Navigate} from "react-router-dom
 import LandingPage from "./pages/LandingPage/LandingPage";
 import AboutPage from "./pages/AboutPage/AboutPage";
 import ChatPage from "./pages/ChatPage/ChatPage";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "./context/authContext";
 import UserProfile from "./pages/UserProfile/UserProfile";
+import { signInStatus } from "./firebase";
 
 function App() {
-  const { user } = useContext(AuthContext);
+  const { user, dispatch } = useContext(AuthContext);
+  
+  useEffect (() => {
+    console.log("Checking SignInStatus");
+    signInStatus(dispatch);
+  }, [dispatch]);
   
   return (
     <>

@@ -35,12 +35,7 @@ const signIn = (dispatch) => {
         photoUrl: userData.photoURL,
         uid: userData.uid,
       });
-      // console.log(res);
       dispatch({ type: "LOGIN_SUCCESS", payload: userData || res.data });
-      // window.location.href = "/dashboard";
-      // const history = useNavigate();
-      // history.push("/dashboard");
-      // return res;
     })
     .catch((error) => {
       dispatch({ type: "LOGIN_FAILURE", payload: error });
@@ -49,11 +44,10 @@ const signIn = (dispatch) => {
 
 const signInStatus = (dispatch) => {
   onAuthStateChanged(auth, (user) => {
-    // dispatch({ type: "LOGIN_START" });
     if (user) {
       dispatch({ type: "LOGIN_SUCCESS", payload: user });
     } else {
-      window.location.replace("/");
+      // window.location.replace("/");
       // console.log("Signed Out");
     }
   });
