@@ -39,7 +39,7 @@ const MessageData = styled.p`
   cursor: pointer;
   margin: 0;
   width: max-content;
-  color: ${props => props.online ? `${green}` : `${darkBlue}`};
+  color: ${(props) => (props.online ? `${green}` : `${darkBlue}`)};
 `;
 
 const MessageItemUser = styled.img`
@@ -57,16 +57,23 @@ export default function Conversation({
   onlineUsers,
   currentUserData,
   id,
-  keyValue
+  keyValue,
 }) {
-  const [user, setUser] = useState({});
+  let [user, setUser] = useState({});
   let [messages, setMessages] = useState([]);
   let [currentChat, setCurrentChat] = useState(null);
   let [isOnline, setIsOnline] = useState(false);
 
   const showUserData = () => {
     let chat = [];
-    currentUserData({ name: user.name, img: user.photoUrl, chatData: chat, uid: user.uid, chatId: id, keyValue });
+    currentUserData({
+      name: user.name,
+      img: user.photoUrl,
+      chatData: chat,
+      uid: user.uid,
+      chatId: id,
+      keyValue,
+    });
     messages.forEach((e) => {
       chat.push(e);
     });
@@ -77,27 +84,28 @@ export default function Conversation({
     let isComponentMounted = true;
     const checkOnline = (userId) => {
       onlineUsers.forEach((element, index) => {
-        if (onlineUsers[index].userId === user.uid || onlineUsers[index].userId === userId) {
+        if (
+          onlineUsers[index].userId === user?.uid ||
+          onlineUsers[index].userId === userId
+        ) {
           if (isComponentMounted) {
             setIsOnline(true);
           }
         }
       });
-    }
+    };
     checkOnline();
     return () => {
       isComponentMounted = false;
-    }
-  }, [user, onlineUsers])
+    };
+  }, [user, onlineUsers]);
 
   useEffect(() => {
     let isComponentMounted = true;
     const friendId = showUserInfo.find((m) => m !== currentUser.uid);
     const getUser = async () => {
       try {
-        const res = await axios(
-          `${backendBaseURL}/user/create/` + friendId
-        );
+        const res = await axios(`${backendBaseURL}/user/create/` + friendId);
         if (isComponentMounted) {
           setUser(res.data[0]);
         }
@@ -108,8 +116,8 @@ export default function Conversation({
     getUser();
     return () => {
       isComponentMounted = false;
-    }
-  }, [currentUser, showUserInfo]);
+    };
+  }, [currentUser, showUserInfo, user]);
 
   useEffect(() => {
     let isComponentMounted = true;
@@ -128,18 +136,17 @@ export default function Conversation({
     getMessages();
     return () => {
       isComponentMounted = false;
-    }
+    };
   }, [currentChat]);
 
   return (
-    <MessageItem
-      onClick={showUserData}
-      className="d-flex flex-row w-100"
-    >
-      <MessageItemUser src={user.photoUrl} />
+    <MessageItem onClick={showUserData} className="d-flex flex-row w-100">
+      <MessageItemUser src={user?.photoUrl} />
       <MessageInfo className="d-flex flex-column w-100">
-        <MessageItemName>{user.name}</MessageItemName>
-        <MessageData online={isOnline} className="text-justify">{isOnline ? "Online" : "Offline"}</MessageData>
+        <MessageItemName>{user?.name}</MessageItemName>
+        <MessageData online={isOnline} className="text-justify">
+          {isOnline ? "Online" : "Offline"}
+        </MessageData>
       </MessageInfo>
     </MessageItem>
   );
