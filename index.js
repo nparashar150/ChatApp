@@ -1,6 +1,6 @@
 const io = require("socket.io")(8000, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "*",
   },
 });
 
@@ -11,12 +11,12 @@ const addUser = (userId, socketId) => {
     users.push({ userId, socketId });
 };
 
-const getUser = (userId) => {
-  return users.find((user) => user.userId === userId);
-}
-
 const removeUser = (socketId) => {
   users = users.filter((user) => user.socketId !== socketId);
+};
+
+const getUser = (userId) => {
+  return users.find((user) => user.userId === userId);
 };
 
 io.on("connection", (socket) => {
@@ -28,12 +28,12 @@ io.on("connection", (socket) => {
     addUser(userId, socket.id);
     io.emit("getUsers", users);
   });
-  
+
   // Chatting Handle
-  socket.on("sendMessage", ({senderId, receiverId, text}) => {
+  socket.on("sendMessage", ({ senderId, receiverId, text }) => {
     const user = getUser(receiverId);
-    io.to(user.socketId).emit("getMessage", {
-      senderId, 
+    io.to(user?.socketId).emit("getMessage", {
+      senderId,
       text,
     });
   });
@@ -42,5 +42,6 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     console.log("User Disconnected");
     removeUser(socket.id);
+    io.emit("getUsers", users);
   });
 });
