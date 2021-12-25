@@ -1,0 +1,48 @@
+{
+  "name": "cheract",
+  "version": "1.1.1",
+  "main": "index.js",
+  "repository": "https://github.com/nparashar150/threejs_/",
+  "author": "Naman Parashar",
+  "license": "MIT",
+  "private": true,
+  "maintainer": [
+    "Naman Parashar"
+  ],
+  "synopsis": "Chatting App made with React.js and Electron.js",
+  "description": "Chatting App made with React.js and Electron.js",
+  "title": "Cheract",
+  "icon": "./icon/icons/win/icon.ico",
+  "linux": {
+    "target": [
+      "AppImage",
+      "snap",
+      "deb",
+      "rpm",
+      "pacman",
+      "apk"
+    ],
+    "arch": [
+      "x64"
+    ],
+    "package": [
+      "tar.gz"
+    ],
+    "category": "Utility"
+  },
+  "scripts": {
+    "start": "concurrently \"cd src/frontend && yarn start\" \"electron .\"",
+    "build": "cd src/frontend && yarn build && cd ../../ && electron-builder --linux",
+    "dist": "electron-builder"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "^6.0.0-beta.61",
+    "electron": "^16.0.5",
+    "electron-builder": "^22.14.5",
+    "electron-icon-maker": "^0.0.5"
+  },
+  "dependencies": {
+    "concurrently": "^6.5.1",
+    "electron-is-dev": "^2.0.0"
+  }
+}
