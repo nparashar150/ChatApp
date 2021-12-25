@@ -192,29 +192,31 @@ const UserChat = ({ currentUserData, setOnlineUsers }) => {
 
   useEffect(() => {
     const checkSocket = (dispatch) => {
-        dispatch({ type: "SOCKET_EVENT_START" });
-        if (socketEvent) {
-          socketRef.current = socketEvent;
-          // console.log(socketRef.current, "Exists")
-        } else {
-          socketRef.current = io("ws://localhost:8000");
-          socketRef.current.on("getMessage", (chatData) => {
-            setIncommingMessage({
-              sender: chatData.senderId,
-              text: chatData.text,
-              createdAt: Date.now(),
-            });
-          });  
-          // console.log(socketRef.current, "Does Not Exist")
-        }
-        dispatch({
-          type: "SOCKET_EVENT_SUCCESS",
-          payload: socketRef.current,
-        });
+      dispatch({ type: "SOCKET_EVENT_START" });
+      if (socketEvent) {
+        socketRef.current = socketEvent;
+      } else {
+        socketRef.current = io("ws://localhost:8000");
+      }
+      dispatch({
+        type: "SOCKET_EVENT_SUCCESS",
+        payload: socketRef.current,
+      });
     };
     checkSocket(dispatch);
   }, [socketEvent, dispatch]);
-  // console.log(socketEvent);
+
+  useEffect(() => {
+    socketRef?.current?.on("getMessage", (chatData) => {
+      setIncommingMessage({
+        sender: chatData.senderId,
+        text: chatData.text,
+        createdAt: Date.now(),
+      }, (err) => {
+        console.log(err);
+      });
+    });
+  }, []);
 
   useEffect(() => {
     incommingMessage &&
@@ -258,12 +260,6 @@ const UserChat = ({ currentUserData, setOnlineUsers }) => {
       conversationId: currentUserData.chatId,
     };
 
-    socketRef?.current?.emit("sendMessage", {
-      senderId: user.uid,
-      receiverId: currentUserData.uid,
-      text: message,
-    });
-
     try {
       const pushChat = await axios.post(
         `${backendBaseURL}/user/message`,
@@ -274,6 +270,14 @@ const UserChat = ({ currentUserData, setOnlineUsers }) => {
     } catch (err) {
       console.log(err);
     }
+    
+    socketRef?.current?.emit("sendMessage", {
+      senderId: user.uid,
+      receiverId: currentUserData.uid,
+      text: message,
+    }, (err) => {
+      console.log(err);
+    });
   };
 
   useEffect(() => {
