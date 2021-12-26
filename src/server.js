@@ -1,5 +1,6 @@
 require("dotenv").config();
-const app = require("express")();
+const express = require("express");
+const app = express();
 const serverless = require("serverless-http");
 const server = require("http").createServer(app);
 const mongoose = require("mongoose");
@@ -8,6 +9,7 @@ const bodyParser = require("body-parser");
 const userRoute = require("./routes/userRoute");
 const conversationRoute = require("./routes/conversationRoute");
 const messageRoute = require("./routes/messageRoute");
+const imageRoute = require("./routes/imageRoute");
 const router = require("express").Router();
 
 mongoose.connect(
@@ -39,9 +41,11 @@ app.use(
 );
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use("/uploads", express.static("uploads"));
 app.use("/user/conversation", conversationRoute);
 app.use("/user/message", messageRoute);
 app.use("/user/create", userRoute);
+app.use("/user/image/upload", imageRoute);
 
 app.get("/.netlify/functions/server/", (req, res) => {
   res.send("<h1>Root Dir</h1>");
@@ -50,8 +54,12 @@ app.get("/.netlify/functions/server/", (req, res) => {
 // server.listen(5000, () => {
 //   console.log("Listening on *: 5000");
 // });
-
+app.use("/.netlify/functions/server/user/image/upload/file", express.static("uploads"));
 app.use("/.netlify/functions/server/user/conversation", conversationRoute);
 app.use("/.netlify/functions/server/user/message", messageRoute);
 app.use("/.netlify/functions/server/user/create", userRoute);
+app.use("/.netlify/functions/server/user/image/upload", imageRoute);
+// app.listen(5000, () => {
+//   console.log("server running on 5000");
+// });
 module.exports.handler = serverless(app);
