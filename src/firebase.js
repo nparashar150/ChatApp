@@ -3,7 +3,9 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
   onAuthStateChanged,
-  signOut
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
 } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 import axios from "axios";
@@ -22,6 +24,7 @@ initializeApp(firebaseConfig);
 
 const provider = new GoogleAuthProvider();
 const auth = getAuth();
+
 const signIn = (dispatch) => {
   dispatch({ type: "LOGIN_START" });
   signInWithPopup(auth, provider)
@@ -42,6 +45,32 @@ const signIn = (dispatch) => {
     });
 };
 
+const signUpWithEmailAndPassword = (dispatch, email, password) => {
+  dispatch({ type: "LOGIN_START" });
+  createUserWithEmailAndPassword(auth, email, password)
+    .then((result) => {
+      const userData = result.user;
+      console.log(userData);
+    })
+    .catch((error) => {
+      dispatch({ type: "LOGIN_FAILURE", payload: error });
+    });
+};
+
+const logInWithEmail = (dispatch, email, password) => {
+  dispatch({ type: "LOGIN_START" });
+  signInWithEmailAndPassword(auth, email, password)
+    .then((result) => {
+      const userData = result.user;
+      
+      console.log(userData);
+      // dispatch({ type: "LOGIN_SUCCESS", payload: userData || res.data });
+    })
+    .catch((error) => {
+      dispatch({ type: "LOGIN_FAILURE", payload: error });
+    });
+};
+
 const signInStatus = (dispatch) => {
   onAuthStateChanged(auth, (user) => {
     if (user) {
@@ -54,14 +83,25 @@ const signInStatus = (dispatch) => {
 };
 
 const signOutUser = () => {
-  signOut(auth).then(() => {
-    // SingOut Success
-    signInStatus();
-  }).catch((error) => {
-    console.log(error);
-  });
-}
+  signOut(auth)
+    .then(() => {
+      // SingOut Success
+      signInStatus();
+      window.location.replace("/");
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
 
-const backendBaseURL = "https://cheract-backend.netlify.app/.netlify/functions/server";
+const backendBaseURL =
+  "https://cheract-backend.netlify.app/.netlify/functions/server";
 
-export { signIn, signInStatus, signOutUser, backendBaseURL };
+export {
+  signIn,
+  signUpWithEmailAndPassword,
+  logInWithEmail,
+  signInStatus,
+  signOutUser,
+  backendBaseURL,
+};
