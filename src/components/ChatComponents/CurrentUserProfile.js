@@ -118,10 +118,10 @@ export default function CurrentUserProfile() {
           <MdOutlineArrowBackIos color={white} />
         </BackButton>
         <ProfileImageWrapper className="d-flex justify-content-center align-items-center">
-          <ProfileImage src={user.photoURL} />
+          <ProfileImage src={user.photoURL || user.photoUrl} />
         </ProfileImageWrapper>
         <ProfileInfoWrapper className="d-flex justify-content-center align-items-center flex-column">
-          <ProfileName>{user.displayName}</ProfileName>
+          <ProfileName>{user.displayName || user.name}</ProfileName>
           <ProfileEmail>{user.email}</ProfileEmail>
         </ProfileInfoWrapper>
         <LogOut onClick={signOutUser}>Sign Out</LogOut>
