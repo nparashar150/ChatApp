@@ -3,26 +3,30 @@ const userInfo = new mongoose.Schema({
   email: {
     type: String,
     require: true,
-    unique: true
+    unique: true,
   },
   name: {
     type: String,
-    require: true
+    require: true,
   },
   creationDate: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
   photoUrl: {
     type: String,
     require: true,
     // unique: true
   },
+  photoId: {
+    type: String,
+    unique: true,
+  },
   uid: {
     type: String,
     require: true,
-    unique: true
-  }
+    unique: true,
+  },
 });
 
-module.exports = mongoose.model('user', userInfo);
+module.exports = mongoose.model("user", userInfo);
