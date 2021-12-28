@@ -47,6 +47,7 @@ export const ButtonSubmit = styled.button`
 
   @media (max-width: 768px) {
     /* margin: 1rem 0 0 0; */
+    padding: .5rem 0rem;
     width: ${(props) => props.mediaWidth ? props.mediaWidth : ""};
   }
 `;
