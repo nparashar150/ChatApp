@@ -39,9 +39,9 @@ app.use(
     methods: ["GET", "POST"],
   })
 );
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-app.use("/uploads", express.static("uploads"));
+app.use(bodyParser.urlencoded({ limit: "6mb", extended: true, parameterLimit:6000 }));
+app.use(bodyParser.json({ limit: "6mb" }));
+// app.use("/uploads", express.static("uploads"));
 app.use("/user/conversation", conversationRoute);
 app.use("/user/message", messageRoute);
 app.use("/user/create", userRoute);
@@ -54,7 +54,7 @@ app.get("/.netlify/functions/server/", (req, res) => {
 // server.listen(5000, () => {
 //   console.log("Listening on *: 5000");
 // });
-app.use("/.netlify/functions/server/user/image/upload/file", express.static("uploads"));
+// app.use("/.netlify/functions/server/user/image/upload/file", express.static("uploads"));
 app.use("/.netlify/functions/server/user/conversation", conversationRoute);
 app.use("/.netlify/functions/server/user/message", messageRoute);
 app.use("/.netlify/functions/server/user/create", userRoute);
