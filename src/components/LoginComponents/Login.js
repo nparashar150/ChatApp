@@ -268,7 +268,7 @@ export default function Login() {
       const fileName = SignInUser.current.LoginInput_Photo.files[0].name;
       const getPhoto = { base64: previewSrc, mimeType, fileName };
       const res = await axios.post(
-        `${backendBaseURL}/.netlify/functions/server/user/image/upload/getPhotoURL`,
+        `${backendBaseURL}/user/image/upload/getPhotoURL`,
         getPhoto
       );
       formData.photoId = res.data.uploadStatus.id;

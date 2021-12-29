@@ -60,7 +60,7 @@ const signUpWithEmailAndPassword = (
       let userData = result.user;
       if (userData) {
         const res = axios.post(
-          `${backendBaseURL}/.netlify/functions/server/user/create`,
+          `${backendBaseURL}/user/create`,
           {
             email: userData.email,
             name,
@@ -117,7 +117,7 @@ const signInStatus = (dispatch) => {
 
 const setUser = async (dispatch, uid) => {
   const USER = await axios.get(
-    `${backendBaseURL}/.netlify/functions/server/user/create/${uid}`
+    `${backendBaseURL}/user/create/${uid}`
   );
   dispatch({ type: "LOGIN_SUCCESS", payload: USER.data[0] });
 };
