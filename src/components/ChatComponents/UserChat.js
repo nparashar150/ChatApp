@@ -208,13 +208,16 @@ const UserChat = ({ currentUserData, setOnlineUsers }) => {
 
   useEffect(() => {
     socketRef?.current?.on("getMessage", (chatData) => {
-      setIncommingMessage({
-        sender: chatData.senderId,
-        text: chatData.text,
-        createdAt: Date.now(),
-      }, (err) => {
-        console.log(err);
-      });
+      setIncommingMessage(
+        {
+          sender: chatData.senderId,
+          text: chatData.text,
+          createdAt: Date.now(),
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
     });
   }, []);
 
@@ -270,14 +273,18 @@ const UserChat = ({ currentUserData, setOnlineUsers }) => {
     } catch (err) {
       console.log(err);
     }
-    
-    socketRef?.current?.emit("sendMessage", {
-      senderId: user.uid,
-      receiverId: currentUserData.uid,
-      text: message,
-    }, (err) => {
-      console.log(err);
-    });
+
+    socketRef?.current?.emit(
+      "sendMessage",
+      {
+        senderId: user.uid,
+        receiverId: currentUserData.uid,
+        text: message,
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   };
 
   useEffect(() => {
@@ -319,7 +326,7 @@ const UserChat = ({ currentUserData, setOnlineUsers }) => {
                             chatting
                             src={
                               user.uid === index.sender
-                                ? user.photoURL
+                                ? user.photoURL || user.photoUrl
                                 : currentUserData.img
                             }
                           />

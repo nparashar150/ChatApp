@@ -3,8 +3,7 @@ import { useContext } from "react";
 import { AuthContext } from "../../context/authContext";
 import { red, darkBlue, white } from "../Shared/ColorPalette";
 import { signOutUser } from "../../firebase";
-import { MdOutlineArrowBackIos } from "react-icons/md/index";
-import { useNavigate } from "react-router";
+import BackButton from "../Shared/BackButton/BackButton";
 
 const ProfileWrapper = styled.section`
   position: absolute;
@@ -19,7 +18,7 @@ const ProfileWrapper = styled.section`
   outline-offset: 0.25rem;
   padding: 3rem 5rem;
   gap: 1rem;
-  
+
   @media (max-width: 768px) {
     padding: 2rem 3rem;
   }
@@ -31,7 +30,7 @@ const ProfileImageWrapper = styled.div`
   overflow: hidden;
   outline-offset: 2px;
   outline: 2px solid ${red};
-  
+
   @media (max-width: 768px) {
     width: 4rem;
     height: 4rem;
@@ -84,39 +83,16 @@ const LogOut = styled.button`
 
   @media (max-width: 768px) {
     margin: 1rem 0 0 0;
-    padding: .7rem 2rem;
-  }
-`;
-const BackButton = styled.div`
-  position: absolute;
-  top: 5%;
-  left: 5%;
-  width: 1.75rem;
-  height: 1.75rem;
-  border-radius: 50%;
-  background: ${red};
-  cursor: pointer;
-  outline: 2px solid ${red};
-  outline-offset: 2px;
-
-  &:hover,
-  &:focus {
-    background: ${red + "AA"};
+    padding: 0.7rem 2rem;
   }
 `;
 
 export default function CurrentUserProfile() {
   let { user } = useContext(AuthContext);
-  const naviate = useNavigate();
   return (
     <>
       <ProfileWrapper className="d-flex justify-content-center align-items-center flex-column">
-        <BackButton
-          onClick={() => naviate(-1)}
-          className="d-flex justify-content-center align-items-center"
-        >
-          <MdOutlineArrowBackIos color={white} />
-        </BackButton>
+        <BackButton />
         <ProfileImageWrapper className="d-flex justify-content-center align-items-center">
           <ProfileImage src={user.photoURL || user.photoUrl} />
         </ProfileImageWrapper>

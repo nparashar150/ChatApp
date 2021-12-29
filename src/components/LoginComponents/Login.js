@@ -11,7 +11,7 @@ import {
   signUpWithEmailAndPassword,
   resetPasswordWithEmail,
   logInWithEmail,
-  backendBaseURL
+  backendBaseURL,
 } from "../../firebase";
 
 const LoginWrapper = styled.section`
@@ -219,9 +219,13 @@ export default function Login() {
       if (forgotPassword) {
         let email = LogInUserRef.current.LoginInput_Email.value;
         if (email && forgotPassword) {
-          setResetLinkSent(true);
           setLoading(true);
+          setResetLinkSent(true);
           resetPasswordWithEmail(email);
+          setTimeout(() => {
+            setResetLinkSent(false);
+            setLoading(false);
+          }, 2000);
         }
       } else {
         const loginData = {
@@ -436,7 +440,7 @@ export default function Login() {
               placeholder="Enter Email"
             />
             {forgotPassword ? (
-              forgotPassword && resetLinkSent ? (
+              resetLinkSent ? (
                 <ErrorLabel notError>
                   {"Check your Inbox for instructions."}
                 </ErrorLabel>
