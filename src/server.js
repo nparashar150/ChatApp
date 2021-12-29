@@ -26,14 +26,8 @@ mongoose.connect(
     }
   }
 );
-router.use(
-  cors({
-    origin: "*",
-    methods: ["GET", "POST"],
-  })
-);
 const corsOptions = {
-  origin: "https://lustrous-bounty-332014.firebaseapp.com",
+  origin: "*",
   methods: ["GET", "POST"],
 };
 app.use(cors(corsOptions));
