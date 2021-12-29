@@ -6,6 +6,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 import axios from "axios";
@@ -45,12 +46,35 @@ const signIn = (dispatch) => {
     });
 };
 
-const signUpWithEmailAndPassword = (dispatch, email, password) => {
+const signUpWithEmailAndPassword = (
+  dispatch,
+  email,
+  password,
+  name,
+  photoUrl,
+  photoId
+) => {
   dispatch({ type: "LOGIN_START" });
   createUserWithEmailAndPassword(auth, email, password)
     .then((result) => {
-      const userData = result.user;
-      console.log(userData);
+      let userData = result.user;
+      if (userData) {
+        const res = axios.post(
+          `${backendBaseURL}/.netlify/functions/server/user/create`,
+          {
+            email: userData.email,
+            name,
+            photoUrl,
+            photoId,
+            uid: userData.uid,
+          }
+        );
+        console.log(res.data);
+        dispatch({ type: "LOGIN_SUCCESS", payload: res.data });
+      } else {
+        dispatch({ type: "LOGIN_FAILURE", payload: "Error creating account" });
+        console.log("Error creating account");
+      }
     })
     .catch((error) => {
       dispatch({ type: "LOGIN_FAILURE", payload: error });
@@ -62,24 +86,40 @@ const logInWithEmail = (dispatch, email, password) => {
   signInWithEmailAndPassword(auth, email, password)
     .then((result) => {
       const userData = result.user;
-      
-      console.log(userData);
-      // dispatch({ type: "LOGIN_SUCCESS", payload: userData || res.data });
+      setUser(dispatch, userData.uid);
     })
     .catch((error) => {
       dispatch({ type: "LOGIN_FAILURE", payload: error });
     });
 };
 
+const resetPasswordWithEmail = (email) => {
+  sendPasswordResetEmail(auth, email)
+    .then(() => {
+      // Password reset email sent!
+      // ..
+    })
+    .catch((error) => {
+      return error;
+    });
+};
+
 const signInStatus = (dispatch) => {
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      dispatch({ type: "LOGIN_SUCCESS", payload: user });
+      setUser(dispatch, user.uid);
     } else {
       // window.location.replace("/");
       // console.log("Signed Out");
     }
   });
+};
+
+const setUser = async (dispatch, uid) => {
+  const USER = await axios.get(
+    `${backendBaseURL}/.netlify/functions/server/user/create/${uid}`
+  );
+  dispatch({ type: "LOGIN_SUCCESS", payload: USER.data[0] });
 };
 
 const signOutUser = () => {
@@ -104,4 +144,5 @@ export {
   signInStatus,
   signOutUser,
   backendBaseURL,
+  resetPasswordWithEmail,
 };
