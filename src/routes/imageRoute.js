@@ -50,7 +50,7 @@ router.post("/getPhotoURL", async (req, res) => {
       res.status(400).json({ message: "Incomplete Data" });
     }
   } catch (err) {
-    res.status(500).json({ message: err });
+    res.status(400).json({ message: "Error:"+err });
   }
 });
 module.exports = router;
