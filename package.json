@@ -8,6 +8,7 @@
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
     "dotenv": "^10.0.0",
+    "encoding": "^0.1.13",
     "express": "^4.17.1",
     "googleapis": "^92.0.0",
     "ioredis": "^4.28.1",
