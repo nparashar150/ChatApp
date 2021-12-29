@@ -32,14 +32,15 @@ router.use(
     methods: ["GET", "POST"],
   })
 );
-
+const corsOptions = {
+  origin: "https://lustrous-bounty-332014.firebaseapp.com",
+  methods: ["GET", "POST"],
+};
+app.use(cors(corsOptions));
+router.use(cors(corsOptions));
 app.use(
-  cors({
-    origin: "*",
-    methods: ["GET", "POST"],
-  })
+  bodyParser.urlencoded({ limit: "6mb", extended: true, parameterLimit: 6000 })
 );
-app.use(bodyParser.urlencoded({ limit: "6mb", extended: true, parameterLimit:6000 }));
 app.use(bodyParser.json({ limit: "6mb" }));
 // app.use("/uploads", express.static("uploads"));
 app.use("/user/conversation", conversationRoute);
