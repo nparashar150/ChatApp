@@ -63,7 +63,7 @@ const ChatInfoUserImg = styled.img`
   width: ${(props) => (props.chatting ? "1.75rem" : "2.75rem")};
   height: ${(props) => (props.chatting ? "1.75rem" : "2.75rem")};
   border-radius: 50%;
-  border: 2px solid ${red + "AA"};
+  /* border: 2px solid ${red + "AA"}; */
 `;
 const ChatInfoUserMore = styled.div`
   cursor: pointer;

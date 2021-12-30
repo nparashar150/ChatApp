@@ -67,10 +67,10 @@ export default function Conversation({
   const showUserData = () => {
     let chat = [];
     currentUserData({
-      name: user.name,
-      img: user.photoUrl,
+      name: user?.name,
+      img: user?.photoUrl,
       chatData: chat,
-      uid: user.uid,
+      uid: user?.uid,
       chatId: id,
       keyValue,
     });

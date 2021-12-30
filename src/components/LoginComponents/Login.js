@@ -6,6 +6,7 @@ import { darkBlue, red, white } from "../Shared/ColorPalette";
 import { ButtonSubmit } from "../Shared/Button/Button";
 import defaultUserProfile from "../../data/Login/defaultUserProfile.png";
 import axios from "axios";
+import BackButton from "../Shared/BackButton/BackButton";
 import {
   signIn,
   signUpWithEmailAndPassword,
@@ -339,6 +340,7 @@ export default function Login() {
   return (
     <>
       <LoginWrapper className="d-flex justify-content-center align-items-center flex-row">
+        <BackButton />
         <LoginForm
           createAccount
           id="CreateAccount"
