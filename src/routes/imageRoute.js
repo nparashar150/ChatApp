@@ -42,6 +42,7 @@ router.post("/getPhotoURL", async (req, res) => {
     const { base64, mimeType, fileName } = req.body;
     if (base64 && mimeType && fileName) {
       let response = await uploadFile(base64, mimeType, fileName);
+      // console.log(response);
       let publicURL = await generatePublicUrl(response.data.id);
       res
         .status(200)

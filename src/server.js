@@ -54,7 +54,7 @@ app.use("/.netlify/functions/server/user/conversation", conversationRoute);
 app.use("/.netlify/functions/server/user/message", messageRoute);
 app.use("/.netlify/functions/server/user/create", userRoute);
 app.use("/.netlify/functions/server/user/image/upload", imageRoute);
-// app.listen(5000, () => {
-//   console.log("server running on 5000");
-// });
+app.listen(5000, () => {
+  console.log("server running on 5000");
+});
 module.exports.handler = serverless(app);
