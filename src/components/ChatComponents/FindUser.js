@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { SlideLeft } from "../Shared/Animation";
-import { darkBlue, white } from "../Shared/ColorPalette";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { backendBaseURL } from "../../firebase";
@@ -9,12 +8,12 @@ import { AuthContext } from "../../context/authContext";
 import QuestionMark from "../../data/ChatPage/QuestionMark.svg";
 
 const MessageItem = styled.div`
-  background: ${white};
+  background: ${props => props.theme.background};
   justify-content: flex-start;
   align-items: center;
   cursor: pointer;
   padding: 0.5rem 0.5rem;
-  border-bottom: 1px solid ${darkBlue + "50"};
+  border-bottom: 1px solid ${props => props.theme.offline};
   gap: 0.75rem;
   animation: ${SlideLeft} 1.5s ease-in-out;
 `;
@@ -28,7 +27,7 @@ const MessageInfo = styled.div`
 const MessageItemName = styled.p`
   font-weight: 800;
   font-size: 0.95rem;
-  background: ${white};
+  background: ${props => props.theme.background};
   text-align: center;
   cursor: pointer;
   margin: 0;
@@ -37,7 +36,7 @@ const MessageItemName = styled.p`
 const MessageData = styled.p`
   font-weight: 600;
   font-size: 0.9rem;
-  background: ${white};
+  background: ${props => props.theme.background};
   text-align: center;
   cursor: pointer;
   margin: 0;
@@ -50,9 +49,8 @@ const MessageItemUser = styled.img`
   overflow: hidden;
   border-radius: 50%;
   cursor: pointer;
-  /* border: 2px solid ${darkBlue + "75"}; */
 `;
-export default function FindUser({ friendEmail, conversations }) {
+export default function FindUser({ friendEmail, conversations, userAdd }) {
   const [searchedUser, setSearchedUser] = useState([]);
   const [find, setFind] = useState(false);
   let { user } = useContext(AuthContext);
@@ -94,6 +92,7 @@ export default function FindUser({ friendEmail, conversations }) {
         `${backendBaseURL}/user/conversation`,
         chatUsers
       );
+      userAdd();
       console.log("User added.", res);
     } catch (err) {
       console.log(err);

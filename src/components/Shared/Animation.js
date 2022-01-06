@@ -21,3 +21,14 @@ export const SlideLeft = keyframes`
     opacity: 1;
   }
 `;
+
+export const FadeIn = keyframes`
+  from {
+    opacity: 0;
+    visibility: 0;
+  }
+  to {
+    opacity: 1;
+    visibility: 1;
+  }
+`;

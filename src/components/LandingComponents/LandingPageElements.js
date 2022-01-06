@@ -1,11 +1,12 @@
 import styled from "styled-components";
-import { SlideLeft, SlideRight } from "../Shared/Animation";
+import { FadeIn } from "../Shared/Animation";
 
 export const LandingWrapper = styled.main`
   padding: 0 1rem;
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  margin-bottom: 20vh;
 
   @media (max-width: 768px) {
     flex-direction: column;
@@ -14,52 +15,117 @@ export const LandingWrapper = styled.main`
   }
 `;
 export const LandingAssetMask = styled.div`
-  position: absolute;
-  right: 0%;
-  margin-top: 12rem;
-  height: 70vh;
-  width: 40vw;
+  margin-top: ${props => props.marginTop ? props.marginTop : "5rem"};
+  width: ${props => props.width ? props.width : "40vw"};
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  animation: ${SlideRight} 1.5s ease-in-out;
+  animation: ${FadeIn} 1.5s ease-in-out;
 
   @media (max-width: 768px) {
-    position: relative;
-    padding: 0;
-    justify-content: flex-end;
-    margin-top: 2rem;
-    width: 100vw;
-    height: 100%;
+    display: none;
   }
 `;
 export const LandingAsset = styled.img`
   height: auto;
-  width: 40vw;
+  width: ${props => props.width ? props.width : "30rem"};
 
   @media (max-width: 768px) {
-    width: 80vw;
+    width: 100vw;
   }
 `;
 export const LandingData = styled.div`
-  height: 70vh;
-  animation: ${SlideLeft} 1.5s ease-in-out;
+  height: 100%;
+  margin-top: -15rem;
+  margin-left: ${props => props.marginLeft ? props.marginLeft : ""};
+  width: 40vw;
+  animation: ${FadeIn} 1.5s ease-in-out;
 
   @media (max-width: 768px) {
     width: 100vw !important;
     padding: 0 1rem;
     height: 100%;
+    align-items: center !important;
+    padding: 10vh 5vw;
   }
 `;
 export const LandingHeading = styled.h1`
-  font-size: 5rem;
+  font-size: ${(props) => (props.mobile ? "3rem" : "4.5rem")};
   font-weight: 800;
+  text-align: ${props => props.alignRight ? "right" : ""};
+  color: ${props => props.theme.font};
 
   @media (max-width: 768px) {
-    font-size: 4rem;
+    font-size: ${(props) => (props.mobile ? "2rem" : "3rem")};
+    text-align: center;
+    padding-top: 0;
   }
 `;
 export const LandingInfo = styled.p`
   font-weight: 600;
   font-size: 1.35rem;
+  text-align: ${props => props.alignRight ? "right" : ""};
+  color: ${props => props.theme.font};
+
+  @media (max-width: 768px) {
+    text-align: center;
+  }
+`;
+
+export const MobileWrapper = styled.section`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100%;
+  padding-top: 5vh;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+`;
+export const MobileAssetMask = styled.div`
+  height: 80vh;
+  width: 40vw;
+  padding: 0 15rem 0 10rem;
+  /* overflow: hidden; */
+
+  @media (max-width: 768px) {
+    height: auto;
+    width: auto;
+    padding: 0;
+  }
+`;
+export const MobileAsset = styled.img`
+  height: 80vh;
+  width: auto;
+`;
+
+export const LaptopPreview = styled.img`
+  width: auto;
+  height: 85vh;
+
+  @media (max-width: 768px) {
+    width: 100vw;
+    height: auto;
+  }
+`;
+
+export const LaptopMask = styled.div`
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  @media (max-width: 768px) {
+    flex-direction: column-reverse;
+    padding-top: 0;
+  }
+`;
+export const Wrapper = styled.main`
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: ${props => props.theme.background};
 `;

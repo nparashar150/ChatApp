@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { darkBlue, red, white } from "../ColorPalette";
 import { AiOutlineMenu } from "react-icons/ai/index";
-import { useNavigate } from "react-router-dom";
+import logo from "../../../data/logo.png";
+import DarkModeToggle from "react-dark-mode-toggle";
 
 const NavWrapper = styled.nav`
   height: 5rem;
-  background: ${white};
+  background: ${props => props.theme.background};
 
   @media (max-width: 768px) {
     flex-direction: column;
@@ -20,14 +20,24 @@ const NavBrand = styled(Link)`
   font-weight: 800;
   cursor: pointer;
   text-decoration: none;
-  color: ${red};
+  color: ${props => props.theme.online};
 
   &:hover,
   &:focus {
-    color: ${red};
+    color: ${props => props.theme.online};
   }
 `;
-// const NavBrandImg = styled.img``;
+const NavBrandImage = styled.img`
+  width: 3.5rem;
+  height: 3.5rem;
+  margin-left: -1.5rem;
+
+  @media (max-width: 768px) {
+    margin-left: 0;
+    width: 3rem;
+    height: 3rem;
+  }
+`;
 const NavLinkWraper = styled.div`
   gap: 1rem;
   @media (max-width: 768px) {
@@ -37,7 +47,7 @@ const NavLinkWraper = styled.div`
 const NavLink = styled(Link)`
   padding: 0.75rem 4rem;
   text-decoration: none;
-  color: ${darkBlue};
+  color: ${props => props.theme.font};
   font-size: 1.15rem;
   font-weight: 600;
   font-family: "Nunito" sans-serif;
@@ -46,37 +56,38 @@ const NavLink = styled(Link)`
   &:hover,
   &:focus {
     text-decoration: underline;
-    color: ${red};
+    color: ${props => props.theme.online};
   }
 `;
-const NavLogin = styled.button`
-  padding: 0.65rem 2.5rem;
-  border: none;
-  border-radius: 1rem;
-  background: ${red};
-  color: ${white};
-  font-family: "Nunito" sans-serif;
-  font-weight: 600;
-  font-size: 1.15rem;
-  margin: 0 0 0 1rem;
-  border: 2px solid ${red};
+// const NavLogin = styled.button`
+//   padding: 0.65rem 2.5rem;
+//   border: none;
+//   border-radius: 1rem;
+//   background: ${red};
+//   color: ${white};
+//   font-family: "Nunito" sans-serif;
+//   font-weight: 600;
+//   font-size: 1.15rem;
+//   margin: 0 0 0 1rem;
+//   border: 2px solid ${red};
 
-  &:hover,
-  &:focus {
-    color: ${darkBlue};
-    background: ${red + "35"};
-  }
+//   &:hover,
+//   &:focus {
+//     color: ${darkBlue};
+//     background: ${red + "35"};
+//   }
 
-  @media (max-width: 768px) {
-    margin: 1rem 0 0 0;
-  }
-`;
+//   @media (max-width: 768px) {
+//     margin: 1rem 0 0 0;
+//   }
+// `;
 
 const NavMobileHam = styled.div`
   display: none;
 
   @media (max-width: 768px) {
     display: block;
+    margin-top: .5rem;
 
     svg {
       width: 1.65rem;
@@ -97,14 +108,13 @@ export const NavMobileWrapper = styled.div`
     height: 100vh;
     width: 100vw;
     padding-top: 2rem;
-    background: ${white};
+    background: ${props => props.theme.background};
     z-index: 10;
   }
 `;
 
-const Navbar = () => {
+const Navbar = ({handleThemeChange, isDarkMode, setIsDarkMode}) => {
   let [toggleNav, setToggleNav] = useState(false);
-  const navigate = useNavigate();
 
   const navStyle = {
     display: toggleNav ? "flex" : "none",
@@ -116,9 +126,9 @@ const Navbar = () => {
     }
   };
 
-  const handleLogin = async () => {
-    navigate("/login");
-  };
+  // const handleLogin = async () => {
+  //   navigate("/login");
+  // };
   // console.log(user);
   useEffect(() => {
     window.screen.width >= 768 ? setToggleNav(true) : setToggleNav(false);
@@ -127,7 +137,9 @@ const Navbar = () => {
     <>
       <NavWrapper className="container d-flex px-md-4 align-items-center justify-content-between">
         <div className="d-flex justify-content-between w-100">
-          <NavBrand to="/">React</NavBrand>
+          <NavBrand to="/">
+            <NavBrandImage src={logo} alt={"logo"} />
+          </NavBrand>
           <NavMobileHam onClick={() => setToggleNav(!toggleNav)}>
             <AiOutlineMenu />
           </NavMobileHam>
@@ -156,9 +168,15 @@ const Navbar = () => {
               Safety
             </NavLink>
           </NavLinkWraper>
-          <NavLogin onClick={handleLogin} >
+          {/* <NavLogin onClick={handleLogin} >
             {"Login"}
-          </NavLogin>
+          </NavLogin> */}
+          <DarkModeToggle
+            onChange={() => handleThemeChange()}
+            checked={isDarkMode}
+            size={80}
+            speed={2}
+          />
         </NavMobileWrapper>
       </NavWrapper>
     </>
