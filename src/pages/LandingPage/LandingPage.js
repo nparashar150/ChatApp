@@ -92,9 +92,9 @@ const LandingPage = () => {
               className="d-flex flex-column w-50 justify-content-center align-items-start"
             >
               <LandingHeading alignRight>
-                {LandingPageJSON.header}
+                {LandingPageJSON.header2}
               </LandingHeading>
-              <LandingInfo mobilePaddingBottom="10vh" alignRight>{LandingPageJSON.data}</LandingInfo>
+              <LandingInfo mobilePaddingBottom="10vh" alignRight>{LandingPageJSON.data2}</LandingInfo>
             </LandingData>
           </LandingWrapper>
           <LaptopMask>
