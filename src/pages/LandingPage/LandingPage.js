@@ -59,7 +59,7 @@ const LandingPage = () => {
             isDarkMode={isDarkMode}
             setIsDarkMode={setIsDarkMode}
           />
-          <LandingWrapper className="container">
+          <LandingWrapper reversed className="container">
             <LandingData className="d-flex flex-column w-50 justify-content-center align-items-start">
               <LandingHeading>{LandingPageJSON.header}</LandingHeading>
               <LandingInfo>{LandingPageJSON.data}</LandingInfo>
@@ -94,7 +94,7 @@ const LandingPage = () => {
               <LandingHeading alignRight>
                 {LandingPageJSON.header}
               </LandingHeading>
-              <LandingInfo alignRight>{LandingPageJSON.data}</LandingInfo>
+              <LandingInfo mobilePaddingBottom="10vh" alignRight>{LandingPageJSON.data}</LandingInfo>
             </LandingData>
           </LandingWrapper>
           <LaptopMask>

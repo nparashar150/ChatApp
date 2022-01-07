@@ -9,9 +9,10 @@ export const LandingWrapper = styled.main`
   margin-bottom: 20vh;
 
   @media (max-width: 768px) {
-    flex-direction: column;
+    flex-direction: ${props => props.reversed ? "column" : "column-reverse"};
     padding: 0 1rem;
     height: 100%;
+    margin-bottom: 5vh;
   }
 `;
 export const LandingAssetMask = styled.div`
@@ -23,7 +24,7 @@ export const LandingAssetMask = styled.div`
   animation: ${FadeIn} 1.5s ease-in-out;
 
   @media (max-width: 768px) {
-    display: none;
+    justify-content: center;
   }
 `;
 export const LandingAsset = styled.img`
@@ -32,6 +33,7 @@ export const LandingAsset = styled.img`
 
   @media (max-width: 768px) {
     width: 100vw;
+    padding: 0 5vw;
   }
 `;
 export const LandingData = styled.div`
@@ -43,10 +45,12 @@ export const LandingData = styled.div`
 
   @media (max-width: 768px) {
     width: 100vw !important;
-    padding: 0 1rem;
+    /* padding: 0 1rem; */
     height: 100%;
     align-items: center !important;
     padding: 10vh 5vw;
+    margin-top: 0;
+    margin-left: 0;
   }
 `;
 export const LandingHeading = styled.h1`
@@ -69,6 +73,7 @@ export const LandingInfo = styled.p`
 
   @media (max-width: 768px) {
     text-align: center;
+    padding-bottom: ${props => props.mobilePaddingBottom ? props.mobilePaddingBottom  : ""};
   }
 `;
 
@@ -119,8 +124,9 @@ export const LaptopMask = styled.div`
   flex-direction: column;
 
   @media (max-width: 768px) {
-    flex-direction: column-reverse;
-    padding-top: 0;
+    /* flex-direction: column-reverse; */
+    /* padding-top: 0; */
+    display: none;
   }
 `;
 export const Wrapper = styled.main`
