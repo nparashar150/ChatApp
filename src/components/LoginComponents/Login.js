@@ -70,6 +70,7 @@ const LoginInput = styled.input`
   font-size: 0.95rem;
   padding: 0 0.75rem;
   display: ${(props) => (props.file ? "none" : "block")};
+  color: ${props => props.theme.font};
 
   &:hover,
   &:focus {

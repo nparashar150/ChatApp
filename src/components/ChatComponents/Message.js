@@ -4,11 +4,17 @@ import { backendBaseURL } from "../../firebase";
 import axios from "axios";
 import { useContext, lazy, Suspense } from "react";
 import { AuthContext } from "../../context/authContext";
-import { SlideLeft } from "../Shared/Animation";
 import broadcast from "../../data/ChatPage/broadcast.png";
 import { FiSearch } from "react-icons/fi/index";
 import FindUser from "./FindUser";
 import { useNavigate } from "react-router-dom";
+import {
+  MessageItemUser,
+  MessageItem,
+  MessageInfo,
+  MessageItemName,
+  MessageData,
+} from "../Shared/UserImage/UserImage";
 const Conversation = lazy(() => import("./Conversation"));
 
 const Messages = styled.h1`
@@ -26,10 +32,10 @@ const Messages = styled.h1`
 `;
 
 const MessageWrapper = styled.section`
-  background: ${props => props.theme.background};
+  background: ${(props) => props.theme.background};
   overflow: hidden;
   flex-direction: column;
-  border-right: 2px solid ${props => props.theme.offline};
+  border-right: 2px solid ${(props) => props.theme.offline};
   width: 25%;
   justify-content: start;
 
@@ -43,7 +49,7 @@ const MessageWrapper = styled.section`
 `;
 
 const MessageDivider = styled.section`
-  background: ${props => props.theme.background};
+  background: ${(props) => props.theme.background};
   justify-content: flex-start;
   align-items: flex-start;
   flex-direction: column;
@@ -54,64 +60,20 @@ const MessageDivider = styled.section`
 `;
 
 const MessageSearchBar = styled.input`
-  border: 2px solid ${props => props.theme.offline};
+  border: 2px solid ${(props) => props.theme.offline};
   outline: none;
   border-radius: 2rem;
   height: 2.5rem;
   width: 100%;
-  background: ${props => props.theme.background};
+  background: ${(props) => props.theme.background};
   font-size: 0.95rem;
   padding: 0 0.75rem;
-  color: ${props => props.theme.font};
-  
+  color: ${(props) => props.theme.font};
+
   &:hover,
   &:focus {
-    border-color: ${props => props.theme.online};
+    border-color: ${(props) => props.theme.online};
   }
-`;
-
-const MessageItem = styled.div`
-  background: ${props => props.theme.background};
-  justify-content: flex-start;
-  align-items: center;
-  cursor: pointer;
-  padding: 0.5rem 0.5rem;
-  gap: 0.75rem;
-  animation: ${SlideLeft} 1.5s ease-in-out;
-`;
-
-const MessageInfo = styled.div`
-  justify-content: center;
-  align-items: flex-start;
-  overflow-x: hidden;
-`;
-
-const MessageItemName = styled.p`
-  font-weight: 800;
-  font-size: 0.95rem;
-  background: ${props => props.theme.background};
-  text-align: center;
-  cursor: pointer;
-  margin: 0;
-`;
-
-const MessageData = styled.p`
-  font-weight: 600;
-  font-size: 0.9rem;
-  background: ${props => props.theme.background};
-  text-align: center;
-  cursor: pointer;
-  margin: 0;
-  width: max-content;
-`;
-
-const MessageItemUser = styled.img`
-  width: 3rem;
-  aspect-ratio: 1 / 1;
-  overflow: hidden;
-  border-radius: 50%;
-  cursor: pointer;
-  border: 2px solid ${props => props.theme.online};
 `;
 
 const searchStyles = {
@@ -143,7 +105,7 @@ const ChatMessageList = (props) => {
   const handleUserAdd = () => {
     setUserAdded(true);
     console.log(userAdded);
-  }
+  };
 
   useEffect(() => {
     let isComponentMounted = true;
@@ -162,7 +124,7 @@ const ChatMessageList = (props) => {
     getUserConversations();
     return () => {
       isComponentMounted = false;
-    }
+    };
   }, [user]);
 
   return (
@@ -193,7 +155,7 @@ const ChatMessageList = (props) => {
           <FiSearch
             style={searchStyles}
             size="1.25rem"
-            color={props => props.theme.online}
+            color={(props) => props.theme.online}
           />
         </form>
         <MessageDivider className="d-flex">
@@ -222,8 +184,12 @@ const ChatMessageList = (props) => {
                   fallback={
                     <MessageItem key={key} className="d-flex flex-row w-100">
                       <MessageInfo className="d-flex flex-column w-100">
-                        <MessageItemName>Loading Conversations...</MessageItemName>
-                        <MessageData className="text-justify">Please wait...</MessageData>
+                        <MessageItemName>
+                          Loading Conversations...
+                        </MessageItemName>
+                        <MessageData className="text-justify">
+                          Please wait...
+                        </MessageData>
                       </MessageInfo>
                     </MessageItem>
                   }

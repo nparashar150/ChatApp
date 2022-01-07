@@ -9,14 +9,25 @@ import LandingPage from "./pages/LandingPage/LandingPage";
 import AboutPage from "./pages/AboutPage/AboutPage";
 import ChatPage from "./pages/ChatPage/ChatPage";
 import LoginPage from "./pages/LoginPage/LoginPage";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "./context/authContext";
 import UserProfile from "./pages/UserProfile/UserProfile";
+import LoadingLanding from "./components/Shared/Spinner/LoadingLanding";
 
 function App() {
   const { user } = useContext(AuthContext);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 3000);
+  }, []);
   return (
-      <>
+    <>
+      {loading ? (
+        <LoadingLanding />
+      ) : (
         <Router>
           <Routes>
             <Route exact path="/" element={<LandingPage />} />
@@ -34,7 +45,8 @@ function App() {
             />
           </Routes>
         </Router>
-      </>
+      )}
+    </>
   );
 }
 
