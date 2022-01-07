@@ -1,8 +1,14 @@
 import ChatMessageList from "../../components/ChatComponents/Message";
 import styled from "styled-components";
-import { useState, lazy, Suspense } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { darkBlue } from "../../components/Shared/ColorPalette";
 import { SocketAuthContextProvider } from "../../context/socketContext";
+import {
+  lightTheme,
+  darkTheme,
+  GlobalStyle,
+} from "../../components/Shared/ThemeEngine/Theme";
+import { ThemeProvider } from "styled-components";
 const UserChat = lazy(() => import("../../components/ChatComponents/UserChat"));
 
 const ChatPageWrapper = styled.div`
@@ -38,25 +44,44 @@ const ChatPage = () => {
     keyValue: 0,
   });
   let [onlineUsers, setOnlineUsers] = useState([]);
+  const [isDarkMode, setIsDarkMode] = useState(true);
 
+  const previousTheme = () => {
+    const getTheme = localStorage.getItem("darkTheme");
+    if (getTheme) {
+      getTheme === "true" ? setIsDarkMode(true) : setIsDarkMode(false);
+    } else {
+      localStorage.setItem("darkTheme", false);
+      setIsDarkMode(false);
+    }
+  };
+
+  useEffect(() => {
+    previousTheme();
+  }, []);
   return (
-    <>
-      <SocketAuthContextProvider>
-        <ChatPageWrapper className="d-flex">
-          <ChatMessageList
-            currentUserData={(value) => setUserInfo(value)}
-            onlineUsers={onlineUsers}
-          />
-          <Suspense fallback={<NoConversation>Loading Chat...</NoConversation>}>
-            <UserChat
-              key={userInfo.keyValue}
-              currentUserData={userInfo}
-              setOnlineUsers={(value) => setOnlineUsers(value)}
+    <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
+      <GlobalStyle />
+      <>
+        <SocketAuthContextProvider>
+          <ChatPageWrapper className="d-flex">
+            <ChatMessageList
+              currentUserData={(value) => setUserInfo(value)}
+              onlineUsers={onlineUsers}
             />
-          </Suspense>
-        </ChatPageWrapper>
-      </SocketAuthContextProvider>
-    </>
+            <Suspense
+              fallback={<NoConversation>Loading Chat...</NoConversation>}
+            >
+              <UserChat
+                key={userInfo.keyValue}
+                currentUserData={userInfo}
+                setOnlineUsers={(value) => setOnlineUsers(value)}
+              />
+            </Suspense>
+          </ChatPageWrapper>
+        </SocketAuthContextProvider>
+      </>
+    </ThemeProvider>
   );
 };
 

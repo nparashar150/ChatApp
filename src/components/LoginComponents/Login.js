@@ -2,9 +2,8 @@ import React, { useState, useEffect, useContext, useRef } from "react";
 import styled from "styled-components";
 import { signInStatus } from "../../firebase";
 import { AuthContext } from "../../context/authContext";
-import { darkBlue, red, white } from "../Shared/ColorPalette";
 import { ButtonSubmit } from "../Shared/Button/Button";
-import defaultUserProfile from "../../data/Login/defaultUserProfile.png";
+import defaultUserProfile from "../../data/Login/defaultUserProfile_.png";
 import axios from "axios";
 import BackButton from "../Shared/BackButton/BackButton";
 import {
@@ -14,9 +13,10 @@ import {
   logInWithEmail,
   backendBaseURL,
 } from "../../firebase";
+import DarkModeToggle from "react-dark-mode-toggle";
 
 const LoginWrapper = styled.section`
-  background: ${white};
+  background: ${(props) => props.theme.background};
   width: 100vw;
   height: 100vh;
   gap: 1rem;
@@ -43,7 +43,7 @@ const DividerLine = styled.div`
   width: 0.2rem;
   height: calc(100vh - 2rem);
   border-radius: 0.25rem;
-  background: ${darkBlue + "50"};
+  background: ${(props) => props.theme.offline};
 
   @media (max-width: 768px) {
     height: 0.25rem;
@@ -61,19 +61,19 @@ const LoginForm = styled.form`
   }
 `;
 const LoginInput = styled.input`
-  border: 3px solid ${darkBlue + "50"};
+  border: 3px solid ${(props) => props.theme.offline};
   outline: none;
   border-radius: 2rem;
   height: 2.75rem;
   width: 30vw;
-  background: ${white};
+  background: ${(props) => props.theme.background};
   font-size: 0.95rem;
   padding: 0 0.75rem;
   display: ${(props) => (props.file ? "none" : "block")};
 
   &:hover,
   &:focus {
-    border-color: ${darkBlue + "AA"};
+    border-color: ${(props) => props.theme.online};
   }
 
   @media (max-width: 768px) {
@@ -81,19 +81,20 @@ const LoginInput = styled.input`
   }
 `;
 const LoginLabelFile = styled.label`
-  border: 3px solid ${darkBlue + "50"};
+  border: 3px solid ${(props) => props.theme.offline};
   outline: none;
   border-radius: 2rem;
   height: 2.75rem;
   width: 30vw;
-  background: ${white};
+  background: ${(props) => props.theme.background};
   font-size: 0.95rem;
   padding: 0 0.75rem;
   line-height: 2.5rem;
+  color: ${(props) => props.theme.font};
 
   &:hover,
   &:focus {
-    border-color: ${darkBlue + "AA"};
+    border-color: ${(props) => props.theme.online};
   }
 
   @media (max-width: 768px) {
@@ -102,7 +103,7 @@ const LoginLabelFile = styled.label`
 `;
 
 const ErrorLabel = styled.div`
-  border: 3px solid ${darkBlue + "75"};
+  border: 3px solid ${(props) => (props.notError ? "#2E8B5750" : "#e6394650")};
   outline: none;
   border-radius: 2rem;
   height: 2.75rem;
@@ -111,13 +112,9 @@ const ErrorLabel = styled.div`
   font-size: 0.95rem;
   padding: 0 0.75rem;
   line-height: 2.5rem;
-  color: ${darkBlue};
+  color: ${(props) => props.theme.font};
   font-weight: 600;
   text-align: center;
-  &:hover,
-  &:focus {
-    border-color: ${darkBlue + "AA"};
-  }
 
   @media (max-width: 768px) {
     width: 80vw;
@@ -125,18 +122,18 @@ const ErrorLabel = styled.div`
 `;
 
 const PreviewImageContainer = styled.div`
-  border: 3px solid ${darkBlue + "50"};
+  border: 3px solid ${(props) => props.theme.offline};
   border-top: 0px;
   border-bottom-left-radius: 2rem;
   border-bottom-right-radius: 2rem;
   width: calc(30vw - 4rem);
   margin-top: -1rem;
-  background: ${darkBlue + "25"};
+  background: ${(props) => props.theme.background};
   padding: 1rem;
 
   &:hover,
   &:focus {
-    border-color: ${darkBlue + "AA"};
+    border-color: ${(props) => props.theme.online};
   }
 
   @media (max-width: 768px) {
@@ -150,19 +147,19 @@ const PreviewImage = styled.img`
   /* min-width: 8rem; */
   /* min-height: 8rem; */
   overflow: hidden;
-  outline: 3px solid ${darkBlue + "50"};
+  outline: 3px solid ${(props) => props.theme.offline};
   outline-offset: 2px;
   border-radius: 50%;
 
   &:hover,
   &:focus {
-    outline-color: ${darkBlue + "AA"};
+    outline-color: ${(props) => props.theme.online};
   }
 `;
 
 const Heading = styled.h2`
   font-weight: 600;
-  color: ${darkBlue};
+  color: ${(props) => props.theme.font};
 
   @media (max-width: 768px) {
     width: 80vw;
@@ -173,35 +170,46 @@ const Heading = styled.h2`
 const ORLineWrapper = styled.div`
   width: 40%;
   height: 1rem;
-  border-bottom: 2px solid ${darkBlue + "50"};
+  border-bottom: 2px solid ${(props) => props.theme.offline};
   text-align: center;
   margin: 0.25em 0 0.75rem 0;
 `;
 
 const ORLine = styled.span`
   font-size: 1.25rem;
-  background-color: ${white};
-  color: ${darkBlue};
+  background-color: ${(props) => props.theme.background};
+  color: ${(props) => props.theme.font};
   padding: 0 1rem 0px 1rem;
 `;
 
 const ForgotPassword = styled.button`
   border: none;
   outline: none;
-  color: ${red};
+  color: ${(props) => props.theme.font};
   font-size: 0.95rem;
   font-weight: 600;
   text-decoration: none;
+  background: ${(props) => props.theme.background};
 
   &:hover,
   &:focus,
   &:visited,
   &:active {
-    color: ${red};
+    color: ${(props) => props.theme.font};
   }
 `;
 
-export default function Login() {
+const ToggleThemeWrapper = styled.div`
+  position: fixed;
+  top: 5%;
+  right: 5%;
+`;
+
+export default function Login({
+  handleThemeChange,
+  isDarkMode,
+  setIsDarkMode,
+}) {
   let { user, dispatch } = useContext(AuthContext);
   let [isSignedIn, setIsSignedIn] = useState(false);
   let [previewSrc, setPreviewSrc] = useState(defaultUserProfile);
@@ -341,6 +349,14 @@ export default function Login() {
     <>
       <LoginWrapper className="d-flex justify-content-center align-items-center flex-row">
         <BackButton />
+        <ToggleThemeWrapper>
+          <DarkModeToggle
+            onChange={() => handleThemeChange()}
+            checked={isDarkMode}
+            size={80}
+            speed={2}
+          />
+        </ToggleThemeWrapper>
         <LoginForm
           createAccount
           id="CreateAccount"

@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { darkBlue, red, white } from "../Shared/ColorPalette";
 import { FiSend } from "react-icons/fi/index";
 import { AiOutlineMore } from "react-icons/ai/index";
 import { io } from "socket.io-client";
@@ -33,7 +32,7 @@ const ChatInfoWrapper = styled.div`
   gap: 0.75rem;
   justify-content: flex-start;
   cursor: pointer;
-  background: ${white};
+  background: ${props => props.theme.background};
   margin-top: 0.5rem;
 
   @media (max-width: 768px) {
@@ -49,8 +48,8 @@ const ChatInfoUserName = styled.div`
   font-size: ${(props) => (props.chatting ? "1rem" : "1.5rem")};
   font-weight: 700;
   cursor: pointer;
-  background: ${(props) => (props.chatting ? `${white}` : `${white}`)};
-  color: ${darkBlue};
+  background: ${(props) => (props.chatting ? `${props => props.theme.background}` : `${props => props.theme.background}`)};
+  color: ${props => props.theme.font};
   width: 50%;
   text-align: ${(props) => (props.right ? "right" : "left")};
 
@@ -63,7 +62,6 @@ const ChatInfoUserImg = styled.img`
   width: ${(props) => (props.chatting ? "1.75rem" : "2.75rem")};
   height: ${(props) => (props.chatting ? "1.75rem" : "2.75rem")};
   border-radius: 50%;
-  /* border: 2px solid ${red + "AA"}; */
 `;
 const ChatInfoUserMore = styled.div`
   cursor: pointer;
@@ -81,7 +79,7 @@ const Chat = styled.div`
   width: auto;
   margin: 0.5rem 0.75rem 0 0;
   height: 75vh;
-  background: ${white};
+  background: ${props => props.theme.background};
 
   @media (max-width: 768px) {
     height: calc(50vh - 8rem);
@@ -100,7 +98,7 @@ const ChattingForm = styled.form`
   right: 0%;
   margin-bottom: 0.75rem;
   margin-right: 0.75rem;
-  background: ${white};
+  background: ${props => props.theme.background};
 
   @media (max-width: 768px) {
     width: 100vw;
@@ -111,24 +109,25 @@ const ChattingForm = styled.form`
 const ChatTime = styled.p`
   font-weight: 600;
   font-size: 0.7rem;
-  background: ${white};
+  background: ${props => props.theme.background};
   cursor: pointer;
   margin: 0;
   width: 100%;
 `;
 const ChattingInput = styled.input`
-  border: 2px solid ${darkBlue + "50"};
+  border: 2px solid ${props => props.theme.offline};
   outline: none;
   border-radius: 2rem;
   height: 2.75rem;
   width: 70vw;
-  background: ${white};
+  background: ${props => props.theme.background};
   font-size: 0.95rem;
   padding: 0 1rem;
+  color: ${props => props.theme.font};
 
   &:hover,
   &:focus {
-    border-color: ${darkBlue + "AA"};
+    border-color: ${props => props.theme.online};
   }
 
   @media (max-width: 768px) {
@@ -138,22 +137,22 @@ const ChattingInput = styled.input`
 const ChattingInputSubmit = styled.div`
   width: 2.75rem;
   height: 2.75rem;
-  background: ${white};
+  background: ${props => props.theme.offline};
   border-radius: 50%;
-  border: 2px solid ${red + "AA"};
+  border: 2px solid ${props => props.theme.online};
 
   &:hover,
   &:focus {
-    background: ${red + "AA"};
+    background: ${props => props.theme.background};
     svg {
-      color: ${white + "AA"};
+      color: ${props => props.theme.online};
     }
   }
 
   svg {
     margin-top: 2px;
     margin-right: 2px;
-    color: ${red + "AA"};
+    color: ${props => props.theme.font + "AA"};
     width: 1.5rem;
     height: 1.5rem;
   }
@@ -166,7 +165,7 @@ const NoConversation = styled.div`
   align-items: center;
   height: 100%;
   width: 70vw;
-  color: ${darkBlue + "75"};
+  color: ${props => props.theme.font + "75"};
   padding: 2rem;
   -webkit-user-select: none;
   -moz-user-select: none;

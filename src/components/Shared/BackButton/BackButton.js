@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { MdOutlineArrowBackIos } from "react-icons/md/index";
-import { red, white } from "../ColorPalette";
 
 const BackButtonWrapper = styled.div`
   position: fixed;
@@ -11,14 +10,14 @@ const BackButtonWrapper = styled.div`
   width: 1.75rem;
   height: 1.75rem;
   border-radius: 50%;
-  background: ${red};
+  background: ${props => props.theme.online};
   cursor: pointer;
-  outline: 2px solid ${red};
+  outline: 2px solid ${props => props.theme.online};
   outline-offset: 2px;
 
   &:hover,
   &:focus {
-    background: ${red + "AA"};
+    background: ${props => props.theme.online + "AA"};
   }
 `;
 
@@ -31,7 +30,7 @@ export default function BackButton() {
         onClick={() => navigate(-1)}
         className="d-flex justify-content-center align-items-center"
       >
-        <MdOutlineArrowBackIos color={white} />
+        <MdOutlineArrowBackIos color={props => props.theme.font} />
       </BackButtonWrapper>
     </>
   );

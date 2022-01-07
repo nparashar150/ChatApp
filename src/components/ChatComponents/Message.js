@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { darkBlue, white } from "../Shared/ColorPalette";
 import { useState, useEffect, useRef } from "react";
 import { backendBaseURL } from "../../firebase";
 import axios from "axios";
@@ -27,10 +26,10 @@ const Messages = styled.h1`
 `;
 
 const MessageWrapper = styled.section`
-  background: ${white};
+  background: ${props => props.theme.background};
   overflow: hidden;
   flex-direction: column;
-  border-right: 2px solid ${darkBlue + "50"};
+  border-right: 2px solid ${props => props.theme.offline};
   width: 25%;
   justify-content: start;
 
@@ -44,7 +43,7 @@ const MessageWrapper = styled.section`
 `;
 
 const MessageDivider = styled.section`
-  background: ${white};
+  background: ${props => props.theme.background};
   justify-content: flex-start;
   align-items: flex-start;
   flex-direction: column;
@@ -55,23 +54,24 @@ const MessageDivider = styled.section`
 `;
 
 const MessageSearchBar = styled.input`
-  border: 2px solid ${darkBlue + "50"};
+  border: 2px solid ${props => props.theme.offline};
   outline: none;
   border-radius: 2rem;
   height: 2.5rem;
   width: 100%;
-  background: ${white};
+  background: ${props => props.theme.background};
   font-size: 0.95rem;
   padding: 0 0.75rem;
-
+  color: ${props => props.theme.font};
+  
   &:hover,
   &:focus {
-    border-color: ${darkBlue + "AA"};
+    border-color: ${props => props.theme.online};
   }
 `;
 
 const MessageItem = styled.div`
-  background: ${white};
+  background: ${props => props.theme.background};
   justify-content: flex-start;
   align-items: center;
   cursor: pointer;
@@ -89,7 +89,7 @@ const MessageInfo = styled.div`
 const MessageItemName = styled.p`
   font-weight: 800;
   font-size: 0.95rem;
-  background: ${white};
+  background: ${props => props.theme.background};
   text-align: center;
   cursor: pointer;
   margin: 0;
@@ -98,7 +98,7 @@ const MessageItemName = styled.p`
 const MessageData = styled.p`
   font-weight: 600;
   font-size: 0.9rem;
-  background: ${white};
+  background: ${props => props.theme.background};
   text-align: center;
   cursor: pointer;
   margin: 0;
@@ -111,7 +111,7 @@ const MessageItemUser = styled.img`
   overflow: hidden;
   border-radius: 50%;
   cursor: pointer;
-  border: 2px solid ${darkBlue + "75"};
+  border: 2px solid ${props => props.theme.online};
 `;
 
 const searchStyles = {
@@ -124,6 +124,7 @@ const ChatMessageList = (props) => {
   let { user } = useContext(AuthContext);
   let [conversations, setConversations] = useState([]);
   let [searching, setSearching] = useState(false);
+  let [userAdded, setUserAdded] = useState(false);
   const navigate = useNavigate();
 
   const searchRef = useRef();
@@ -138,6 +139,11 @@ const ChatMessageList = (props) => {
       setSearching(false);
     }
   };
+
+  const handleUserAdd = () => {
+    setUserAdded(true);
+    console.log(userAdded);
+  }
 
   useEffect(() => {
     let isComponentMounted = true;
@@ -187,7 +193,7 @@ const ChatMessageList = (props) => {
           <FiSearch
             style={searchStyles}
             size="1.25rem"
-            color={darkBlue + "AA"}
+            color={props => props.theme.online}
           />
         </form>
         <MessageDivider className="d-flex">
@@ -196,6 +202,7 @@ const ChatMessageList = (props) => {
               <FindUser
                 conversations={conversations}
                 friendEmail={searchUser}
+                userAdded={handleUserAdd}
               />
             ) : (
               <MessageItem className="d-flex flex-row w-100">
