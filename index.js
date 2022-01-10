@@ -49,6 +49,10 @@ io.on("connection", (socket) => {
   });
 });
 
+app.get("/", (req, res) => {
+  res.json("NOT ALLOWED!!");
+})
+
 server.listen(process.env.PORT || 8000, () => {
   console.log("Socket Server Started!");
 })
