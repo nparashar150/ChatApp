@@ -1,34 +1,27 @@
 [
-    {
-        "header": "About 'APP'",
-        "data": "APP   is free(Data charges may apply) and offers simple, secure, reliable messaging all over the world.",
-        "footer": {}
-    },
-    {
-        "header":"Our Mission",
-        "data":"APP is a alternative to both SMS and other messaging apps controlled by ultra big corporations"
-    }    ,
-    {
-        "header":"No number Necessary",
-        "data":"Just login with google and start chatting with your friends!"
-    },
-    {
-        "header":"Technologies",
-        "data":[
-            "React",
-            "FireBase",
-            "Express",
-            "Mongo",
-            "Node",
-            "Socket.io",
-            "Styled Components",
-            "Sass",
-            "Bootstrap",
-            "Netlify serverless http",
-            "Google APIs"
-        ]
-    },
-    {
-        "header":"Made With ❤ Web Dev Team of ACE"
-    }
+  {
+    "header": "About 'APP'",
+    "data": "APP is free(Data charges may apply) and offers simple, secure, reliable messaging all over the world. Just login with google and start chatting with your friends!. APP is a alternative to both SMS and other messaging apps controlled by ultra big corporations",
+    "footer": {}
+  },
+  {
+    "header": "Technologies",
+    "data": [
+      "Mongo",
+      "Express",
+      "Node",
+      "React",
+      "FireBase",
+      "Socket.io",
+      "Styled Components",
+      "Sass",
+      "Bootstrap",
+      "Netlify serverless http",
+      "Google APIs",
+      "Github API"
+    ]
+  },
+  {
+    "header": "Made with ❤ Web Dev Team of ACE"
+  }
 ]

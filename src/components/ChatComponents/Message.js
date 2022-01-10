@@ -135,6 +135,7 @@ const ChatMessageList = (props) => {
           <MessageItem
             onClick={() => navigate("/profile")}
             className="d-flex flex-row p-0"
+            noBorder
           >
             <MessageItemUser src={user.photoURL || user.photoUrl} />
           </MessageItem>

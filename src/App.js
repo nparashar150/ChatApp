@@ -37,7 +37,7 @@ function App() {
               path="/dashboard"
               element={user ? <ChatPage /> : <Navigate to="/" />}
             />
-            <Route exatt path="/profile" element={<UserProfile />} />
+            <Route exact path="/profile" element={<UserProfile />} />
             <Route
               exact
               path="/login"

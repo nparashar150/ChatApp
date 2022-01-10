@@ -2,12 +2,14 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { AiOutlineMenu } from "react-icons/ai/index";
-import logo from "../../../data/logo.png";
+import logoDark from "../../../data/logo-dark.svg";
+import logoLight from "../../../data/logo-light.svg";
 import DarkModeToggle from "react-dark-mode-toggle";
 
 const NavWrapper = styled.nav`
   height: 5rem;
   background: ${props => props.theme.background};
+  z-index: 10;
 
   @media (max-width: 768px) {
     flex-direction: column;
@@ -138,7 +140,7 @@ const Navbar = ({handleThemeChange, isDarkMode, setIsDarkMode}) => {
       <NavWrapper className="container d-flex px-md-4 align-items-center justify-content-between">
         <div className="d-flex justify-content-between w-100">
           <NavBrand to="/">
-            <NavBrandImage src={logo} alt={"logo"} />
+            <NavBrandImage src={isDarkMode ? logoDark : logoLight} alt={"logo"} />
           </NavBrand>
           <NavMobileHam onClick={() => setToggleNav(!toggleNav)}>
             <AiOutlineMenu />
@@ -162,10 +164,10 @@ const Navbar = ({handleThemeChange, isDarkMode, setIsDarkMode}) => {
             </NavLink>
             <NavLink
               className="px-3"
-              to="#safety"
+              to="/download"
               onClick={() => toggleNavItem()}
             >
-              Safety
+              Download
             </NavLink>
           </NavLinkWraper>
           {/* <NavLogin onClick={handleLogin} >
