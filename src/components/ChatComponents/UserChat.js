@@ -32,7 +32,7 @@ const ChatInfoWrapper = styled.div`
   gap: 0.75rem;
   justify-content: flex-start;
   cursor: pointer;
-  background: ${props => props.theme.background};
+  background: ${(props) => props.theme.background};
   margin-top: 0.5rem;
 
   @media (max-width: 768px) {
@@ -48,8 +48,11 @@ const ChatInfoUserName = styled.div`
   font-size: ${(props) => (props.chatting ? "1rem" : "1.5rem")};
   font-weight: 700;
   cursor: pointer;
-  background: ${(props) => (props.chatting ? `${props => props.theme.background}` : `${props => props.theme.background}`)};
-  color: ${props => props.theme.font};
+  background: ${(props) =>
+    props.chatting
+      ? `${(props) => props.theme.background}`
+      : `${(props) => props.theme.background}`};
+  color: ${(props) => props.theme.font};
   width: 50%;
   text-align: ${(props) => (props.right ? "right" : "left")};
 
@@ -79,7 +82,7 @@ const Chat = styled.div`
   width: auto;
   margin: 0.5rem 0.75rem 0 0;
   height: 75vh;
-  background: ${props => props.theme.background};
+  background: ${(props) => props.theme.background};
 
   @media (max-width: 768px) {
     height: calc(50vh - 8rem);
@@ -98,7 +101,7 @@ const ChattingForm = styled.form`
   right: 0%;
   margin-bottom: 0.75rem;
   margin-right: 0.75rem;
-  background: ${props => props.theme.background};
+  background: ${(props) => props.theme.background};
 
   @media (max-width: 768px) {
     width: 100vw;
@@ -109,25 +112,25 @@ const ChattingForm = styled.form`
 const ChatTime = styled.p`
   font-weight: 600;
   font-size: 0.7rem;
-  background: ${props => props.theme.background};
+  background: ${(props) => props.theme.background};
   cursor: pointer;
   margin: 0;
   width: 100%;
 `;
 const ChattingInput = styled.input`
-  border: 2px solid ${props => props.theme.offline};
+  border: 2px solid ${(props) => props.theme.offline};
   outline: none;
   border-radius: 2rem;
   height: 2.75rem;
   width: 70vw;
-  background: ${props => props.theme.background};
+  background: ${(props) => props.theme.background};
   font-size: 0.95rem;
   padding: 0 1rem;
-  color: ${props => props.theme.font};
+  color: ${(props) => props.theme.font};
 
   &:hover,
   &:focus {
-    border-color: ${props => props.theme.online};
+    border-color: ${(props) => props.theme.online};
   }
 
   @media (max-width: 768px) {
@@ -137,22 +140,22 @@ const ChattingInput = styled.input`
 const ChattingInputSubmit = styled.div`
   width: 2.75rem;
   height: 2.75rem;
-  background: ${props => props.theme.offline};
+  background: ${(props) => props.theme.offline};
   border-radius: 50%;
-  border: 2px solid ${props => props.theme.online};
+  border: 2px solid ${(props) => props.theme.online};
 
   &:hover,
   &:focus {
-    background: ${props => props.theme.background};
+    background: ${(props) => props.theme.background};
     svg {
-      color: ${props => props.theme.online};
+      color: ${(props) => props.theme.online};
     }
   }
 
   svg {
     margin-top: 2px;
     margin-right: 2px;
-    color: ${props => props.theme.font + "AA"};
+    color: ${(props) => props.theme.font + "AA"};
     width: 1.5rem;
     height: 1.5rem;
   }
@@ -165,7 +168,7 @@ const NoConversation = styled.div`
   align-items: center;
   height: 100%;
   width: 70vw;
-  color: ${props => props.theme.font + "75"};
+  color: ${(props) => props.theme.font + "75"};
   padding: 2rem;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -190,40 +193,59 @@ const UserChat = ({ currentUserData, setOnlineUsers }) => {
   const { socketEvent, dispatch } = useContext(SocketAuthContext);
 
   useEffect(() => {
+    let isComponentMounted = true;
     const checkSocket = (dispatch) => {
       dispatch({ type: "SOCKET_EVENT_START" });
       if (socketEvent) {
         socketRef.current = socketEvent;
       } else {
-        socketRef.current = io("ws://localhost:8000");
+        socketRef.current = io("http://localhost:8000");
       }
       dispatch({
         type: "SOCKET_EVENT_SUCCESS",
         payload: socketRef.current,
       });
+      console.log(socketRef.current);
     };
-    checkSocket(dispatch);
+    if (isComponentMounted) {
+      checkSocket(dispatch);
+    }
+    return () => {
+      isComponentMounted = false;
+    };
   }, [socketEvent, dispatch]);
 
   useEffect(() => {
-    socketRef?.current?.on("getMessage", (chatData) => {
-      setIncommingMessage(
-        {
-          sender: chatData.senderId,
-          text: chatData.text,
-          createdAt: Date.now(),
-        },
-        (err) => {
-          console.log(err);
-        }
-      );
-    });
+    let isComponentMounted = true;
+    if (isComponentMounted) {
+      socketRef?.current?.on("getMessage", (chatData) => {
+        setIncommingMessage(
+          {
+            sender: chatData.senderId,
+            text: chatData.text,
+            createdAt: Date.now(),
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
+      });
+    }
+    return () => {
+      isComponentMounted = false;
+    };
   }, []);
 
   useEffect(() => {
-    incommingMessage &&
-      currentUserData?.members?.includes(incommingMessage.sender) &&
-      setChat((prev) => [...prev], incommingMessage);
+    let isComponentMounted = true;
+    if (isComponentMounted) {
+      incommingMessage &&
+        currentUserData?.members?.includes(incommingMessage.sender) &&
+        setChat((prev) => [...prev], incommingMessage);
+    }
+    return () => {
+      isComponentMounted = false;
+    };
   }, [incommingMessage, currentUserData]);
 
   useEffect(() => {
@@ -240,6 +262,7 @@ const UserChat = ({ currentUserData, setOnlineUsers }) => {
   }, [setOnlineUsers, user]);
 
   useEffect(() => {
+    let isComponentMounted = true;
     const getMessages = async () => {
       try {
         const res = await axios.get(
@@ -251,7 +274,12 @@ const UserChat = ({ currentUserData, setOnlineUsers }) => {
         console.log(err);
       }
     };
-    getMessages();
+    if (isComponentMounted) {
+      getMessages();
+    }
+    return () => {
+      isComponentMounted = false;
+    };
   }, [currentUserData, chat]);
 
   const formHandler = async (e) => {

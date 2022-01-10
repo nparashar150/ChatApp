@@ -98,7 +98,7 @@ export default function Conversation({
   }, [currentChat]);
 
   return (
-    <MessageItem onClick={showUserData} className="d-flex flex-row w-100">
+    <MessageItem key={keyValue} onClick={showUserData} className="d-flex flex-row w-100">
       <MessageItemUser src={user?.photoUrl} />
       <MessageInfo className="d-flex flex-column w-100">
         <MessageItemName>{user?.name}</MessageItemName>
