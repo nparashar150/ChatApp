@@ -1,6 +1,9 @@
-const io = require("socket.io")(8000, {
+const app = require("express")();
+const server = require("http").Server(app);
+const io = require("socket.io")({
   cors: {
     origin: "*",
+    methods: ["GET", "POST"]
   },
 });
 
@@ -45,3 +48,7 @@ io.on("connection", (socket) => {
     io.emit("getUsers", users);
   });
 });
+
+server.listen(8000, () => {
+  console.log("Socket Server Started!");
+})
