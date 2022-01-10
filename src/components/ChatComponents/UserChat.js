@@ -6,7 +6,7 @@ import axios from "axios";
 import { backendBaseURL } from "../../firebase";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en.json";
-import { useContext, useRef, useState, useEffect } from "react";
+import { useContext, useRef, useState, useEffect, useCallback } from "react";
 import { AuthContext } from "../../context/authContext";
 import { SocketAuthContext } from "../../context/socketContext";
 import Spinner from "../Shared/Spinner/Spinner";
@@ -205,7 +205,7 @@ const UserChat = ({ currentUserData, setOnlineUsers }) => {
         type: "SOCKET_EVENT_SUCCESS",
         payload: socketRef.current,
       });
-      console.log(socketRef.current);
+      // console.log(socketRef.current);
     };
     if (isComponentMounted) {
       checkSocket(dispatch);
@@ -261,26 +261,25 @@ const UserChat = ({ currentUserData, setOnlineUsers }) => {
     };
   }, [setOnlineUsers, user]);
 
+  const getMessages = useCallback(async () => {
+    try {
+      const res = await axios.get(
+        `${backendBaseURL}/user/message/` + currentUserData.chatId
+      );
+      setChat(res.data);
+      setLoading(false);
+    } catch (err) {
+      console.log(err);
+    }
+  }, [currentUserData.chatId]);
+
   useEffect(() => {
     let isComponentMounted = true;
-    const getMessages = async () => {
-      try {
-        const res = await axios.get(
-          `${backendBaseURL}/user/message/` + currentUserData.chatId
-        );
-        setChat(res.data);
-        setLoading(false);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    if (isComponentMounted) {
-      getMessages();
-    }
+    isComponentMounted && getMessages();
     return () => {
       isComponentMounted = false;
-    };
-  }, [currentUserData, chat]);
+    }
+  }, [getMessages]);
 
   const formHandler = async (e) => {
     e.preventDefault();

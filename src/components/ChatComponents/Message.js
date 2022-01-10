@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { backendBaseURL } from "../../firebase";
 import axios from "axios";
 import { useContext, lazy, Suspense } from "react";
@@ -107,25 +107,32 @@ const ChatMessageList = (props) => {
     console.log(userAdded);
   };
 
+  const getUserConversations = useCallback(async () => {
+    try {
+      // console.log("Changed");
+      const controller = new AbortController();
+      if (user.uid) {
+        const response = await axios.get(
+          `${backendBaseURL}/user/conversation/` + user.uid,
+          {
+            signal: controller.signal,
+          }
+        );
+        setConversations(response.data);
+      }
+      controller.abort();
+    } catch (err) {
+      console.log(err);
+    }
+  }, [user.uid]);
+
   useEffect(() => {
     let isComponentMounted = true;
-    const getUserConversations = async () => {
-      try {
-        const response = await axios.get(
-          `${backendBaseURL}/user/conversation/` + user.uid
-        );
-        if (isComponentMounted) {
-          setConversations(response.data);
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getUserConversations();
+    isComponentMounted && getUserConversations();
     return () => {
       isComponentMounted = false;
-    };
-  }, [user]);
+    }
+  }, [getUserConversations]);
 
   return (
     <>

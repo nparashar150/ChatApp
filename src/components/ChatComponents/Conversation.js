@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { backendBaseURL } from "../../firebase";
 import {
@@ -58,24 +58,23 @@ export default function Conversation({
     };
   }, [user, onlineUsers]);
 
+  const getUser = useCallback(async () => {
+    try {
+      const friendId = showUserInfo.find((m) => m !== currentUser.uid);
+      const res = await axios(`${backendBaseURL}/user/create/` + friendId);
+      setUser(res.data[0]);
+    } catch (err) {
+      console.log(err);
+    }
+  }, [currentUser.uid, showUserInfo]);
+
   useEffect(() => {
     let isComponentMounted = true;
-    const friendId = showUserInfo.find((m) => m !== currentUser.uid);
-    const getUser = async () => {
-      try {
-        const res = await axios(`${backendBaseURL}/user/create/` + friendId);
-        if (isComponentMounted) {
-          setUser(res.data[0]);
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getUser();
+    isComponentMounted && getUser();
     return () => {
       isComponentMounted = false;
     };
-  }, [currentUser, showUserInfo, user]);
+  }, [getUser]);
 
   useEffect(() => {
     let isComponentMounted = true;
@@ -98,7 +97,11 @@ export default function Conversation({
   }, [currentChat]);
 
   return (
-    <MessageItem key={keyValue} onClick={showUserData} className="d-flex flex-row w-100">
+    <MessageItem
+      key={keyValue}
+      onClick={showUserData}
+      className="d-flex flex-row w-100"
+    >
       <MessageItemUser src={user?.photoUrl} />
       <MessageInfo className="d-flex flex-column w-100">
         <MessageItemName>{user?.name}</MessageItemName>
