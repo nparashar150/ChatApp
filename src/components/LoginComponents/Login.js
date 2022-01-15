@@ -373,7 +373,7 @@ export default function Login({
             type="text"
             placeholder="Enter Name"
           />
-          <LoginLabelFile for="LoginInput_Photo">
+          <LoginLabelFile htmlFor="LoginInput_Photo">
             {photoPlaceholder
               ? SignInUser.current.LoginInput_Photo.files[0].name
               : "Upload Photo"}
