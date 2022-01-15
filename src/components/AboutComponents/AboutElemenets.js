@@ -93,7 +93,11 @@ export default function AboutElemenets({ isDark }) {
   };
 
   useEffect(() => {
-    getContributors();
+    let isComponentMounted = true;
+    isComponentMounted && getContributors();
+    return () => {
+      isComponentMounted = false;
+    }
   }, []);
   return (
     <>
