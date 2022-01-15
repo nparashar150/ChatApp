@@ -9,6 +9,7 @@ import LandingPage from "./pages/LandingPage/LandingPage";
 import AboutPage from "./pages/AboutPage/AboutPage";
 import ChatPage from "./pages/ChatPage/ChatPage";
 import LoginPage from "./pages/LoginPage/LoginPage";
+import DownloadPage from "./pages/DownloadPage/DownloadPage";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "./context/authContext";
 import UserProfile from "./pages/UserProfile/UserProfile";
@@ -32,6 +33,7 @@ function App() {
           <Routes>
             <Route exact path="/" element={<LandingPage />} />
             <Route exact path="/about" element={<AboutPage />} />
+            <Route exact path="/download" element={<DownloadPage />} />
             <Route
               exact
               path="/dashboard"

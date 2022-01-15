@@ -7,7 +7,7 @@ export const LandingWrapper = styled.main`
   justify-content: flex-start;
   align-items: center;
   margin-bottom: 20vh;
-  overflow: ${props => props.overflowHidden ? "hidden" : "" };
+  overflow: ${(props) => (props.overflowHidden ? "hidden" : "")};
 
   @media (max-width: 768px) {
     flex-direction: ${(props) =>
