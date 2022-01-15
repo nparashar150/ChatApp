@@ -8,7 +8,7 @@ import DarkModeToggle from "react-dark-mode-toggle";
 
 const NavWrapper = styled.nav`
   height: 5rem;
-  background: ${props => props.theme.background};
+  background: ${(props) => props.theme.background};
   z-index: 10;
 
   @media (max-width: 768px) {
@@ -22,11 +22,11 @@ const NavBrand = styled(Link)`
   font-weight: 800;
   cursor: pointer;
   text-decoration: none;
-  color: ${props => props.theme.online};
+  color: ${(props) => props.theme.online};
 
   &:hover,
   &:focus {
-    color: ${props => props.theme.online};
+    color: ${(props) => props.theme.online};
   }
 `;
 const NavBrandImage = styled.img`
@@ -49,7 +49,7 @@ const NavLinkWraper = styled.div`
 const NavLink = styled(Link)`
   padding: 0.75rem 4rem;
   text-decoration: none;
-  color: ${props => props.theme.font};
+  color: ${(props) => props.theme.font};
   font-size: 1.15rem;
   font-weight: 600;
   font-family: "Nunito" sans-serif;
@@ -58,7 +58,7 @@ const NavLink = styled(Link)`
   &:hover,
   &:focus {
     text-decoration: underline;
-    color: ${props => props.theme.online};
+    color: ${(props) => props.theme.online};
   }
 `;
 // const NavLogin = styled.button`
@@ -89,7 +89,7 @@ const NavMobileHam = styled.div`
 
   @media (max-width: 768px) {
     display: block;
-    margin-top: .5rem;
+    margin-top: 0.5rem;
 
     svg {
       width: 1.65rem;
@@ -110,12 +110,12 @@ export const NavMobileWrapper = styled.div`
     height: 100vh;
     width: 100vw;
     padding-top: 2rem;
-    background: ${props => props.theme.background};
+    background: ${(props) => props.theme.background};
     z-index: 10;
   }
 `;
 
-const Navbar = ({handleThemeChange, isDarkMode, setIsDarkMode}) => {
+const Navbar = ({ handleThemeChange, isDarkMode, setIsDarkMode }) => {
   let [toggleNav, setToggleNav] = useState(false);
 
   const navStyle = {
@@ -140,7 +140,10 @@ const Navbar = ({handleThemeChange, isDarkMode, setIsDarkMode}) => {
       <NavWrapper className="container d-flex px-md-4 align-items-center justify-content-between">
         <div className="d-flex justify-content-between w-100">
           <NavBrand to="/">
-            <NavBrandImage src={isDarkMode ? logoDark : logoLight} alt={"logo"} />
+            <NavBrandImage
+              src={isDarkMode ? logoDark : logoLight}
+              alt={"logo"}
+            />
           </NavBrand>
           <NavMobileHam onClick={() => setToggleNav(!toggleNav)}>
             <AiOutlineMenu />
@@ -157,18 +160,18 @@ const Navbar = ({handleThemeChange, isDarkMode, setIsDarkMode}) => {
             </NavLink>
             <NavLink
               className="px-3"
-              to="/support"
-              onClick={() => toggleNavItem()}
-            >
-              Support
-            </NavLink>
-            <NavLink
-              className="px-3"
               to="/download"
               onClick={() => toggleNavItem()}
             >
               Download
             </NavLink>
+            {/* <NavLink
+              className="px-3"
+              to="/login"
+              onClick={() => toggleNavItem()}
+            >
+              Browser
+            </NavLink> */}
           </NavLinkWraper>
           {/* <NavLogin onClick={handleLogin} >
             {"Login"}
