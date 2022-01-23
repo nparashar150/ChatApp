@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { FadeIn } from "../Shared/Animation";
+import styled from 'styled-components';
+import { FadeIn } from '../Shared/Animation';
 
 export const LandingWrapper = styled.main`
   padding: 0 1rem;
@@ -7,19 +7,19 @@ export const LandingWrapper = styled.main`
   justify-content: flex-start;
   align-items: center;
   margin-bottom: 20vh;
-  overflow: ${(props) => (props.overflowHidden ? "hidden" : "")};
+  overflow: ${(props) => (props.overflowHidden ? 'hidden' : '')};
 
   @media (max-width: 768px) {
     flex-direction: ${(props) =>
-      props.reversed ? "column" : "column-reverse"};
+    props.reversed ? 'column' : 'column-reverse'};
     padding: 0 1rem;
     height: 100%;
     margin-bottom: 5vh;
   }
 `;
 export const LandingAssetMask = styled.div`
-  margin-top: ${(props) => (props.marginTop ? props.marginTop : "5rem")};
-  width: ${(props) => (props.width ? props.width : "40vw")};
+  margin-top: ${(props) => (props.marginTop ? props.marginTop : '5rem')};
+  width: ${(props) => (props.width ? props.width : '40vw')};
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -31,18 +31,18 @@ export const LandingAssetMask = styled.div`
 `;
 export const LandingAsset = styled.img`
   height: auto;
-  width: ${(props) => (props.width ? props.width : "30rem")};
+  width: ${(props) => (props.width ? props.width : '30rem')};
 
   @media (max-width: 768px) {
     width: 100vw;
     padding: 0 5vw;
-    margin-top: ${(props) => (props.marginTop ? props.marginTop : "")};
+    margin-top: ${(props) => (props.marginTop ? props.marginTop : '')};
   }
 `;
 export const LandingData = styled.div`
   height: 100%;
   margin-top: -15rem;
-  margin-left: ${(props) => (props.marginLeft ? props.marginLeft : "")};
+  margin-left: ${(props) => (props.marginLeft ? props.marginLeft : '')};
   width: 40vw;
   animation: ${FadeIn} 1.5s ease-in-out;
 
@@ -63,14 +63,14 @@ export const LandingData = styled.div`
   `}
 `;
 export const LandingHeading = styled.h1`
-  font-size: ${(props) => (props.mobile ? "3rem" : "4.5rem")};
+  font-size: ${(props) => (props.mobile ? '3rem' : '4.5rem')};
   font-weight: 800;
-  text-align: ${(props) => (props.alignRight ? "right" : "")};
+  text-align: ${(props) => (props.alignRight ? 'right' : '')};
   color: ${(props) => props.theme.font};
   animation: ${FadeIn} 1.5s ease-in-out;
 
   @media (max-width: 768px) {
-    font-size: ${(props) => (props.mobile ? "2rem" : "3rem")};
+    font-size: ${(props) => (props.mobile ? '2rem' : '3rem')};
     text-align: center;
     padding-top: 0;
   }
@@ -78,14 +78,14 @@ export const LandingHeading = styled.h1`
 export const LandingInfo = styled.p`
   font-weight: 600;
   font-size: 1.35rem;
-  text-align: ${(props) => (props.alignRight ? "right" : "")};
+  text-align: ${(props) => (props.alignRight ? 'right' : '')};
   color: ${(props) => props.theme.font};
   animation: ${FadeIn} 1.5s ease-in-out;
 
   @media (max-width: 768px) {
     text-align: center;
     padding-bottom: ${(props) =>
-      props.mobilePaddingBottom ? props.mobilePaddingBottom : ""};
+    props.mobilePaddingBottom ? props.mobilePaddingBottom : ''};
   }
 `;
 

@@ -1,4 +1,4 @@
-import Navbar from "../../components/Shared/Navbar/Navbar";
+import Navbar from '../../components/Shared/Navbar/Navbar';
 import {
   LandingWrapper,
   LandingData,
@@ -9,38 +9,38 @@ import {
   LaptopPreview,
   LaptopMask,
   Wrapper,
-} from "../../components/LandingComponents/LandingPageElements";
-import LandingPageJSON from "../../data/LandingPage/LandingPage.json";
-import MacbookProLightTheme from "../../data/LandingPage/assets/Macbook-Pro-Light-Theme.png";
-import MacbookProDarkTheme from "../../data/LandingPage/assets/Macbook-Pro-Dark-Theme.png";
-import iPhone13ChatsSampleLightTheme from "../../data/LandingPage/assets/iPhone13-Chats-Sample-Light-Theme.png";
-import iPhone13ChatsSampleDarkTheme from "../../data/LandingPage/assets/iPhone13-Chats-Sample-Dark-Theme.png";
-import iPhone13ProfileSampleLightTheme from "../../data/LandingPage/assets/iPhone13-Profile-Sample-Light-Theme.png";
-import iPhone13ProfileSampleDarkTheme from "../../data/LandingPage/assets/iPhone13-Profile-Sample-Dark-Theme.png";
-import { Button } from "../../components/Shared/Button/Button";
-import Footer from "../../components/Shared/Footer/Footer";
-import { useEffect, useState } from "react";
+} from '../../components/LandingComponents/LandingPageElements';
+import LandingPageJSON from '../../data/LandingPage/LandingPage.json';
+import MacbookProLightTheme from '../../data/LandingPage/assets/Macbook-Pro-Light-Theme.png';
+import MacbookProDarkTheme from '../../data/LandingPage/assets/Macbook-Pro-Dark-Theme.png';
+import iPhone13ChatsSampleLightTheme from '../../data/LandingPage/assets/iPhone13-Chats-Sample-Light-Theme.png';
+import iPhone13ChatsSampleDarkTheme from '../../data/LandingPage/assets/iPhone13-Chats-Sample-Dark-Theme.png';
+import iPhone13ProfileSampleLightTheme from '../../data/LandingPage/assets/iPhone13-Profile-Sample-Light-Theme.png';
+import iPhone13ProfileSampleDarkTheme from '../../data/LandingPage/assets/iPhone13-Profile-Sample-Dark-Theme.png';
+import { Button } from '../../components/Shared/Button/Button';
+import Footer from '../../components/Shared/Footer/Footer';
+import { useEffect, useState } from 'react';
 import {
   lightTheme,
   darkTheme,
   GlobalStyle,
-} from "../../components/Shared/ThemeEngine/Theme";
-import { ThemeProvider } from "styled-components";
+} from '../../components/Shared/ThemeEngine/Theme';
+import { ThemeProvider } from 'styled-components';
 
 const LandingPage = () => {
   const [isDarkMode, setIsDarkMode] = useState();
 
   const handleThemeChange = () => {
-    localStorage.setItem("darkTheme", !isDarkMode);
+    localStorage.setItem('darkTheme', !isDarkMode);
     setIsDarkMode(!isDarkMode);
   };
 
   const previousTheme = () => {
-    const getTheme = localStorage.getItem("darkTheme");
+    const getTheme = localStorage.getItem('darkTheme');
     if (getTheme) {
-      getTheme === "true" ? setIsDarkMode(true) : setIsDarkMode(false);
+      getTheme === 'true' ? setIsDarkMode(true) : setIsDarkMode(false);
     } else {
-      localStorage.setItem("darkTheme", false);
+      localStorage.setItem('darkTheme', false);
       setIsDarkMode(false);
     }
   };
@@ -63,7 +63,7 @@ const LandingPage = () => {
             <LandingData className="d-flex flex-column w-50 justify-content-center align-items-start">
               <LandingHeading>{LandingPageJSON.header}</LandingHeading>
               <LandingInfo>{LandingPageJSON.data}</LandingInfo>
-              <Button to={"/login"}>Join Now !</Button>
+              <Button to={'/login'}>Join Now !</Button>
             </LandingData>
             <LandingAssetMask>
               <LandingAsset
@@ -72,7 +72,7 @@ const LandingPage = () => {
                     ? iPhone13ChatsSampleDarkTheme
                     : iPhone13ChatsSampleLightTheme
                 }
-                alt={"iPhone13ChatSample"}
+                alt={'iPhone13ChatSample'}
               />
             </LandingAssetMask>
           </LandingWrapper>
@@ -84,7 +84,7 @@ const LandingPage = () => {
                     ? iPhone13ProfileSampleDarkTheme
                     : iPhone13ProfileSampleLightTheme
                 }
-                alt={"iPhone13ProfileSample"}
+                alt={'iPhone13ProfileSample'}
               />
             </LandingAssetMask>
             <LandingData
@@ -103,7 +103,7 @@ const LandingPage = () => {
             </LandingHeading>
             <LaptopPreview
               src={isDarkMode ? MacbookProDarkTheme : MacbookProLightTheme}
-              alt={"MacbookProSample"}
+              alt={'MacbookProSample'}
             />
           </LaptopMask>
           <Footer />

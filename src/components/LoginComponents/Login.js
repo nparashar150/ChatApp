@@ -1,19 +1,19 @@
-import React, { useState, useEffect, useContext, useRef } from "react";
-import styled from "styled-components";
-import { signInStatus } from "../../firebase";
-import { AuthContext } from "../../context/authContext";
-import { ButtonSubmit } from "../Shared/Button/Button";
-import defaultUserProfile from "../../data/Login/defaultUserProfile_.png";
-import axios from "axios";
-import BackButton from "../Shared/BackButton/BackButton";
+import React, { useState, useEffect, useContext, useRef } from 'react';
+import styled from 'styled-components';
+import { signInStatus } from '../../firebase';
+import { AuthContext } from '../../context/authContext';
+import { ButtonSubmit } from '../Shared/Button/Button';
+import defaultUserProfile from '../../data/Login/defaultUserProfile_.png';
+import axios from 'axios';
+import BackButton from '../Shared/BackButton/BackButton';
 import {
   signIn,
   signUpWithEmailAndPassword,
   resetPasswordWithEmail,
   logInWithEmail,
   backendBaseURL,
-} from "../../firebase";
-import DarkModeToggle from "react-dark-mode-toggle";
+} from '../../firebase';
+import DarkModeToggle from 'react-dark-mode-toggle';
 
 const LoginWrapper = styled.section`
   background: ${(props) => props.theme.background};
@@ -57,7 +57,7 @@ const LoginForm = styled.form`
   /* height: 100%; */
 
   @media (max-width: 768px) {
-    height: ${(props) => (props.createAccount ? "100vh" : "")};
+    height: ${(props) => (props.createAccount ? '100vh' : '')};
   }
 `;
 const LoginInput = styled.input`
@@ -69,8 +69,8 @@ const LoginInput = styled.input`
   background: ${(props) => props.theme.background};
   font-size: 0.95rem;
   padding: 0 0.75rem;
-  display: ${(props) => (props.file ? "none" : "block")};
-  color: ${props => props.theme.font};
+  display: ${(props) => (props.file ? 'none' : 'block')};
+  color: ${(props) => props.theme.font};
 
   &:hover,
   &:focus {
@@ -104,12 +104,12 @@ const LoginLabelFile = styled.label`
 `;
 
 const ErrorLabel = styled.div`
-  border: 3px solid ${(props) => (props.notError ? "#2E8B5750" : "#e6394650")};
+  border: 3px solid ${(props) => (props.notError ? '#2E8B5750' : '#e6394650')};
   outline: none;
   border-radius: 2rem;
   height: 2.75rem;
   width: 30vw;
-  background: ${(props) => (props.notError ? "#2E8B5750" : "#e6394650")};
+  background: ${(props) => (props.notError ? '#2E8B5750' : '#e6394650')};
   font-size: 0.95rem;
   padding: 0 0.75rem;
   line-height: 2.5rem;
@@ -209,7 +209,7 @@ const ToggleThemeWrapper = styled.div`
 export default function Login({
   handleThemeChange,
   isDarkMode,
-  setIsDarkMode,
+  // setIsDarkMode,
 }) {
   let { user, dispatch } = useContext(AuthContext);
   let [isSignedIn, setIsSignedIn] = useState(false);
@@ -253,21 +253,21 @@ export default function Login({
   const handleSignUp = async (e) => {
     e.preventDefault();
     if (
-      SignInUser.current.LoginInput_Name.value === "" &&
-      SignInUser.current.LoginInput_Email.value === "" &&
-      SignInUser.current.LoginInput_Password.value === "" &&
-      SignInUser.current.LoginInput_Password_Confirm.value === ""
+      SignInUser.current.LoginInput_Name.value === '' &&
+      SignInUser.current.LoginInput_Email.value === '' &&
+      SignInUser.current.LoginInput_Password.value === '' &&
+      SignInUser.current.LoginInput_Password_Confirm.value === ''
     ) {
-      return setError("Fill all the fields");
+      return setError('Fill all the fields');
     }
     if (
       SignInUser.current.LoginInput_Password_Confirm.value !==
       SignInUser.current.LoginInput_Password.value
     ) {
-      return setError("Passwords donot match");
+      return setError('Passwords donot match');
     }
     if (!photoPlaceholder) {
-      return setError("Upload your Image for Profile Picture");
+      return setError('Upload your Image for Profile Picture');
     }
     try {
       setError(null);
@@ -298,11 +298,11 @@ export default function Login({
     } catch (err) {
       console.log(err);
     }
-    SignInUser.current.LoginInput_Name.value = "";
-    SignInUser.current.LoginInput_Email.value = "";
-    SignInUser.current.LoginInput_Password.value = "";
-    SignInUser.current.LoginInput_Password_Confirm.value = "";
-    setSuccess("Account Created successfully");
+    SignInUser.current.LoginInput_Name.value = '';
+    SignInUser.current.LoginInput_Email.value = '';
+    SignInUser.current.LoginInput_Password.value = '';
+    SignInUser.current.LoginInput_Password_Confirm.value = '';
+    setSuccess('Account Created successfully');
     setLoading(false);
   };
 
@@ -324,7 +324,7 @@ export default function Login({
         setPhotoPlaceholder(true);
         readFile.readAsDataURL(file);
       } else {
-        setError("Error: file size should be less than 4Mb");
+        setError('Error: file size should be less than 4Mb');
         setPhotoPlaceholder(false);
         setPreviewSrc(defaultUserProfile);
       }
@@ -376,7 +376,7 @@ export default function Login({
           <LoginLabelFile htmlFor="LoginInput_Photo">
             {photoPlaceholder
               ? SignInUser.current.LoginInput_Photo.files[0].name
-              : "Upload Photo"}
+              : 'Upload Photo'}
           </LoginLabelFile>
           <LoginInput
             required
@@ -418,8 +418,8 @@ export default function Login({
             placeholder="Confirm Password"
             minLength={8}
           />
-          {error ? <ErrorLabel>{error}</ErrorLabel> : ""}
-          {success ? <ErrorLabel success>{success}</ErrorLabel> : ""}
+          {error ? <ErrorLabel>{error}</ErrorLabel> : ''}
+          {success ? <ErrorLabel success>{success}</ErrorLabel> : ''}
           <ButtonSubmit
             mediaWidth="80vw"
             padding=".5rem 2.5rem"
@@ -428,7 +428,7 @@ export default function Login({
             disabled={loading}
             onClick={handleSignUp}
           >
-            {loading ? "Please wait..." : "Create Account"}
+            {loading ? 'Please wait...' : 'Create Account'}
           </ButtonSubmit>
         </LoginForm>
         <DividerLine />
@@ -461,10 +461,10 @@ export default function Login({
             {forgotPassword ? (
               resetLinkSent ? (
                 <ErrorLabel notError>
-                  {"Check your Inbox for instructions."}
+                  {'Check your Inbox for instructions.'}
                 </ErrorLabel>
               ) : (
-                ""
+                ''
               )
             ) : (
               <LoginInput
@@ -486,14 +486,14 @@ export default function Login({
             >
               {forgotPassword
                 ? loading
-                  ? "Please wait..."
-                  : "Reset Password"
+                  ? 'Please wait...'
+                  : 'Reset Password'
                 : loading
-                ? "Please wait..."
-                : "Log In"}
+                  ? 'Please wait...'
+                  : 'Log In'}
             </ButtonSubmit>
             <ForgotPassword onClick={() => setForgotPassword(!forgotPassword)}>
-              {forgotPassword ? "Back to Login?" : "Forgot Password?"}
+              {forgotPassword ? 'Back to Login?' : 'Forgot Password?'}
             </ForgotPassword>
           </LoginForm>
         </SignIn>

@@ -1,7 +1,7 @@
-import React from "react";
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import { MdOutlineArrowBackIos } from "react-icons/md/index";
+import React from 'react';
+import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import { MdOutlineArrowBackIos } from 'react-icons/md/index';
 
 const BackButtonWrapper = styled.div`
   position: fixed;
@@ -17,7 +17,7 @@ const BackButtonWrapper = styled.div`
 
   &:hover,
   &:focus {
-    background: ${props => props.theme.online + "AA"};
+    background: ${props => props.theme.online + 'AA'};
   }
 `;
 

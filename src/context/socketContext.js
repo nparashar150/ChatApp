@@ -1,11 +1,11 @@
-import { createContext, useReducer } from "react";
-import SocketAuthReducer from "./socketReducer";
+import { createContext, useReducer } from 'react';
+import SocketAuthReducer from './socketReducer';
 
 const INITIAL_SOCKET_STATE = {
-    socketEvent: null,
-    isFetching: false,
-    error: null
-  }
+  socketEvent: null,
+  isFetching: false,
+  error: null
+};
 
 export const SocketAuthContext = createContext(INITIAL_SOCKET_STATE);
 export const SocketAuthContextProvider = ({ children }) => {
@@ -21,5 +21,5 @@ export const SocketAuthContextProvider = ({ children }) => {
     >
       {children}
     </SocketAuthContext.Provider>
-  )
-}
+  );
+};

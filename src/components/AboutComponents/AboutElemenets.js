@@ -1,13 +1,13 @@
-import styled from "styled-components";
-import axios from "axios";
-import { useEffect, useState } from "react";
+import styled from 'styled-components';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 import {
   MessageItem,
   MessageInfo,
   MessageItemName,
   MessageData,
   MessageItemUser,
-} from "../Shared/UserImage/UserImage";
+} from '../Shared/UserImage/UserImage';
 import {
   LandingWrapper,
   LandingData,
@@ -15,11 +15,11 @@ import {
   LandingInfo,
   LandingAssetMask,
   LandingAsset,
-} from "../LandingComponents/LandingPageElements";
-import logoLight from "../../data/logo-light.svg";
-import logoDark from "../../data/logo-dark.svg";
-import AboutPageData from "../../data/AboutPage/AboutPage.json";
-import Spinner from "../Shared/Spinner/Spinner";
+} from '../LandingComponents/LandingPageElements';
+import logoLight from '../../data/logo-light.svg';
+import logoDark from '../../data/logo-dark.svg';
+import AboutPageData from '../../data/AboutPage/AboutPage.json';
+import Spinner from '../Shared/Spinner/Spinner';
 const AboutWrapper = styled.section`
   width: 100vw;
   height: 100%;
@@ -74,8 +74,8 @@ export default function AboutElemenets({ isDark }) {
 
   const getContributors = async () => {
     const GET_CONFIG = {
-      method: "GET",
-      url: "https://api.github.com/repos/nparashar150/threejs_/stats/contributors",
+      method: 'GET',
+      url: 'https://api.github.com/repos/nparashar150/threejs_/stats/contributors',
       headers: {
         Authorization: `token ${process.env.REACT_APP_GITHUB_ACCESS_TOKEN}`,
       },
@@ -97,7 +97,7 @@ export default function AboutElemenets({ isDark }) {
     isComponentMounted && getContributors();
     return () => {
       isComponentMounted = false;
-    }
+    };
   }, []);
   return (
     <>
@@ -113,12 +113,12 @@ export default function AboutElemenets({ isDark }) {
           <LandingAsset
             marginTop="-25vh"
             src={isDark ? logoDark : logoLight}
-            alt={"iPhone13ChatSample"}
+            alt={'iPhone13ChatSample'}
           />
         </LandingAssetMask>
       </LandingWrapper>
       <AboutWrapper className="container d-flex justify-content-center align-items-center flex-column">
-        <LandingHeading mobile>{"Contributors"}</LandingHeading>
+        <LandingHeading mobile>{'Contributors'}</LandingHeading>
         <AuthorList className="container px-md-5">
           {loading ? (
             <Spinner />
@@ -128,7 +128,7 @@ export default function AboutElemenets({ isDark }) {
                 <AuthItem
                   noBorder
                   onClick={() =>
-                    window.open(element.author.html_url, "_blank").focus()
+                    window.open(element.author.html_url, '_blank').focus()
                   }
                   key={key}
                   className="d-flex flex-row flex-column"

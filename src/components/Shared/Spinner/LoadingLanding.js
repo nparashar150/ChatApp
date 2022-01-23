@@ -1,8 +1,8 @@
-import React from "react";
-import { useEffect, useState } from "react";
-import { lightTheme, darkTheme, GlobalStyle } from "../ThemeEngine/Theme";
-import { ThemeProvider } from "styled-components";
-import styled, { keyframes } from "styled-components";
+import React from 'react';
+import { useEffect, useState } from 'react';
+import { lightTheme, darkTheme, GlobalStyle } from '../ThemeEngine/Theme';
+import { ThemeProvider } from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 const circleOne = keyframes`
   0%{
@@ -83,11 +83,11 @@ export default function LoadingLanding() {
   const [isDarkMode, setIsDarkMode] = useState();
 
   const previousTheme = () => {
-    const getTheme = localStorage.getItem("darkTheme");
+    const getTheme = localStorage.getItem('darkTheme');
     if (getTheme) {
-      getTheme === "true" ? setIsDarkMode(true) : setIsDarkMode(false);
+      getTheme === 'true' ? setIsDarkMode(true) : setIsDarkMode(false);
     } else {
-      localStorage.setItem("darkTheme", false);
+      localStorage.setItem('darkTheme', false);
       setIsDarkMode(false);
     }
   };

@@ -7,9 +7,9 @@ import {
   signInWithEmailAndPassword,
   signOut,
   sendPasswordResetEmail,
-} from "firebase/auth";
-import { initializeApp } from "firebase/app";
-import axios from "axios";
+} from 'firebase/auth';
+import { initializeApp } from 'firebase/app';
+import axios from 'axios';
 // import {useNavigate} from "react-router-dom";
 
 const firebaseConfig = {
@@ -27,7 +27,7 @@ const provider = new GoogleAuthProvider();
 const auth = getAuth();
 
 const signIn = (dispatch) => {
-  dispatch({ type: "LOGIN_START" });
+  dispatch({ type: 'LOGIN_START' });
   signInWithPopup(auth, provider)
     .then((result) => {
       // const credential = GoogleAuthProvider.credentialFromResult(result);
@@ -39,10 +39,10 @@ const signIn = (dispatch) => {
         photoUrl: userData.photoURL,
         uid: userData.uid,
       });
-      dispatch({ type: "LOGIN_SUCCESS", payload: userData || res.data });
+      dispatch({ type: 'LOGIN_SUCCESS', payload: userData || res.data });
     })
     .catch((error) => {
-      dispatch({ type: "LOGIN_FAILURE", payload: error });
+      dispatch({ type: 'LOGIN_FAILURE', payload: error });
     });
 };
 
@@ -54,7 +54,7 @@ const signUpWithEmailAndPassword = (
   photoUrl,
   photoId
 ) => {
-  dispatch({ type: "LOGIN_START" });
+  dispatch({ type: 'LOGIN_START' });
   createUserWithEmailAndPassword(auth, email, password)
     .then((result) => {
       let userData = result.user;
@@ -70,26 +70,26 @@ const signUpWithEmailAndPassword = (
           }
         );
         console.log(res.data);
-        dispatch({ type: "LOGIN_SUCCESS", payload: res.data });
+        dispatch({ type: 'LOGIN_SUCCESS', payload: res.data });
       } else {
-        dispatch({ type: "LOGIN_FAILURE", payload: "Error creating account" });
-        console.log("Error creating account");
+        dispatch({ type: 'LOGIN_FAILURE', payload: 'Error creating account' });
+        console.log('Error creating account');
       }
     })
     .catch((error) => {
-      dispatch({ type: "LOGIN_FAILURE", payload: error });
+      dispatch({ type: 'LOGIN_FAILURE', payload: error });
     });
 };
 
 const logInWithEmail = (dispatch, email, password) => {
-  dispatch({ type: "LOGIN_START" });
+  dispatch({ type: 'LOGIN_START' });
   signInWithEmailAndPassword(auth, email, password)
     .then((result) => {
       const userData = result.user;
       setUser(dispatch, userData.uid);
     })
     .catch((error) => {
-      dispatch({ type: "LOGIN_FAILURE", payload: error });
+      dispatch({ type: 'LOGIN_FAILURE', payload: error });
     });
 };
 
@@ -119,7 +119,7 @@ const setUser = async (dispatch, uid) => {
   const USER = await axios.get(
     `${backendBaseURL}/user/create/${uid}`
   );
-  dispatch({ type: "LOGIN_SUCCESS", payload: USER.data[0] });
+  dispatch({ type: 'LOGIN_SUCCESS', payload: USER.data[0] });
 };
 
 const signOutUser = () => {
@@ -127,7 +127,7 @@ const signOutUser = () => {
     .then(() => {
       // SingOut Success
       signInStatus();
-      window.location.replace("/");
+      window.location.replace('/');
     })
     .catch((error) => {
       console.log(error);
@@ -135,7 +135,7 @@ const signOutUser = () => {
 };
 
 const backendBaseURL =
-  "https://cheract-backend.netlify.app/.netlify/functions/server";
+  'https://cheract-backend.netlify.app/.netlify/functions/server';
 
 export {
   signIn,

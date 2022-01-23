@@ -1,9 +1,9 @@
-import styled from "styled-components";
-import { useContext } from "react";
-import { AuthContext } from "../../context/authContext";
-import { signOutUser } from "../../firebase";
-import BackButton from "../Shared/BackButton/BackButton";
-import DarkModeToggle from "react-dark-mode-toggle";
+import styled from 'styled-components';
+import { useContext } from 'react';
+import { AuthContext } from '../../context/authContext';
+import { signOutUser } from '../../firebase';
+import BackButton from '../Shared/BackButton/BackButton';
+import DarkModeToggle from 'react-dark-mode-toggle';
 
 const Wrapper = styled.main`
   width: 100vw;
@@ -105,7 +105,7 @@ const ToggleThemeWrapper = styled.div`
 export default function CurrentUserProfile({
   handleThemeChange,
   isDarkMode,
-  setIsDarkMode,
+  // setIsDarkMode,
 }) {
   let { user } = useContext(AuthContext);
   return (

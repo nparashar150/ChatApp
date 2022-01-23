@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { SlideLeft } from "../Animation";
+import styled from 'styled-components';
+import { SlideLeft } from '../Animation';
 
 export const MessageItem = styled.div`
   background: ${(props) => props.theme.background};

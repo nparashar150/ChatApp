@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
-import styled from "styled-components";
-import { Link } from "react-router-dom";
-import { AiOutlineMenu } from "react-icons/ai/index";
-import logoDark from "../../../data/logo-dark.svg";
-import logoLight from "../../../data/logo-light.svg";
-import DarkModeToggle from "react-dark-mode-toggle";
+import { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import { AiOutlineMenu } from 'react-icons/ai/index';
+import logoDark from '../../../data/logo-dark.svg';
+import logoLight from '../../../data/logo-light.svg';
+import DarkModeToggle from 'react-dark-mode-toggle';
 
 const NavWrapper = styled.nav`
   height: 5rem;
@@ -115,11 +115,11 @@ export const NavMobileWrapper = styled.div`
   }
 `;
 
-const Navbar = ({ handleThemeChange, isDarkMode, setIsDarkMode }) => {
+const Navbar = ({ handleThemeChange, isDarkMode }) => {
   let [toggleNav, setToggleNav] = useState(false);
 
   const navStyle = {
-    display: toggleNav ? "flex" : "none",
+    display: toggleNav ? 'flex' : 'none',
   };
 
   const toggleNavItem = () => {
@@ -142,7 +142,7 @@ const Navbar = ({ handleThemeChange, isDarkMode, setIsDarkMode }) => {
           <NavBrand to="/">
             <NavBrandImage
               src={isDarkMode ? logoDark : logoLight}
-              alt={"logo"}
+              alt={'logo'}
             />
           </NavBrand>
           <NavMobileHam onClick={() => setToggleNav(!toggleNav)}>

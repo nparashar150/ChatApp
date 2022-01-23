@@ -1,5 +1,5 @@
 // import "./Spinner.scss";
-import styled, { keyframes } from "styled-components";
+import styled, { keyframes } from 'styled-components';
 
 const RollerSpinner = keyframes`
       0% {
@@ -87,7 +87,7 @@ const SpinningCircle = styled.div`
       width: 7px;
       height: 7px;
       border-radius: 50%;
-      background: ${props => props.theme.online ? props.theme.online : "#40E0D0"};
+      background: ${props => props.theme.online ? props.theme.online : '#40E0D0'};
       margin: -4px 0 0 -4px;
     }
   }

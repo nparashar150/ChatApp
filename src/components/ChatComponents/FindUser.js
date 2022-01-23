@@ -1,16 +1,16 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
-import { backendBaseURL } from "../../firebase";
-import { useContext } from "react";
-import { AuthContext } from "../../context/authContext";
-import QuestionMark from "../../data/ChatPage/QuestionMark.svg";
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { backendBaseURL } from '../../firebase';
+import { useContext } from 'react';
+import { AuthContext } from '../../context/authContext';
+import QuestionMark from '../../data/ChatPage/QuestionMark.svg';
 import {
   MessageItemUser,
   MessageInfo,
   MessageItemName,
   MessageData,
   MessageItem,
-} from "../Shared/UserImage/UserImage";
+} from '../Shared/UserImage/UserImage';
 
 export default function FindUser({ friendEmail, conversations, userAdd }) {
   const [searchedUser, setSearchedUser] = useState([]);
@@ -40,7 +40,7 @@ export default function FindUser({ friendEmail, conversations, userAdd }) {
       }
     });
     found < conversations.length
-      ? console.log("User already there.")
+      ? console.log('User already there.')
       : createChat(key);
   };
 
@@ -55,7 +55,7 @@ export default function FindUser({ friendEmail, conversations, userAdd }) {
         chatUsers
       );
       userAdd();
-      console.log("User added.", res);
+      console.log('User added.', res);
     } catch (err) {
       console.log(err);
     }
@@ -86,9 +86,9 @@ export default function FindUser({ friendEmail, conversations, userAdd }) {
         <MessageItem className="d-flex flex-row w-100">
           <MessageItemUser src={QuestionMark} />
           <MessageInfo className="d-flex flex-column w-100">
-            <MessageItemName>{"User Not Found"}</MessageItemName>
+            <MessageItemName>{'User Not Found'}</MessageItemName>
             <MessageData className="text-justify">
-              {"Invite him to the Website"}
+              {'Invite him to the Website'}
             </MessageData>
           </MessageInfo>
         </MessageItem>

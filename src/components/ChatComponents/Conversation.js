@@ -1,13 +1,13 @@
-import { useState, useEffect, useCallback } from "react";
-import axios from "axios";
-import { backendBaseURL } from "../../firebase";
+import { useState, useEffect, useCallback } from 'react';
+import axios from 'axios';
+import { backendBaseURL } from '../../firebase';
 import {
   MessageItemUser,
   MessageInfo,
   MessageItemName,
   MessageData,
   MessageItem,
-} from "../Shared/UserImage/UserImage";
+} from '../Shared/UserImage/UserImage';
 
 export default function Conversation({
   showUserInfo,
@@ -106,7 +106,7 @@ export default function Conversation({
       <MessageInfo className="d-flex flex-column w-100">
         <MessageItemName>{user?.name}</MessageItemName>
         <MessageData online={isOnline} className="text-justify">
-          {isOnline ? "Online" : "Offline"}
+          {isOnline ? 'Online' : 'Offline'}
         </MessageData>
       </MessageInfo>
     </MessageItem>

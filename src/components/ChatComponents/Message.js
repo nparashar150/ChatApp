@@ -1,21 +1,21 @@
-import styled from "styled-components";
-import { useState, useEffect, useRef, useCallback } from "react";
-import { backendBaseURL } from "../../firebase";
-import axios from "axios";
-import { useContext, lazy, Suspense } from "react";
-import { AuthContext } from "../../context/authContext";
-import broadcast from "../../data/ChatPage/broadcast.png";
-import { FiSearch } from "react-icons/fi/index";
-import FindUser from "./FindUser";
-import { useNavigate } from "react-router-dom";
+import styled from 'styled-components';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { backendBaseURL } from '../../firebase';
+import axios from 'axios';
+import { useContext, lazy, Suspense } from 'react';
+import { AuthContext } from '../../context/authContext';
+import broadcast from '../../data/ChatPage/broadcast.png';
+import { FiSearch } from 'react-icons/fi/index';
+import FindUser from './FindUser';
+import { useNavigate } from 'react-router-dom';
 import {
   MessageItemUser,
   MessageItem,
   MessageInfo,
   MessageItemName,
   MessageData,
-} from "../Shared/UserImage/UserImage";
-const Conversation = lazy(() => import("./Conversation"));
+} from '../Shared/UserImage/UserImage';
+const Conversation = lazy(() => import('./Conversation'));
 
 const Messages = styled.h1`
   font-weight: 700;
@@ -77,12 +77,12 @@ const MessageSearchBar = styled.input`
 `;
 
 const searchStyles = {
-  marginLeft: "-10%",
-  marginTop: "-1rem",
+  marginLeft: '-10%',
+  marginTop: '-1rem',
 };
 
 const ChatMessageList = (props) => {
-  let [searchUser, setSearchUser] = useState("");
+  let [searchUser, setSearchUser] = useState('');
   let { user } = useContext(AuthContext);
   let [conversations, setConversations] = useState([]);
   let [searching, setSearching] = useState(false);
@@ -97,7 +97,7 @@ const ChatMessageList = (props) => {
   };
 
   const handleInputSearch = (e) => {
-    if (e.target.value === "") {
+    if (e.target.value === '') {
       setSearching(false);
     }
   };
@@ -131,7 +131,7 @@ const ChatMessageList = (props) => {
     isComponentMounted && getUserConversations();
     return () => {
       isComponentMounted = false;
-    }
+    };
   }, [getUserConversations]);
 
   return (
@@ -140,7 +140,7 @@ const ChatMessageList = (props) => {
         <Messages className="d-flex flex-row w-100 justify-content-between align-items-center">
           Messages
           <MessageItem
-            onClick={() => navigate("/profile")}
+            onClick={() => navigate('/profile')}
             className="d-flex flex-row p-0"
             noBorder
           >
@@ -189,8 +189,9 @@ const ChatMessageList = (props) => {
             Object.keys(conversations).map((key) => {
               return (
                 <Suspense
+                  key={key}
                   fallback={
-                    <MessageItem key={key} className="d-flex flex-row w-100">
+                    <MessageItem className="d-flex flex-row w-100">
                       <MessageInfo className="d-flex flex-column w-100">
                         <MessageItemName>
                           Loading Conversations...

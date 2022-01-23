@@ -1,18 +1,18 @@
-import styled from "styled-components";
-import { FiSend } from "react-icons/fi/index";
-import { AiOutlineMore } from "react-icons/ai/index";
-import { io } from "socket.io-client";
-import axios from "axios";
-import { backendBaseURL } from "../../firebase";
-import TimeAgo from "javascript-time-ago";
-import en from "javascript-time-ago/locale/en.json";
-import { useContext, useRef, useState, useEffect, useCallback } from "react";
-import { AuthContext } from "../../context/authContext";
-import { SocketAuthContext } from "../../context/socketContext";
-import Spinner from "../Shared/Spinner/Spinner";
+import styled from 'styled-components';
+import { FiSend } from 'react-icons/fi/index';
+import { AiOutlineMore } from 'react-icons/ai/index';
+import { io } from 'socket.io-client';
+import axios from 'axios';
+import { backendBaseURL } from '../../firebase';
+import TimeAgo from 'javascript-time-ago';
+import en from 'javascript-time-ago/locale/en.json';
+import { useContext, useRef, useState, useEffect, useCallback } from 'react';
+import { AuthContext } from '../../context/authContext';
+import { SocketAuthContext } from '../../context/socketContext';
+import Spinner from '../Shared/Spinner/Spinner';
 
 TimeAgo.addDefaultLocale(en);
-const timeAgo = new TimeAgo("en-US");
+const timeAgo = new TimeAgo('en-US');
 const ChattingSection = styled.section`
   @media (max-width: 768px) {
     width: 100% !important;
@@ -45,7 +45,7 @@ const ChatPanel = styled.div`
   overflow-y: scroll;
 `;
 const ChatInfoUserName = styled.div`
-  font-size: ${(props) => (props.chatting ? "1rem" : "1.5rem")};
+  font-size: ${(props) => (props.chatting ? '1rem' : '1.5rem')};
   font-weight: 700;
   cursor: pointer;
   background: ${(props) =>
@@ -54,16 +54,17 @@ const ChatInfoUserName = styled.div`
       : `${(props) => props.theme.background}`};
   color: ${(props) => props.theme.font};
   width: 50%;
-  text-align: ${(props) => (props.right ? "right" : "left")};
+  text-align: ${(props) => (props.right ? 'right' : 'left')};
 
   @media (max-width: 768px) {
-    white-space: ${(props) => (props.chatting ? "nowrap" : "normal")};
-    overflow: scroll;
+    white-space: ${(props) => (props.chatting ? 'normal' : 'nowrap')};
+    overflow: hidden;
+    width: 75%;
   }
 `;
 const ChatInfoUserImg = styled.img`
-  width: ${(props) => (props.chatting ? "1.75rem" : "2.75rem")};
-  height: ${(props) => (props.chatting ? "1.75rem" : "2.75rem")};
+  width: ${(props) => (props.chatting ? '1.75rem' : '2.75rem')};
+  height: ${(props) => (props.chatting ? '1.75rem' : '2.75rem')};
   border-radius: 50%;
 `;
 const ChatInfoUserMore = styled.div`
@@ -155,7 +156,7 @@ const ChattingInputSubmit = styled.div`
   svg {
     margin-top: 2px;
     margin-right: 2px;
-    color: ${(props) => props.theme.font + "AA"};
+    color: ${(props) => props.theme.font + 'AA'};
     width: 1.5rem;
     height: 1.5rem;
   }
@@ -168,7 +169,7 @@ const NoConversation = styled.div`
   align-items: center;
   height: 100%;
   width: 70vw;
-  color: ${(props) => props.theme.font + "75"};
+  color: ${(props) => props.theme.font + '75'};
   padding: 2rem;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -183,7 +184,7 @@ const NoConversation = styled.div`
 `;
 
 const UserChat = ({ currentUserData, setOnlineUsers }) => {
-  let [message, setMessage] = useState("");
+  let [message, setMessage] = useState('');
   let [chat, setChat] = useState([]);
   let [incommingMessage, setIncommingMessage] = useState(null);
   let [loading, setLoading] = useState(true);
@@ -195,14 +196,14 @@ const UserChat = ({ currentUserData, setOnlineUsers }) => {
   useEffect(() => {
     let isComponentMounted = true;
     const checkSocket = (dispatch) => {
-      dispatch({ type: "SOCKET_EVENT_START" });
+      dispatch({ type: 'SOCKET_EVENT_START' });
       if (socketEvent) {
         socketRef.current = socketEvent;
       } else {
-        socketRef.current = io("http://localhost:8000");
+        socketRef.current = io('http://localhost:8000');
       }
       dispatch({
-        type: "SOCKET_EVENT_SUCCESS",
+        type: 'SOCKET_EVENT_SUCCESS',
         payload: socketRef.current,
       });
       // console.log(socketRef.current);
@@ -218,7 +219,7 @@ const UserChat = ({ currentUserData, setOnlineUsers }) => {
   useEffect(() => {
     let isComponentMounted = true;
     if (isComponentMounted) {
-      socketRef?.current?.on("getMessage", (chatData) => {
+      socketRef?.current?.on('getMessage', (chatData) => {
         setIncommingMessage(
           {
             sender: chatData.senderId,
@@ -250,8 +251,8 @@ const UserChat = ({ currentUserData, setOnlineUsers }) => {
 
   useEffect(() => {
     let isComponentMounted = true;
-    socketRef?.current?.emit("sendUser", user.uid);
-    socketRef?.current?.on("getUsers", (users) => {
+    socketRef?.current?.emit('sendUser', user.uid);
+    socketRef?.current?.on('getUsers', (users) => {
       if (isComponentMounted) {
         setOnlineUsers(users);
       }
@@ -278,7 +279,7 @@ const UserChat = ({ currentUserData, setOnlineUsers }) => {
     isComponentMounted && getMessages();
     return () => {
       isComponentMounted = false;
-    }
+    };
   }, [getMessages]);
 
   const formHandler = async (e) => {
@@ -295,13 +296,13 @@ const UserChat = ({ currentUserData, setOnlineUsers }) => {
         messagePush
       );
       setChat([...chat, pushChat.data]);
-      setMessage("");
+      setMessage('');
     } catch (err) {
       console.log(err);
     }
 
     socketRef?.current?.emit(
-      "sendMessage",
+      'sendMessage',
       {
         senderId: user.uid,
         receiverId: currentUserData.uid,
@@ -314,12 +315,12 @@ const UserChat = ({ currentUserData, setOnlineUsers }) => {
   };
 
   useEffect(() => {
-    scrollRef.current?.scrollIntoView({ behaviour: "smooth" });
+    scrollRef.current?.scrollIntoView({ behaviour: 'smooth' });
   }, [chat]);
 
   return (
     <ChattingSection className="w-75">
-      {currentUserData.name !== "" ? (
+      {currentUserData.name !== '' ? (
         <>
           <ChatArea className="w-100">
             <ChatInfoWrapper className="d-flex w-100 align-items-center">
@@ -343,8 +344,8 @@ const UserChat = ({ currentUserData, setOnlineUsers }) => {
                           key={key}
                           className={
                             user.uid === index.sender
-                              ? "d-flex flex-row-reverse w-100 align-items-start px-2"
-                              : "d-flex flex-row w-100 align-items-start px-3"
+                              ? 'd-flex flex-row-reverse w-100 align-items-start px-2'
+                              : 'd-flex flex-row w-100 align-items-start px-3'
                           }
                           ref={scrollRef}
                         >
@@ -360,16 +361,16 @@ const UserChat = ({ currentUserData, setOnlineUsers }) => {
                             chatting
                             className={
                               user.uid === index.sender
-                                ? "text-end"
-                                : "text-start"
+                                ? 'text-end'
+                                : 'text-start'
                             }
                           >
                             {index.text}
                             <ChatTime
                               className={
                                 user.uid === index.sender
-                                  ? "text-end"
-                                  : "text-start"
+                                  ? 'text-end'
+                                  : 'text-start'
                               }
                             >
                               {timeAgo.format(new Date(index.createdAt))}

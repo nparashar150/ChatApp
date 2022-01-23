@@ -1,28 +1,28 @@
-import Navbar from "../../components/Shared/Navbar/Navbar";
+import Navbar from '../../components/Shared/Navbar/Navbar';
 import {
   lightTheme,
   darkTheme,
   GlobalStyle,
-} from "../../components/Shared/ThemeEngine/Theme";
-import { ThemeProvider } from "styled-components";
-import { useState, useEffect } from "react";
-import AboutElemenets from "../../components/AboutComponents/AboutElemenets";
-import Footer from "../../components/Shared/Footer/Footer";
+} from '../../components/Shared/ThemeEngine/Theme';
+import { ThemeProvider } from 'styled-components';
+import { useState, useEffect } from 'react';
+import AboutElemenets from '../../components/AboutComponents/AboutElemenets';
+import Footer from '../../components/Shared/Footer/Footer';
 
 const AboutPage = () => {
   const [isDarkMode, setIsDarkMode] = useState();
 
   const handleThemeChange = () => {
-    localStorage.setItem("darkTheme", !isDarkMode);
+    localStorage.setItem('darkTheme', !isDarkMode);
     setIsDarkMode(!isDarkMode);
   };
 
   const previousTheme = () => {
-    const getTheme = localStorage.getItem("darkTheme");
+    const getTheme = localStorage.getItem('darkTheme');
     if (getTheme) {
-      getTheme === "true" ? setIsDarkMode(true) : setIsDarkMode(false);
+      getTheme === 'true' ? setIsDarkMode(true) : setIsDarkMode(false);
     } else {
-      localStorage.setItem("darkTheme", false);
+      localStorage.setItem('darkTheme', false);
       setIsDarkMode(false);
     }
   };

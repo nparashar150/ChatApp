@@ -1,5 +1,5 @@
-import { createContext, useReducer } from "react";
-import AuthReducer from "./authReducer";
+import { createContext, useReducer } from 'react';
+import AuthReducer from './authReducer';
 
 const INITIAL_STATE = {
   user: null,
@@ -19,7 +19,7 @@ export const AuthContextProvider = ({ children }) => {
         dispatch
       }}
     >
-        {children}
+      {children}
     </AuthContext.Provider>
   );
 };
